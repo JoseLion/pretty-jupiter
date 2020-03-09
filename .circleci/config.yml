@@ -24,7 +24,7 @@ jobs:
 
       - run:
           name: Lint
-          command: ./gradlew lintGradle codenarcMain codenarcTest codenarcFunctionalTest
+          command: ./gradlew lintGradle codenarcMain codenarcTest
 
       - run:
           name: Compile and build
@@ -32,7 +32,7 @@ jobs:
 
       - run:
           name: Test
-          command: ./gradlew test functionalTest
+          command: ./gradlew test
 
       - run:
           name: Test reports
@@ -47,3 +47,45 @@ jobs:
       - run:
           name: Upload reports
           command: bash <(curl -s https://codecov.io/bash)
+
+  publish:
+    working_directory: ~/repo/pretty-jupiter
+
+    docker:
+      - image: circleci/openjdk:13-jdk-buster
+        environment:
+          JVM_OPTS: -Xmx4096m
+          TERM: dumb
+
+    steps:
+      - checkout:
+          path: ~/repo/pretty-jupiter
+
+      - run:
+          name: Generate gradle.lock
+          command: cat gradle/wrapper/gradle-wrapper.properties gradle/dependency-locks/* > gradle.lock
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gradle.lock" }}
+            - v1-dependencies-
+
+      - run:
+          name: Build artifact
+          command: ./gradlew jar
+
+      - run:
+          name: Publish plugin
+          command: ./gradlew publishPlugins
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: release
