@@ -15,7 +15,8 @@ import com.github.joselion.prettyjupiter.helpers.PrettyJupiterPluginException
 public class PrettyJupiterPlugin implements Plugin<Project> {
   public void apply(Project project) {
     try {
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final PrettyJupiterPluginExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterPluginExtension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
 
       project.test.testLogging {
         exceptionFormat(SHORT)
