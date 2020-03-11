@@ -52,14 +52,14 @@ class PrettyLoggerTest extends Specification {
         getParent() >> null
         getDisplayName() >> 'This is a test result!'
       }
-      final TestResult result = Stub(TestResult) {
+      final TestResult results = Stub(TestResult) {
         getResultType() >> resultType
         getStartTime() >> 10000
         getEndTime() >> 10010
       }
 
     when:
-      prettyLogger.logResults(descriptor, result)
+      prettyLogger.logResults(descriptor, results)
 
     then:
       with(logger) {
@@ -73,6 +73,40 @@ class PrettyLoggerTest extends Specification {
       SKIPPED     | "⚠ ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
   }
 
+  def '.logSummary'(ResultType resultType, String icon) {
+    given:
+      final Logger logger = Mock()
+      final Project project = Stub(Project) { getLogger() >> logger }
+      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
+      final TestResult results = Stub(TestResult) {
+        getResultType() >> resultType
+        getStartTime() >> 1583909261673
+        getEndTime() >> 1583909305290
+        getTestCount() >> 136
+        getSuccessfulTestCount() >> 120
+        getFailedTestCount() >> 10
+        getSkippedTestCount() >> 6
+      }
+
+    when:
+      prettyLogger.logSummary(descriptor, results)
+
+    then:
+      with(logger) {
+        1 * lifecycle('************************************************************************************************************')
+        1 * lifecycle("* ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) *")
+        1 * lifecycle('* Report: [] *')
+        1 * lifecycle('************************************************************************************************************')
+      }
+
+    where:
+      resultType  | icon
+      SUCCESS     | '✔'
+      FAILURE     | '❌'
+      SKIPPED     | '⚠'
+  }
+
   def 'duration colors'(Long startTime, Long endTime, Colors color) {
     given:
       final Logger logger = Mock()
@@ -83,14 +117,14 @@ class PrettyLoggerTest extends Specification {
         getParent() >> null
         getDisplayName() >> 'Another test description comes here'
       }
-      final TestResult result = Stub(TestResult) {
+      final TestResult results = Stub(TestResult) {
         getResultType() >> SUCCESS
         getStartTime() >> startTime
         getEndTime() >> endTime
       }
 
       when:
-        prettyLogger.logResults(descriptor, result)
+        prettyLogger.logResults(descriptor, results)
 
       then:
         with(logger) {

@@ -24,6 +24,7 @@ public class PrettyJupiterPlugin implements Plugin<Project> {
 
       project.test.beforeSuite(prettyLogger.&logDescriptors)
       project.test.afterTest(prettyLogger.&logResults)
+      project.test.afterSuite(prettyLogger.&logSummary)
     }
   }
 }

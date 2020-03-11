@@ -4,7 +4,10 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 
+import groovy.time.TimeDuration
+import groovy.time.TimeCategory
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
@@ -45,6 +48,25 @@ public class PrettyLogger {
     final String duration = getDuration(result)
 
     project.logger.lifecycle("${tabs}${status.icon} ${desc}${duration}")
+  }
+
+  public void logSummary(TestDescriptor descriptor, TestResult result) {
+    if (!descriptor.parent) {
+      final def status = statusMap[result.getResultType()]
+      final String symbol = '*'
+      final String successes = Utils.coloredText(Colors.GREEN, "${result.successfulTestCount} successes")
+      final String failures = Utils.coloredText(Colors.RED, "${result.failedTestCount} failures")
+      final String skipped = Utils.coloredText(Colors.YELLOW, "${result.skippedTestCount} skipped")
+      final TimeDuration time = TimeCategory.minus(new Date(result.endTime), new Date(result.startTime))
+      final String summary = "${symbol} ${status.icon} ${result.testCount} tests completed, ${successes}, ${failures}, ${skipped} (${time}) ${symbol}"
+      final String reportPath = project.tasks.withType(Test).reports.html.entryPoint
+      final String border = symbol * summary.length()
+      
+      project.logger.lifecycle("${border}")
+      project.logger.lifecycle(summary)
+      project.logger.lifecycle("${symbol} Report: ${reportPath} ${symbol}")
+      project.logger.lifecycle("${border}")
+    }
   }
 
   private String getDuration(TestResult result) {
