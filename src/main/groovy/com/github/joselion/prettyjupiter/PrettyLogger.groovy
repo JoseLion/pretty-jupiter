@@ -22,8 +22,11 @@ public class PrettyLogger {
 
   private Project project
 
-  public PrettyLogger(Project project) {
+  private PrettyJupiterPluginExtension extension
+
+  public PrettyLogger(Project project, PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()) {
     this.project = project
+    this.extension = extension
   }
 
   public void logDescriptors(TestDescriptor descriptor) {
@@ -38,10 +41,26 @@ public class PrettyLogger {
   public void logResults(TestDescriptor descriptor, TestResult result) {
     final def status = statusMap[result.getResultType()]
     final String tabs = Utils.getTabs(descriptor)
-    final long timeDiff = result.getEndTime() - result.getStartTime()
     final String desc = Utils.coloredText(status.color, descriptor.getDisplayName())
+    final String duration = getDuration(result)
 
-    project.logger.lifecycle("${tabs}${status.icon} ${desc} (${timeDiff}ms)")
+    project.logger.lifecycle("${tabs}${status.icon} ${desc}${duration}")
+  }
+
+  private String getDuration(TestResult result) {
+    if (extension.duration.enabled) {
+      final long timeDiff = result.getEndTime() - result.getStartTime()
+      final Colors color = timeDiff >= extension.duration.threshold
+        ? Colors.RED
+        : timeDiff >= extension.duration.threshold / 2
+          ? Colors.YELLOW
+          : Colors.WHITE
+      final String millis = Utils.coloredText(color, "${timeDiff}ms")
+
+      return " (${millis})"
+    }
+
+    return ''
   }
   
 }
