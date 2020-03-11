@@ -8,7 +8,7 @@ plugins {
   id 'nebula.lint' version '16.2.3'
 }
 
-version = '0.1.0-M1'
+version = '0.1.0'
 
 dependencyLocking {
   lockAllConfigurations()
@@ -54,7 +54,7 @@ gradlePlugin {
       id = 'com.github.joselion.pretty-jupiter'
       implementationClass = 'com.github.joselion.prettyjupiter.PrettyJupiterPlugin'
       displayName = 'Pretty Jupiter Plugin'
-      description = 'Gradle plugin for logging JUnit Jupiter tests in pretty Mocha.js style'
+      description = 'Gradle plugin to log JUnit Jupiter tests with a pretty Mocha.js style'
     }
   }
 }
