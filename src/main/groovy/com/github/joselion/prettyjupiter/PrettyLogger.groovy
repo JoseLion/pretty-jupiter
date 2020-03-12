@@ -58,8 +58,10 @@ public class PrettyLogger {
       final String skipped = Utils.coloredText(Colors.YELLOW, "${result.skippedTestCount} skipped")
       final TimeDuration time = TimeCategory.minus(new Date(result.endTime), new Date(result.startTime))
       final String summary = "${symbol} ${status.icon} ${result.testCount} tests completed, ${successes}, ${failures}, ${skipped} (${time}) ${symbol}"
-      final String border = symbol * summary.length()
+      final String rawText = "${symbol} ${status.icon} ${result.testCount} tests completed, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped (${time}) ${symbol}"
+      final String border = symbol * rawText.length()
       
+      project.logger.lifecycle('\n\n')
       project.logger.lifecycle("${border}")
       project.logger.lifecycle(summary)
       project.logger.lifecycle("${border}")

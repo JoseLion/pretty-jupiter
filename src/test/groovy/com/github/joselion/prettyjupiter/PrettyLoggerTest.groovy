@@ -97,9 +97,11 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        1 * lifecycle('************************************************************************************************************')
+        final String rawText = "* ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) *"
+        1 * lifecycle('\n\n')
+        1 * lifecycle('*' * rawText.length())
         1 * lifecycle("* ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) *")
-        1 * lifecycle('************************************************************************************************************')
+        1 * lifecycle('*' * rawText.length())
       }
 
     where:
