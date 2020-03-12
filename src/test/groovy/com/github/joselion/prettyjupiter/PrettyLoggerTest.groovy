@@ -8,6 +8,7 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
+import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
@@ -76,7 +77,9 @@ class PrettyLoggerTest extends Specification {
   def '.logSummary'(ResultType resultType, String icon) {
     given:
       final Logger logger = Mock()
-      final Project project = Stub(Project) { getLogger() >> logger }
+      final Project project = Stub(Project) {
+        getLogger() >> logger
+      }
       final PrettyLogger prettyLogger = new PrettyLogger(project)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
       final TestResult results = Stub(TestResult) {
@@ -96,7 +99,6 @@ class PrettyLoggerTest extends Specification {
       with(logger) {
         1 * lifecycle('************************************************************************************************************')
         1 * lifecycle("* ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) *")
-        1 * lifecycle('* Report: [] *')
         1 * lifecycle('************************************************************************************************************')
       }
 
