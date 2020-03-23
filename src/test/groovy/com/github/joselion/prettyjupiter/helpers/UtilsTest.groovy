@@ -39,12 +39,26 @@ class UtilsTest extends Specification {
       Utils.coloredText(color, 'This is a colored text!') == text
 
     where:
-      color         | text
-      Colors.GRAY   | "${ESC}[90mThis is a colored text!${ESC}[0m"
-      Colors.GREEN  | "${ESC}[32mThis is a colored text!${ESC}[0m"
-      Colors.RED    | "${ESC}[31mThis is a colored text!${ESC}[0m"
-      Colors.YELLOW | "${ESC}[33mThis is a colored text!${ESC}[0m"
-      Colors.WHITE  | "${ESC}[97mThis is a colored text!${ESC}[0m"
+      color             | text
+      Colors.BRIGHT_RED | "${ESC}[91mThis is a colored text!${ESC}[0m"
+      Colors.GRAY       | "${ESC}[90mThis is a colored text!${ESC}[0m"
+      Colors.GREEN      | "${ESC}[32mThis is a colored text!${ESC}[0m"
+      Colors.RED        | "${ESC}[31mThis is a colored text!${ESC}[0m"
+      Colors.YELLOW     | "${ESC}[33mThis is a colored text!${ESC}[0m"
+      Colors.WHITE      | "${ESC}[97mThis is a colored text!${ESC}[0m"
+  }
+
+  def '.limitedText'(Integer limit, String result) {
+    expect:
+      Utils.limitedText("Multiple lines text\n" * 5, limit) == result
+      Utils.limitedText(null, 1) == null
+
+    where:
+      limit | result
+      0     | '--- not showing 5 lines of text ---'
+      1     | 'Multiple lines text\n--- and 4 more ---'
+      3     | 'Multiple lines text\nMultiple lines text\nMultiple lines text\n--- and 2 more ---'
+      7     | 'Multiple lines text\nMultiple lines text\nMultiple lines text\nMultiple lines text\nMultiple lines text\n'
   }
 
   private TestDescriptor descriptorWithParents(Integer num) {

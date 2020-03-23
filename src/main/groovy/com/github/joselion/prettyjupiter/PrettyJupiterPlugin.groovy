@@ -1,6 +1,7 @@
 package com.github.joselion.prettyjupiter
 
 import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
 
 import org.gradle.api.Project
 import org.gradle.api.Plugin
@@ -20,6 +21,7 @@ public class PrettyJupiterPlugin implements Plugin<Project> {
         final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
 
         testTaks.testLogging {
+          events = [STANDARD_ERROR]
           exceptionFormat(SHORT)
           showStandardStreams(true)
         }
