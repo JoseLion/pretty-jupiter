@@ -1,6 +1,8 @@
 package com.github.joselion.prettyjupiter
 
 import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
+import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
 
 import groovy.lang.MissingPropertyException
 import org.gradle.testfixtures.ProjectBuilder
@@ -19,8 +21,11 @@ class PrettyJupiterPluginTest extends Specification {
       project.plugins.apply(basePlugin)
 
     then:
+      project.test.testLogging.events.contains STANDARD_OUT
+      project.test.testLogging.events.contains STANDARD_ERROR
       project.test.testLogging.exceptionFormat == SHORT
       project.test.testLogging.showStandardStreams == true
+      project.test.reports.html.enabled == true
 
     where:
       basePlugin << ['java', 'java-library', 'groovy', 'java-gradle-plugin']
