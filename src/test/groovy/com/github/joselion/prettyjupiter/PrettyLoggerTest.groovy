@@ -5,13 +5,16 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 
+import java.io.File
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
+import org.gradle.api.reporting.DirectoryReport
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
+import org.gradle.api.tasks.testing.TestTaskReports
 import org.gradle.testfixtures.ProjectBuilder
 
 import com.github.joselion.prettyjupiter.helpers.Colors
@@ -23,7 +26,8 @@ class PrettyLoggerTest extends Specification {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final Test testTask = Stub(Test)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getClassName() >> className
@@ -48,7 +52,8 @@ class PrettyLoggerTest extends Specification {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final Test testTask = Stub(Test)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getDisplayName() >> 'This is a test result!'
@@ -78,10 +83,17 @@ class PrettyLoggerTest extends Specification {
   def '.logSummary'(ResultType resultType, String icon) {
     given:
       final Logger logger = Mock()
-      final Project project = Stub(Project) {
-        getLogger() >> logger
+      final Project project = Stub(Project) { getLogger() >> logger }
+      final Test testTask = Stub(Test) {
+        getReports() >> Stub(TestTaskReports) {
+          getHtml() >> Stub(DirectoryReport) {
+            getEntryPoint() >> Stub(File) {
+              toString() >> 'path/to/report/file.html'
+            }
+          }
+        }
       }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
       final Exception exception = new Exception("Multi\nline\nexception!")
       final TestResult testRes = Stub(TestResult) {
@@ -104,7 +116,7 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        final String rawText = "* ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) *"
+        final String rawText = " ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) "
 
         1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
@@ -125,9 +137,11 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle("       ${exception.getStackTrace()[9]}")
         1 * lifecycle("       --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
         2 * lifecycle('\n')
-        1 * lifecycle('*' * rawText.length())
-        1 * lifecycle("* ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) *")
-        1 * lifecycle('*' * rawText.length())
+        1 * lifecycle('┌' + '─' * rawText.length() + '┐')
+        1 * lifecycle("| ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) |")
+        1 * lifecycle('|' + ' ' * rawText.length() + '|')
+        1 * lifecycle('| Report: path/to/report/file.html                                              |')
+        1 * lifecycle('└' + '─' * rawText.length() + '┘')
       }
 
     where:
@@ -141,8 +155,9 @@ class PrettyLoggerTest extends Specification {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
+      final Test testTask = Stub(Test)
       final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
-      final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getDisplayName() >> 'Another test description comes here'
@@ -176,9 +191,10 @@ class PrettyLoggerTest extends Specification {
   def 'disable duration'() {
     final Logger logger = Mock()
     final Project project = Stub(Project) { getLogger() >> logger }
+    final Test testTask = Stub(Test)
     final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
     extension.duration.enabled = false
-    final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
+    final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
     final TestDescriptor descriptor = Stub(TestDescriptor) {
       getParent() >> null
       getDisplayName() >> 'Some tests without duration'
