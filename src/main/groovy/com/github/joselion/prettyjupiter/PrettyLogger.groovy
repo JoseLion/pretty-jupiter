@@ -6,6 +6,8 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 
 import groovy.time.TimeDuration
 import groovy.time.TimeCategory
+import java.lang.Throwable
+import java.util.List
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
@@ -26,9 +28,12 @@ public class PrettyLogger {
 
   private PrettyJupiterPluginExtension extension
 
+  private List<Failure> failures;
+
   public PrettyLogger(Project project, PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()) {
     this.project = project
     this.extension = extension
+    this.failures = []
   }
 
   public void logDescriptors(TestDescriptor descriptor) {
@@ -46,6 +51,10 @@ public class PrettyLogger {
     final String desc = Utils.coloredText(status.color, descriptor.getDisplayName())
     final String duration = getDuration(result)
 
+    if (result.getResultType() == FAILURE && result.getException() != null) {
+      this.failures.add(new Failure(result.getException(), descriptor, extension))
+    }
+
     project.logger.lifecycle("${tabs}${status.icon} ${desc}${duration}")
   }
 
@@ -62,9 +71,29 @@ public class PrettyLogger {
       final String border = symbol * rawText.length()
       
       project.logger.lifecycle('\n\n')
+
+      this.failures.eachWithIndex { failure, i ->
+        final String n = Utils.coloredText(Colors.BRIGHT_RED, "(${i + 1})");
+        final String ns = ' ' * ("${i}".length() + 2)
+
+        project.logger.lifecycle("${n}  ${failure.getLocation()}:")
+        failure.getMessage().eachLine {
+          project.logger.lifecycle("${ns}    ${it}")
+        }
+        
+        project.logger.lifecycle('')
+        project.logger.lifecycle("${ns}  Failure stack trace:")
+        failure.getTrace().eachLine {
+          project.logger.lifecycle("${ns}    ${it}")
+        }
+        project.logger.lifecycle('\n')
+      }
+
+      project.logger.lifecycle('\n')
       project.logger.lifecycle("${border}")
       project.logger.lifecycle(summary)
       project.logger.lifecycle("${border}")
+      
     }
   }
 
