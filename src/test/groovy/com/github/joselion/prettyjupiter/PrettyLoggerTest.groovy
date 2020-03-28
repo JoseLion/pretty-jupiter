@@ -18,6 +18,7 @@ import org.gradle.api.tasks.testing.TestTaskReports
 import org.gradle.testfixtures.ProjectBuilder
 
 import com.github.joselion.prettyjupiter.helpers.Colors
+import com.github.joselion.prettyjupiter.helpers.Icons
 import com.github.joselion.prettyjupiter.helpers.Utils
 
 class PrettyLoggerTest extends Specification {
@@ -75,12 +76,12 @@ class PrettyLoggerTest extends Specification {
 
     where:
       resultType  | log
-      SUCCESS     | "✔ ${ESC}[90mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
-      FAILURE     | "❌ ${ESC}[31mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
-      SKIPPED     | "⚠ ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      SUCCESS     | "${Icons.SUCCESS} ${ESC}[90mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      FAILURE     | "${Icons.FAILURE} ${ESC}[31mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      SKIPPED     | "${Icons.SKIPPED} ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
   }
 
-  def '.logSummary'(ResultType resultType, String icon) {
+  def '.logSummary'(ResultType resultType, Icons icon) {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
@@ -116,7 +117,12 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        final String rawText = " ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) "
+        def normalize = { String s ->
+          s.replace("${ESC}", '')
+            .replaceAll(/\[\d*m/, '')
+        }
+        final String rawText = normalize(" ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) ")
+        final String rawReport = ' Report: path/to/report/file.html'
 
         1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
@@ -140,15 +146,15 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle('┌' + '─' * rawText.length() + '┐')
         1 * lifecycle("| ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) |")
         1 * lifecycle('|' + ' ' * rawText.length() + '|')
-        1 * lifecycle('| Report: path/to/report/file.html                                              |')
+        1 * lifecycle('|' + rawReport + ' ' * (rawText.length() - rawReport.length()) + '|')
         1 * lifecycle('└' + '─' * rawText.length() + '┘')
       }
 
     where:
       resultType  | icon
-      SUCCESS     | '✔'
-      FAILURE     | '❌'
-      SKIPPED     | '⚠'
+      SUCCESS     | Icons.SUCCESS
+      FAILURE     | Icons.FAILURE
+      SKIPPED     | Icons.SKIPPED
   }
 
   def 'duration colors'(Long startTime, Long endTime, Colors color) {
@@ -175,7 +181,7 @@ class PrettyLoggerTest extends Specification {
         with(logger) {
           final int colorCode = color.getCode()
           final long diff = endTime - startTime
-          1 * lifecycle("✔ ${ESC}[90mAnother test description comes here${ESC}[0m (${ESC}[${colorCode}m${diff}ms${ESC}[0m)")
+          1 * lifecycle("${Icons.SUCCESS} ${ESC}[90mAnother test description comes here${ESC}[0m (${ESC}[${colorCode}m${diff}ms${ESC}[0m)")
         }
 
       where:
@@ -210,7 +216,7 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        1 * lifecycle("✔ ${ESC}[90mSome tests without duration${ESC}[0m")
+        1 * lifecycle("${Icons.SUCCESS} ${ESC}[90mSome tests without duration${ESC}[0m")
       }
   }
 

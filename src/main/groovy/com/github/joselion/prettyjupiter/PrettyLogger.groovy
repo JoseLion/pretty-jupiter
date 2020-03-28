@@ -16,14 +16,15 @@ import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
 import com.github.joselion.prettyjupiter.helpers.Colors
+import com.github.joselion.prettyjupiter.helpers.Icons
 import com.github.joselion.prettyjupiter.helpers.Utils
 
 public class PrettyLogger {
 
   private final def statusMap = [
-    (SUCCESS): [icon: Utils.coloredText(Colors.GREEN, '︎✔︎'), color: Colors.GRAY],
-    (FAILURE): [icon: '❌', color: Colors.RED],
-    (SKIPPED): [icon: '⚠️', color: Colors.YELLOW]
+    (SUCCESS): [icon: Icons.SUCCESS, color: Colors.GRAY],
+    (FAILURE): [icon: Icons.FAILURE, color: Colors.RED],
+    (SKIPPED): [icon: Icons.SKIPPED, color: Colors.YELLOW]
   ]
 
   private Project project
