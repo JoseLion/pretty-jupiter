@@ -21,9 +21,9 @@ import com.github.joselion.prettyjupiter.helpers.Utils
 public class PrettyLogger {
 
   private final def statusMap = [
-    (SUCCESS): [icon: '✔', color: Colors.GRAY],
+    (SUCCESS): [icon: Utils.coloredText(Colors.GREEN, '︎✔︎'), color: Colors.GRAY],
     (FAILURE): [icon: '❌', color: Colors.RED],
-    (SKIPPED): [icon: '⚠', color: Colors.YELLOW]
+    (SKIPPED): [icon: '⚠️', color: Colors.YELLOW]
   ]
 
   private Project project
