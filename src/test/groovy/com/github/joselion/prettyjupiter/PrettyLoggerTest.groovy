@@ -5,16 +5,20 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 
+import java.io.File
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
+import org.gradle.api.reporting.DirectoryReport
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
+import org.gradle.api.tasks.testing.TestTaskReports
 import org.gradle.testfixtures.ProjectBuilder
 
 import com.github.joselion.prettyjupiter.helpers.Colors
+import com.github.joselion.prettyjupiter.helpers.Icons
 import com.github.joselion.prettyjupiter.helpers.Utils
 
 class PrettyLoggerTest extends Specification {
@@ -23,7 +27,8 @@ class PrettyLoggerTest extends Specification {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final Test testTask = Stub(Test)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getClassName() >> className
@@ -48,7 +53,8 @@ class PrettyLoggerTest extends Specification {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final Test testTask = Stub(Test)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getDisplayName() >> 'This is a test result!'
@@ -57,6 +63,7 @@ class PrettyLoggerTest extends Specification {
         getResultType() >> resultType
         getStartTime() >> 10000
         getEndTime() >> 10010
+        getException() >> null
       }
 
     when:
@@ -69,19 +76,31 @@ class PrettyLoggerTest extends Specification {
 
     where:
       resultType  | log
-      SUCCESS     | "✔ ${ESC}[90mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
-      FAILURE     | "❌ ${ESC}[31mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
-      SKIPPED     | "⚠ ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      SUCCESS     | "${Icons.SUCCESS} ${ESC}[90mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      FAILURE     | "${Icons.FAILURE} ${ESC}[31mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
+      SKIPPED     | "${Icons.SKIPPED} ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
   }
 
-  def '.logSummary'(ResultType resultType, String icon) {
+  def '.logSummary'(ResultType resultType, Icons icon) {
     given:
       final Logger logger = Mock()
-      final Project project = Stub(Project) {
-        getLogger() >> logger
+      final Project project = Stub(Project) { getLogger() >> logger }
+      final Test testTask = Stub(Test) {
+        getReports() >> Stub(TestTaskReports) {
+          getHtml() >> Stub(DirectoryReport) {
+            getEntryPoint() >> Stub(File) {
+              toString() >> 'path/to/report/file.html'
+            }
+          }
+        }
       }
-      final PrettyLogger prettyLogger = new PrettyLogger(project)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
+      final Exception exception = new Exception("Multi\nline\nexception!")
+      final TestResult testRes = Stub(TestResult) {
+        getResultType() >> FAILURE
+        getException() >> exception
+      }
       final TestResult results = Stub(TestResult) {
         getResultType() >> resultType
         getStartTime() >> 1583909261673
@@ -93,30 +112,58 @@ class PrettyLoggerTest extends Specification {
       }
 
     when:
+      prettyLogger.logResults(desc(1), testRes)
       prettyLogger.logSummary(descriptor, results)
 
     then:
       with(logger) {
-        final String rawText = "* ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) *"
+        def normalize = { String s ->
+          s.replace("${ESC}", '')
+            .replaceAll(/\[\d*m/, '')
+        }
+        final String rawText = normalize(" ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) ")
+        final String rawReport = ' Report: path/to/report/file.html'
+
         1 * lifecycle('\n\n')
-        1 * lifecycle('*' * rawText.length())
-        1 * lifecycle("* ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) *")
-        1 * lifecycle('*' * rawText.length())
+        1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
+        1 * lifecycle("       ${ESC}[91mMulti")
+        1 * lifecycle('       line')
+        1 * lifecycle("       exception!${ESC}[0m")
+        1 * lifecycle('')
+        1 * lifecycle('     Failure stack trace:')
+        1 * lifecycle("       ${ESC}[90m${exception.getStackTrace()[0]}")
+        1 * lifecycle("       ${exception.getStackTrace()[1]}")
+        1 * lifecycle("       ${exception.getStackTrace()[2]}")
+        1 * lifecycle("       ${exception.getStackTrace()[3]}")
+        1 * lifecycle("       ${exception.getStackTrace()[4]}")
+        1 * lifecycle("       ${exception.getStackTrace()[5]}")
+        1 * lifecycle("       ${exception.getStackTrace()[6]}")
+        1 * lifecycle("       ${exception.getStackTrace()[7]}")
+        1 * lifecycle("       ${exception.getStackTrace()[8]}")
+        1 * lifecycle("       ${exception.getStackTrace()[9]}")
+        1 * lifecycle("       --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
+        2 * lifecycle('\n')
+        1 * lifecycle('┌' + '─' * rawText.length() + '┐')
+        1 * lifecycle("| ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) |")
+        1 * lifecycle('|' + ' ' * rawText.length() + '|')
+        1 * lifecycle('|' + rawReport + ' ' * (rawText.length() - rawReport.length()) + '|')
+        1 * lifecycle('└' + '─' * rawText.length() + '┘')
       }
 
     where:
       resultType  | icon
-      SUCCESS     | '✔'
-      FAILURE     | '❌'
-      SKIPPED     | '⚠'
+      SUCCESS     | Icons.SUCCESS
+      FAILURE     | Icons.FAILURE
+      SKIPPED     | Icons.SKIPPED
   }
 
   def 'duration colors'(Long startTime, Long endTime, Colors color) {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
+      final Test testTask = Stub(Test)
       final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
-      final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getDisplayName() >> 'Another test description comes here'
@@ -134,7 +181,7 @@ class PrettyLoggerTest extends Specification {
         with(logger) {
           final int colorCode = color.getCode()
           final long diff = endTime - startTime
-          1 * lifecycle("✔ ${ESC}[90mAnother test description comes here${ESC}[0m (${ESC}[${colorCode}m${diff}ms${ESC}[0m)")
+          1 * lifecycle("${Icons.SUCCESS} ${ESC}[90mAnother test description comes here${ESC}[0m (${ESC}[${colorCode}m${diff}ms${ESC}[0m)")
         }
 
       where:
@@ -150,9 +197,10 @@ class PrettyLoggerTest extends Specification {
   def 'disable duration'() {
     final Logger logger = Mock()
     final Project project = Stub(Project) { getLogger() >> logger }
+    final Test testTask = Stub(Test)
     final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
     extension.duration.enabled = false
-    final PrettyLogger prettyLogger = new PrettyLogger(project, extension)
+    final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
     final TestDescriptor descriptor = Stub(TestDescriptor) {
       getParent() >> null
       getDisplayName() >> 'Some tests without duration'
@@ -168,7 +216,35 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        1 * lifecycle("✔ ${ESC}[90mSome tests without duration${ESC}[0m")
+        1 * lifecycle("${Icons.SUCCESS} ${ESC}[90mSome tests without duration${ESC}[0m")
       }
+  }
+
+  private TestDescriptor desc(Integer parents = 0) {
+    final Integer num = parents + 1
+
+    return Stub(TestDescriptor) {
+      getParent() >> Stub(TestDescriptor) {
+        getParent() >> descriptorWithParents(num)
+      }
+    }
+  }
+
+  private TestDescriptor descriptorWithParents(Integer num) {
+    if (num == null) {
+      return null
+    }
+
+    if (num == 0) {
+      return Stub(TestDescriptor) {
+        getParent() >> null
+        getDisplayName() >> "Test ${num - 1}"
+      }
+    }
+
+    return Stub(TestDescriptor) {
+      getParent() >> descriptorWithParents(num - 1)
+      getDisplayName() >> "Test ${num - 1}"
+    }
   }
 }

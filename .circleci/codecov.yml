@@ -2,7 +2,10 @@ codecov:
   require_ci_to_pass: yes
 
 coverage:
+  range: 80..100
+  round: up
   status:
     project:
-      target: 90%
-      threshold: 5%
+      default:
+        target: 80%
+        threshold: 10%

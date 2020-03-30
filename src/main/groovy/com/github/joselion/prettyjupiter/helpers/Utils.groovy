@@ -1,5 +1,6 @@
 package com.github.joselion.prettyjupiter.helpers
 
+import java.util.stream.Collectors
 import org.gradle.api.tasks.testing.TestDescriptor
 
 import com.github.joselion.prettyjupiter.helpers.Colors
@@ -26,7 +27,26 @@ public class Utils {
     return "${ESC}[${colorCode}m${text}${ESC}[0m"
   }
 
-  private static Integer getLevel(TestDescriptor descriptor, Integer acc = -2) {
+  public static String limitedText(String text, Integer maxLines) {
+    if (text == null) {
+      return null
+    }
+
+    final long lines = text.lines().count()
+
+    if (maxLines == 0) {
+      return "--- not showing ${lines} lines of text ---"
+    }
+
+    if (lines > maxLines) {
+      final String limited = text.lines().limit(maxLines).collect(Collectors.joining('\n'))
+      return "${limited}\n--- and ${lines - maxLines} more ---"
+    }
+
+    return text
+  }
+
+  public static Integer getLevel(TestDescriptor descriptor, Integer acc = -2) {
     final TestDescriptor parent = descriptor?.getParent()
 
     return parent != null
