@@ -21,7 +21,7 @@ class PrettyJupiterPluginTest extends Specification {
       project.plugins.apply(basePlugin)
 
     then:
-      project.test.testLogging.exceptionFormat == SHORT
+      project.test.testLogging.events.size() == 0
       project.test.reports.html.enabled == true
 
     where:
