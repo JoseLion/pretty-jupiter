@@ -22,9 +22,7 @@ public class PrettyJupiterPlugin implements Plugin<Project> {
         final PrettyLogger prettyLogger = new PrettyLogger(project, testTaks, extension)
 
         testTaks.testLogging {
-          events = [STANDARD_OUT, STANDARD_ERROR]
           exceptionFormat(SHORT)
-          showStandardStreams(true)
         }
 
         testTaks.reports {

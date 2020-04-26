@@ -21,10 +21,7 @@ class PrettyJupiterPluginTest extends Specification {
       project.plugins.apply(basePlugin)
 
     then:
-      project.test.testLogging.events.contains STANDARD_OUT
-      project.test.testLogging.events.contains STANDARD_ERROR
       project.test.testLogging.exceptionFormat == SHORT
-      project.test.testLogging.showStandardStreams == true
       project.test.reports.html.enabled == true
 
     where:
