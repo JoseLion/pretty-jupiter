@@ -15,7 +15,7 @@ class Failure {
 
   public Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterPluginExtension extension) {
     this.location = buildLocation(descriptor, Utils.getLevel(descriptor))
-    this.message = buildMessage(exception.getMessage(), extension.failure.maxMessageLines)
+    this.message = buildMessage(exception.toString(), extension.failure.maxMessageLines)
     this.trace = buildTrace(exception.getStackTrace().join('\n'), extension.failure.maxTraceLines)
   }
 

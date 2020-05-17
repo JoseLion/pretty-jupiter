@@ -23,11 +23,11 @@ class FailureTest extends Specification {
 
   def "#message"() {
     given:
-      final String error = "This shouldbe an Assertion error!"
+      final String error = "This should be an Assertion error!"
       final Failure failure = new Failure(new Exception(error), desc(1), new PrettyJupiterPluginExtension())
 
     expect:
-      failure.getMessage() == "${ESC}[91m${error}${ESC}[0m"
+      failure.getMessage() == "${ESC}[91mjava.lang.Exception: ${error}${ESC}[0m"
   }
 
   def "#trace"() {
