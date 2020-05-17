@@ -96,7 +96,7 @@ class PrettyLoggerTest extends Specification {
       }
       final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
-      final Exception exception = new Exception("Multi\nline\nexception!")
+      final Exception exception = new Exception("\nMulti\nline\nexception!")
       final TestResult testRes = Stub(TestResult) {
         getResultType() >> FAILURE
         getException() >> exception
@@ -126,7 +126,8 @@ class PrettyLoggerTest extends Specification {
 
         1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
-        1 * lifecycle("       ${ESC}[91mMulti")
+        1 * lifecycle("       ${ESC}[91mjava.lang.Exception: ")
+        1 * lifecycle("       Multi")
         1 * lifecycle('       line')
         1 * lifecycle("       exception!${ESC}[0m")
         1 * lifecycle('')
