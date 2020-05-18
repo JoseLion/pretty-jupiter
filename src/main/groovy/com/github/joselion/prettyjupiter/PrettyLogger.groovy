@@ -76,9 +76,17 @@ public class PrettyLogger {
         failure.getMessage().eachLine {
           project.logger.lifecycle("${ns}    ${it}")
         }
+
+        if (failure.getCause()) {
+          project.logger.lifecycle('')
+          project.logger.lifecycle("${ns}  Caused by:")
+          failure.getCause().eachLine {
+            project.logger.lifecycle("${ns}    ${it}")
+          }
+        }
         
         project.logger.lifecycle('')
-        project.logger.lifecycle("${ns}  Failure stack trace:")
+        project.logger.lifecycle("${ns}  Stack trace:")
         failure.getTrace().eachLine {
           project.logger.lifecycle("${ns}    ${it}")
         }
@@ -102,15 +110,16 @@ public class PrettyLogger {
         .map(normalize)
         .max({ a, b -> a.length() - b.length() })
         .orElse("")
-        .length()
+        .length() + 1
 
       project.logger.lifecycle('\n')
-      project.logger.lifecycle('┌' + ('─' * (max + 2)) + '┐')
+      project.logger.lifecycle('┌─' + ('─' * max) + '─┐')
       summary.lines().toArray().each {
-        final String ws = ' ' * (max - normalize(it).length())
+        final int end = Icons.values()*.icon.any { icon -> it.contains(icon) } ? 1 : 0
+        final String ws = ' ' * (max - normalize(it).length() - end)
         project.logger.lifecycle("| ${it}${ws} |")
       }
-      project.logger.lifecycle('└' + ('─' * (max + 2)) + '┘')
+      project.logger.lifecycle('└─' + ('─' * max) + '─┘')
       
     }
   }
