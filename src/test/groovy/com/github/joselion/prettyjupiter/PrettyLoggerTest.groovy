@@ -96,7 +96,11 @@ class PrettyLoggerTest extends Specification {
       }
       final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
-      final Exception exception = new Exception("\nMulti\nline\nexception!")
+      final Exception causeD = new Exception("Cause of error C")
+      final Exception causeC = new Exception("Cause of error B", causeD)
+      final Exception causeB = new Exception("Cause of error A", causeC)
+      final Exception causeA = new Exception("Cause of top error", causeB)
+      final Exception exception = new Exception("\nMulti\nline\nexception!", causeA)
       final TestResult testRes = Stub(TestResult) {
         getResultType() >> FAILURE
         getException() >> exception
@@ -121,8 +125,9 @@ class PrettyLoggerTest extends Specification {
           s.replace("${ESC}", '')
             .replaceAll(/\[\d*m/, '')
         }
-        final String rawText = normalize(" ${icon} 136 tests completed, 120 successes, 10 failures, 6 skipped (43.617 seconds) ")
-        final String rawReport = ' Report: path/to/report/file.html'
+        final String rawText = "${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds)"
+        final String visibleText = normalize(rawText)
+        final String rawReport = 'Report: path/to/report/file.html'
 
         1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
@@ -131,24 +136,31 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle('       line')
         1 * lifecycle("       exception!${ESC}[0m")
         1 * lifecycle('')
-        1 * lifecycle('     Failure stack trace:')
-        1 * lifecycle("       ${ESC}[90m${exception.getStackTrace()[0]}")
-        1 * lifecycle("       ${exception.getStackTrace()[1]}")
-        1 * lifecycle("       ${exception.getStackTrace()[2]}")
-        1 * lifecycle("       ${exception.getStackTrace()[3]}")
-        1 * lifecycle("       ${exception.getStackTrace()[4]}")
-        1 * lifecycle("       ${exception.getStackTrace()[5]}")
-        1 * lifecycle("       ${exception.getStackTrace()[6]}")
-        1 * lifecycle("       ${exception.getStackTrace()[7]}")
-        1 * lifecycle("       ${exception.getStackTrace()[8]}")
-        1 * lifecycle("       ${exception.getStackTrace()[9]}")
-        1 * lifecycle("       --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
+        1 * lifecycle('     Caused by:')
+        1 * lifecycle("       ${ESC}[33m+ java.lang.Exception: Cause of top error")
+        1 * lifecycle('       └─┬─ java.lang.Exception: Cause of error A')
+        1 * lifecycle('         └─┬─ java.lang.Exception: Cause of error B')
+        1 * lifecycle("           └─── java.lang.Exception: Cause of error C${ESC}[0m")
+        1 * lifecycle('')
+        1 * lifecycle('     Stack trace:')
+        1 * lifecycle("       ${ESC}[90mjava.lang.Exception:  Multi line exception!")
+        1 * lifecycle("         at ${exception.getStackTrace()[0]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[1]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[2]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[3]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[4]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[5]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[6]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[7]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[8]}")
+        1 * lifecycle("         at ${exception.getStackTrace()[9]}")
+        1 * lifecycle("         --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
         2 * lifecycle('\n')
-        1 * lifecycle('┌' + '─' * rawText.length() + '┐')
-        1 * lifecycle("| ${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds) |")
-        1 * lifecycle('|' + ' ' * rawText.length() + '|')
-        1 * lifecycle('|' + rawReport + ' ' * (rawText.length() - rawReport.length()) + '|')
-        1 * lifecycle('└' + '─' * rawText.length() + '┘')
+        1 * lifecycle('┌─' + '─' * visibleText.length() + '──┐')
+        1 * lifecycle("| ${rawText} |")
+        1 * lifecycle('| ' + ' ' * visibleText.length() + '  |')
+        1 * lifecycle('| ' + rawReport + ' ' * (visibleText.length() - rawReport.length()) + '  |')
+        1 * lifecycle('└─' + '─' * visibleText.length() + '──┘')
       }
 
     where:
