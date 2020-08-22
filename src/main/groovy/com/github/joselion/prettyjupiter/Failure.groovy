@@ -65,7 +65,7 @@ class Failure {
     return Utils.coloredText(Colors.GRAY, firstLine + traceText)
   }
 
-  private String buildCause(Exception cause) {
+  private String buildCause(Throwable cause) {
     if (cause) {
       final String causeText = "+ ${cause.toString()}" + getNextCause(cause.getCause())
       return Utils.coloredText(Colors.YELLOW, causeText)
