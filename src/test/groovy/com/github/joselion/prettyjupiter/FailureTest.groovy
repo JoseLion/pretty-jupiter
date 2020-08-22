@@ -10,10 +10,10 @@ class FailureTest extends Specification {
   private static final Exception causeD = new Exception('Cause of error C')
   private static final Exception causeC = new Exception('Cause of error B', causeD)
   private static final Exception causeB = new Exception('Cause of error A', causeC)
-  private static final Exception causeA = new Exception('Cause of top error', causeB)
+  private static final AssertionError causeA = new AssertionError('Cause of top error', causeB)
   private static final Exception fullCause = new Exception('Top error', causeA)
 
-  def '#cause'(Exception topError, String result) {
+  def '#cause'(Throwable topError, String result) {
     given:
       final Failure failure = new Failure(topError, desc(1), new PrettyJupiterPluginExtension())
 
@@ -29,7 +29,7 @@ class FailureTest extends Specification {
       causeA          | "${ESC}[33m+ java.lang.Exception: Cause of error A\n" +
                                   '└─┬─ java.lang.Exception: Cause of error B\n' +
                                   "  └─── java.lang.Exception: Cause of error C${ESC}[0m"
-      fullCause       | "${ESC}[33m+ java.lang.Exception: Cause of top error\n" +
+      fullCause       | "${ESC}[33m+ java.lang.AssertionError: Cause of top error\n" +
                                   '└─┬─ java.lang.Exception: Cause of error A\n' +
                                   '  └─┬─ java.lang.Exception: Cause of error B\n' +
                                   "    └─── java.lang.Exception: Cause of error C${ESC}[0m"
