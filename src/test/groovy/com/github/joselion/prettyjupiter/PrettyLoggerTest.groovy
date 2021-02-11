@@ -157,7 +157,7 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle("         --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
         2 * lifecycle('\n')
         1 * lifecycle('┌─' + '─' * visibleText.length() + '──┐')
-        1 * lifecycle("| ${rawText} |")
+        1 * lifecycle("| ${rawText}  |")
         1 * lifecycle('| ' + ' ' * visibleText.length() + '  |')
         1 * lifecycle('| ' + rawReport + ' ' * (visibleText.length() - rawReport.length()) + '  |')
         1 * lifecycle('└─' + '─' * visibleText.length() + '──┘')

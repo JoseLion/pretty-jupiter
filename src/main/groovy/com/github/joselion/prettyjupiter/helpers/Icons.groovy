@@ -2,8 +2,8 @@ package com.github.joselion.prettyjupiter.helpers
 
 enum Icons {
   SUCCESS(Utils.coloredText(Colors.GREEN, '✔')),
-  FAILURE('❌'),
-  SKIPPED('⚠️')
+  FAILURE(Utils.coloredText(Colors.RED, '✖')),
+  SKIPPED('⚠️ ')
 
   private final String icon
 
