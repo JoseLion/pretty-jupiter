@@ -16,10 +16,11 @@ import org.gradle.api.tasks.testing.Test
  */
 public class PrettyJupiterPlugin implements Plugin<Project> {
   public void apply(Project project) {
+    def extension = project.extensions.create('prettyJupiter', PrettyJupiterPluginExtension)
+
     project.plugins.withType(JavaPlugin) {
       project.tasks.withType(Test) { testTaks ->
-        final PrettyJupiterPluginExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterPluginExtension)
-        final PrettyLogger prettyLogger = new PrettyLogger(project, testTaks, extension)
+        def prettyLogger = new PrettyLogger(project, testTaks, extension)
 
         testTaks.testLogging {
           events = []
