@@ -62,6 +62,23 @@ gradlePlugin {
   }
 }
 
+sourceSets {
+  e2e {
+  }
+}
+
+gradlePlugin.testSourceSets(sourceSets.e2e)
+configurations.e2eImplementation.extendsFrom(configurations.testImplementation)
+
+tasks.register('e2e', Test) {
+  testClassesDirs = sourceSets.e2e.output.classesDirs
+  classpath = sourceSets.e2e.runtimeClasspath
+}
+
+tasks.named('test') {
+  finalizedBy(tasks.e2e)
+}
+
 test {
   testLogging {
     showStandardStreams = true
