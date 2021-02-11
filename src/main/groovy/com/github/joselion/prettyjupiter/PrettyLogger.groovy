@@ -115,8 +115,7 @@ public class PrettyLogger {
       project.logger.lifecycle('\n')
       project.logger.lifecycle('┌─' + ('─' * max) + '─┐')
       summary.lines().toArray().each {
-        final int end = Icons.values()*.icon.any { icon -> it.contains(icon) } ? 1 : 0
-        final String ws = ' ' * (max - normalize(it).length() - end)
+        final String ws = ' ' * (max - normalize(it).length())
         project.logger.lifecycle("| ${it}${ws} |")
       }
       project.logger.lifecycle('└─' + ('─' * max) + '─┘')
