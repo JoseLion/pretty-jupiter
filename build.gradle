@@ -4,8 +4,8 @@ plugins {
   id 'jacoco'
   id 'java-gradle-plugin'
 
-  id 'com.gradle.plugin-publish' version '0.11.0'
-  id 'nebula.lint' version '16.2.3'
+  id 'com.gradle.plugin-publish' version '0.12.0'
+  id 'nebula.lint' version '16.17.0'
 }
 
 version = '1.3.1'
@@ -19,7 +19,7 @@ dependencyLocking {
 
 codenarc {
   reportFormat('console')
-  toolVersion('1.5')
+  toolVersion('2.0.0')
 }
 
 gradleLint {
@@ -39,9 +39,9 @@ repositories {
 }
 
 dependencies {
-  testImplementation(group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.3', ext: 'pom')
+  testImplementation(group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7', ext: 'pom')
   testImplementation(group: 'org.spockframework', name: 'spock-core', version: '1.3-groovy-2.5')
-  testRuntimeOnly(group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.8')
+  testRuntimeOnly(group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.20')
   testRuntimeOnly(group: 'org.objenesis', name: 'objenesis', version: '3.1')
 }
 

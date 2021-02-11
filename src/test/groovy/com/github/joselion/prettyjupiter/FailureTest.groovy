@@ -62,7 +62,7 @@ class FailureTest extends Specification {
     given:
       final String trace = '''java.lang.Exception: Some error message
   at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-  at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+  at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:64)
   at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
   at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
   at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
