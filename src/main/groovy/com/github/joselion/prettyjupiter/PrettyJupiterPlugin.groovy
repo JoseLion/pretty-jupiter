@@ -19,20 +19,22 @@ public class PrettyJupiterPlugin implements Plugin<Project> {
     def extension = project.extensions.create('prettyJupiter', PrettyJupiterPluginExtension)
 
     project.plugins.withType(JavaPlugin) {
-      project.tasks.withType(Test) { testTaks ->
-        def prettyLogger = new PrettyLogger(project, testTaks, extension)
+      project.tasks.withType(Test) { testTask ->
+        def prettyLogger = new PrettyLogger(project, testTask, extension)
 
-        testTaks.testLogging {
+        testTask.testLogging {
           events = []
         }
 
-        testTaks.reports {
+        testTask.reports {
           html.enabled(true)
         }
 
-        testTaks.beforeSuite(prettyLogger.&logDescriptors)
-        testTaks.afterTest(prettyLogger.&logResults)
-        testTaks.afterSuite(prettyLogger.&logSummary)
+        testTask.beforeSuite(prettyLogger.&logDescriptors)
+        testTask.afterTest(prettyLogger.&logResults)
+        testTask.afterSuite(prettyLogger.&logSummary)
+
+        systemProperty('file.encoding', 'UTF-8')
       }
     }
   }
