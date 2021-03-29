@@ -13,7 +13,9 @@
   <ruleset-ref path="rulesets/groovyism.xml" />
   <ruleset-ref path="rulesets/imports.xml" />
   <ruleset-ref path="rulesets/logging.xml" />
-  <ruleset-ref path="rulesets/security.xml" />
+  <ruleset-ref path="rulesets/security.xml">
+    <exclude name="JavaIoPackageAccess" />
+  </ruleset-ref>
   <ruleset-ref path="rulesets/serialization.xml" />
   <ruleset-ref path="rulesets/unnecessary.xml">
     <exclude name="UnnecessaryReturnKeyword" />
