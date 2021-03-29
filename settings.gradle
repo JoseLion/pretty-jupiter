@@ -8,3 +8,5 @@
  */
 
 rootProject.name = 'pretty-jupiter'
+
+enableFeaturePreview('ONE_LOCKFILE_PER_PROJECT')
