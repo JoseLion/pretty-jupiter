@@ -14,7 +14,7 @@ enum Colors {
     this.code = code
   }
 
-  public int getCode() {
-    code
+  int getCode() {
+    return code
   }
 }

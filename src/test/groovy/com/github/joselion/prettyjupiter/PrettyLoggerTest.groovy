@@ -1,12 +1,13 @@
 package com.github.joselion.prettyjupiter
 
 import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
-import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
+import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 
-import java.io.File
-import spock.lang.Specification
+import com.github.joselion.prettyjupiter.helpers.Colors
+import com.github.joselion.prettyjupiter.helpers.Icons
+
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
 import org.gradle.api.reporting.DirectoryReport
@@ -15,11 +16,8 @@ import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 import org.gradle.api.tasks.testing.TestTaskReports
-import org.gradle.testfixtures.ProjectBuilder
 
-import com.github.joselion.prettyjupiter.helpers.Colors
-import com.github.joselion.prettyjupiter.helpers.Icons
-import com.github.joselion.prettyjupiter.helpers.Utils
+import spock.lang.Specification
 
 class PrettyLoggerTest extends Specification {
 
@@ -96,11 +94,11 @@ class PrettyLoggerTest extends Specification {
       }
       final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
-      final Exception causeD = new Exception("Cause of error C")
-      final Exception causeC = new Exception("Cause of error B", causeD)
-      final Exception causeB = new Exception("Cause of error A", causeC)
-      final Exception causeA = new Exception("Cause of top error", causeB)
-      final Exception exception = new Exception("\nMulti\nline\nexception!", causeA)
+      final Exception causeD = new Exception('Cause of error C')
+      final Exception causeC = new Exception('Cause of error B', causeD)
+      final Exception causeB = new Exception('Cause of error A', causeC)
+      final Exception causeA = new Exception('Cause of top error', causeB)
+      final Exception exception = new Exception('\nMulti\nline\nexception!', causeA)
       final TestResult testRes = Stub(TestResult) {
         getResultType() >> FAILURE
         getException() >> exception
@@ -132,7 +130,7 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
         1 * lifecycle("       ${ESC}[91mjava.lang.Exception: ")
-        1 * lifecycle("       Multi")
+        1 * lifecycle('       Multi')
         1 * lifecycle('       line')
         1 * lifecycle("       exception!${ESC}[0m")
         1 * lifecycle('')

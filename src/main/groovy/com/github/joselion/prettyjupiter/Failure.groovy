@@ -1,40 +1,40 @@
 package com.github.joselion.prettyjupiter
 
-import org.gradle.api.tasks.testing.TestDescriptor
-
 import com.github.joselion.prettyjupiter.helpers.Colors
 import com.github.joselion.prettyjupiter.helpers.Utils
 
+import org.gradle.api.tasks.testing.TestDescriptor
+
 class Failure {
 
-  private String cause;
+  private final String cause
 
-  private String location;
+  private final String location
 
-  private String message;
+  private final String message
 
-  private String trace;
+  private final String trace
 
-  public Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterPluginExtension extension) {
-    this.cause = buildCause(exception.getCause());
+  Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterPluginExtension extension) {
+    this.cause = buildCause(exception.getCause())
     this.location = buildLocation(descriptor, Utils.getLevel(descriptor))
     this.message = buildMessage(exception.toString(), extension.failure.maxMessageLines)
     this.trace = buildTrace(exception, extension.failure.maxTraceLines)
   }
 
-  public String getCause() {
+  String getCause() {
     return cause
   }
 
-  public String getLocation() {
+  String getLocation() {
     return location
   }
 
-  public String getMessage() {
+  String getMessage() {
     return message
   }
 
-  public String getTrace() {
+  String getTrace() {
     return trace
   }
 
@@ -67,21 +67,21 @@ class Failure {
 
   private String buildCause(Throwable cause) {
     if (cause) {
-      final String causeText = "+ ${cause.toString()}" + getNextCause(cause.getCause())
+      final String causeText = "+ ${cause}" + getNextCause(cause.getCause())
       return Utils.coloredText(Colors.YELLOW, causeText)
     }
 
-    return null;
+    return null
   }
 
   private String getNextCause(Throwable cause, int indent = 0) {
     if (cause) {
-      final String ns = ' ' * indent;
+      final String ns = ' ' * indent
       final String symbol = cause.getCause() ? '┬' : '─'
       final String next = getNextCause(cause.getCause(), indent + 2)
-      return "\n${ns}└─${symbol}─ ${cause.toString()}" + next
+      return "\n${ns}└─${symbol}─ ${cause}" + next
     }
 
-    return '';
+    return ''
   }
 }

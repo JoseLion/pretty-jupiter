@@ -8,10 +8,10 @@ class PrettyJupiterPluginE2E extends Specification {
 
   def 'can apply the plugin'() {
     given:
-      def projectDir = new File("build/e2e")
+      def projectDir = new File('build/e2e')
       projectDir.mkdirs()
-      new File(projectDir, "settings.gradle") << ""
-      def buildGradle = new File(projectDir, "build.gradle")
+      new File(projectDir, 'settings.gradle') << ''
+      def buildGradle = new File(projectDir, 'build.gradle')
       buildGradle.bytes = []
       buildGradle << """\
         |plugins {
@@ -25,7 +25,7 @@ class PrettyJupiterPluginE2E extends Specification {
         def runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("test")
+        runner.withArguments('test')
         runner.withProjectDir(projectDir)
         def result = runner.build()
 
@@ -35,10 +35,10 @@ class PrettyJupiterPluginE2E extends Specification {
 
   def 'can apply the plugin with 2 test tasks'() {
     given:
-      def projectDir = new File("build/e2e")
+      def projectDir = new File('build/e2e')
       projectDir.mkdirs()
-      new File(projectDir, "settings.gradle") << ""
-      def buildGradle = new File(projectDir, "build.gradle")
+      new File(projectDir, 'settings.gradle') << ''
+      def buildGradle = new File(projectDir, 'build.gradle')
       buildGradle.bytes = []
       buildGradle << """\
         |plugins {
@@ -66,7 +66,7 @@ class PrettyJupiterPluginE2E extends Specification {
         def runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("test")
+        runner.withArguments('test')
         runner.withProjectDir(projectDir)
         def result = runner.build()
 
@@ -74,11 +74,11 @@ class PrettyJupiterPluginE2E extends Specification {
         result.output.contains('BUILD SUCCESSFUL')
   }
 
-  def "can change the plugin configuration"() {
-    def projectDir = new File("build/e2e")
+  def 'can change the plugin configuration'() {
+    def projectDir = new File('build/e2e')
       projectDir.mkdirs()
-      new File(projectDir, "settings.gradle") << ""
-      def buildGradle = new File(projectDir, "build.gradle")
+      new File(projectDir, 'settings.gradle') << ''
+      def buildGradle = new File(projectDir, 'build.gradle')
       buildGradle.bytes = []
       buildGradle << """\
         |plugins {
@@ -100,7 +100,7 @@ class PrettyJupiterPluginE2E extends Specification {
         def runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("test")
+        runner.withArguments('test')
         runner.withProjectDir(projectDir)
         def result = runner.build()
 

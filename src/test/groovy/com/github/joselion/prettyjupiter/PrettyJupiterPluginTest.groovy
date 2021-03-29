@@ -1,12 +1,8 @@
 package com.github.joselion.prettyjupiter
 
-import static org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
-import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR
-import static org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT
-
-import groovy.lang.MissingPropertyException
-import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
+
 import spock.lang.Specification
 
 

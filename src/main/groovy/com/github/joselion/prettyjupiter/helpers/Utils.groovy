@@ -1,19 +1,18 @@
 package com.github.joselion.prettyjupiter.helpers
 
 import java.util.stream.Collectors
+
 import org.gradle.api.tasks.testing.TestDescriptor
 
-import com.github.joselion.prettyjupiter.helpers.Colors
+class Utils {
 
-public class Utils {
+  static final String ESC = Character.toString(27)
 
-  public static final String ESC = Character.toString(27)
-
-  public Utils() {
-    throw new IllegalStateException("Utility class")
+  Utils() {
+    throw new IllegalStateException('Utility class')
   }
 
-  public static String getTabs(TestDescriptor descriptor, String tabChar = '  ') {
+  static String getTabs(TestDescriptor descriptor, String tabChar = '  ') {
     final Integer level = getLevel(descriptor)
 
     return level > 0
@@ -21,13 +20,13 @@ public class Utils {
       : ''
   }
 
-  public static String coloredText(Colors color, String text) {
+  static String coloredText(Colors color, String text) {
     final String colorCode = color.getCode()
 
     return "${ESC}[${colorCode}m${text}${ESC}[0m"
   }
 
-  public static String limitedText(String text, Integer maxLines) {
+  static String limitedText(String text, Integer maxLines) {
     if (text == null) {
       return null
     }
@@ -46,7 +45,7 @@ public class Utils {
     return text
   }
 
-  public static Integer getLevel(TestDescriptor descriptor, Integer acc = -2) {
+  static Integer getLevel(TestDescriptor descriptor, Integer acc = -2) {
     final TestDescriptor parent = descriptor?.getParent()
 
     return parent != null

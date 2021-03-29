@@ -47,7 +47,7 @@ jobs:
 
       - run:
           name: Lint
-          command: ./gradlew codenarcMain codenarcTest
+          command: ./gradlew codenarcMain codenarcTest codenarcE2e
 
       - run:
           name: Test

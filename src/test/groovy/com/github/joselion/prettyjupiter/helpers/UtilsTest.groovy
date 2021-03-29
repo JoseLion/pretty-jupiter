@@ -2,11 +2,9 @@ package com.github.joselion.prettyjupiter.helpers
 
 import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
 
-import spock.lang.Specification
 import org.gradle.api.tasks.testing.TestDescriptor
 
-import com.github.joselion.prettyjupiter.helpers.Colors
-import com.github.joselion.prettyjupiter.helpers.Utils
+import spock.lang.Specification
 
 class UtilsTest extends Specification {
 
@@ -50,7 +48,7 @@ class UtilsTest extends Specification {
 
   def '.limitedText'(Integer limit, String result) {
     expect:
-      Utils.limitedText("Multiple lines text\n" * 5, limit) == result
+      Utils.limitedText('Multiple lines text\n' * 5, limit) == result
       Utils.limitedText(null, 1) == null
 
     where:
