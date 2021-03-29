@@ -24,7 +24,7 @@ jobs:
 
       - run:
           name: Lint
-          command: ./gradlew lintGradle codenarcMain codenarcTest
+          command: ./gradlew codenarcMain codenarcTest
 
       - run:
           name: Compile and build
