@@ -1,48 +1,46 @@
 package com.github.joselion.prettyjupiter
 
-import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
+import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
-import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
-
-import groovy.time.TimeDuration
-import groovy.time.TimeCategory
-import java.lang.Throwable
-import java.util.List
-import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
-import org.gradle.api.tasks.testing.TestDescriptor
-import org.gradle.api.tasks.testing.TestResult
-import org.gradle.api.tasks.testing.TestResult.ResultType
+import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 
 import com.github.joselion.prettyjupiter.helpers.Colors
 import com.github.joselion.prettyjupiter.helpers.Icons
 import com.github.joselion.prettyjupiter.helpers.Utils
 
-public class PrettyLogger {
+import groovy.time.TimeCategory
+import groovy.time.TimeDuration
 
-  private final def statusMap = [
+import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestResult
+
+class PrettyLogger {
+
+  private static final statusMap = [
     (SUCCESS): [icon: Icons.SUCCESS, color: Colors.GRAY],
     (FAILURE): [icon: Icons.FAILURE, color: Colors.RED],
     (SKIPPED): [icon: Icons.SKIPPED, color: Colors.YELLOW]
   ]
 
-  private Project project
+  private final Project project
 
-  private Test testTask
+  private final Test testTask
 
-  private PrettyJupiterPluginExtension extension
+  private final PrettyJupiterPluginExtension extension
 
-  private List<Failure> failures;
+  private final List<Failure> failures
 
-  public PrettyLogger(Project project, Test testTask, PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()) {
+  PrettyLogger(Project project, Test testTask, PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()) {
     this.project = project
     this.testTask = testTask
     this.extension = extension
     this.failures = []
   }
 
-  public void logDescriptors(TestDescriptor descriptor) {
+  void logDescriptors(TestDescriptor descriptor) {
     if (descriptor.getClassName() != null) {
       final String tabs = Utils.getTabs(descriptor)
       def desc = Utils.coloredText(Colors.WHITE, descriptor.getDisplayName())
@@ -51,8 +49,8 @@ public class PrettyLogger {
     }
   }
 
-  public void logResults(TestDescriptor descriptor, TestResult result) {
-    final def status = statusMap[result.getResultType()]
+  void logResults(TestDescriptor descriptor, TestResult result) {
+    final status = statusMap[result.getResultType()]
     final String tabs = Utils.getTabs(descriptor)
     final String desc = Utils.coloredText(status.color, descriptor.getDisplayName())
     final String duration = getDuration(result)
@@ -64,12 +62,12 @@ public class PrettyLogger {
     project.logger.lifecycle("${tabs}${status.icon} ${desc}${duration}")
   }
 
-  public void logSummary(TestDescriptor descriptor, TestResult result) {
+  void logSummary(TestDescriptor descriptor, TestResult result) {
     if (!descriptor.parent) {
       project.logger.lifecycle('\n\n')
 
       this.failures.eachWithIndex { failure, i ->
-        final String n = Utils.coloredText(Colors.BRIGHT_RED, "(${i + 1})");
+        final String n = Utils.coloredText(Colors.BRIGHT_RED, "(${i + 1})")
         final String ns = ' ' * ("${i}".length() + 2)
 
         project.logger.lifecycle("${n}  ${failure.getLocation()}:")
@@ -93,7 +91,7 @@ public class PrettyLogger {
         project.logger.lifecycle('\n')
       }
 
-      final def status = statusMap[result.getResultType()]
+      final status = statusMap[result.getResultType()]
       final String successes = Utils.coloredText(Colors.GREEN, "${result.successfulTestCount} successes")
       final String failures = Utils.coloredText(Colors.RED, "${result.failedTestCount} failures")
       final String skipped = Utils.coloredText(Colors.YELLOW, "${result.skippedTestCount} skipped")
@@ -108,8 +106,8 @@ public class PrettyLogger {
 
       final Integer max = summary.lines()
         .map(normalize)
-        .max({ a, b -> a.length() - b.length() })
-        .orElse("")
+        .max { a, b -> a.length() - b.length() }
+        .orElse('')
         .length() + 1
 
       project.logger.lifecycle('\n')

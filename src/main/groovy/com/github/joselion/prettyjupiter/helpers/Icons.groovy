@@ -12,7 +12,7 @@ enum Icons {
   }
 
   @Override
-  public String toString() {
+  String toString() {
     return icon
   }
 }

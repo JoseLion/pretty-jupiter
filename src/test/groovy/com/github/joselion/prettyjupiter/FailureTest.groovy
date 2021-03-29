@@ -3,6 +3,7 @@ package com.github.joselion.prettyjupiter
 import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
 
 import org.gradle.api.tasks.testing.TestDescriptor
+
 import spock.lang.Specification
 
 class FailureTest extends Specification {
@@ -44,14 +45,14 @@ class FailureTest extends Specification {
 
     where:
       descriptor  | location
-      desc()      | ""
-      desc(1)     | "Test description 1"
-      desc(3)     | "Test description 1 => Test description 2 => Test description 3"
+      desc()      | ''
+      desc(1)     | 'Test description 1'
+      desc(3)     | 'Test description 1 => Test description 2 => Test description 3'
   }
 
   def '#message'() {
     given:
-      final String error = "This should be an Assertion error!"
+      final String error = 'This should be an Assertion error!'
       final Failure failure = new Failure(new Exception(error), desc(1), new PrettyJupiterPluginExtension())
 
     expect:
@@ -72,7 +73,7 @@ class FailureTest extends Specification {
   at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:237)
   at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:249)
   --- and 60 more ---'''
-      final Failure failure = new Failure(new Exception("Some error message"), desc(1), new PrettyJupiterPluginExtension())
+      final Failure failure = new Failure(new Exception('Some error message'), desc(1), new PrettyJupiterPluginExtension())
 
     expect:
       failure.getTrace() == "${ESC}[90m${trace}${ESC}[0m"
