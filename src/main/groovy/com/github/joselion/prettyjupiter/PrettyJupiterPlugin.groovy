@@ -33,8 +33,6 @@ public class PrettyJupiterPlugin implements Plugin<Project> {
         testTask.beforeSuite(prettyLogger.&logDescriptors)
         testTask.afterTest(prettyLogger.&logResults)
         testTask.afterSuite(prettyLogger.&logSummary)
-
-        systemProperty('file.encoding', 'UTF-8')
       }
     }
   }
