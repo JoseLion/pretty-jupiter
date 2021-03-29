@@ -1,6 +1,7 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+executors:
+  default-jvm:
     working_directory: ~/repo/pretty-jupiter
 
     docker:
@@ -9,80 +10,86 @@ jobs:
           JVM_OPTS: -Xmx4096m
           TERM: dumb
 
+commands:
+  setup:
+    description: "Setup the environment to run tasks on CI"
+
     steps:
       - checkout:
           path: ~/repo/pretty-jupiter
 
-      - run:
-          name: Generate gradle.lock
-          command: cat gradle/wrapper/gradle-wrapper.properties gradle/dependency-locks/* > gradle.lock
-
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "gradle.lock" }}
-            - v1-dependencies-
+            - v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+            - v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-
+            - v2-dependencies-
+
+  store-cache:
+    description: "Store Gradle configuration and dependencies in cache"
+
+    steps:
+      - save_cache:
+          paths:
+            - ~/repo/pretty-jupiter/.gradle
+            - ~/.gradle
+          key: v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+
+jobs:
+  build:
+    executor: default-jvm
+
+    steps:
+      - setup
+
+      - run:
+          name: Compile
+          command: ./gradlew compileGroovy compileTestGroovy compileE2eGroovy
 
       - run:
           name: Lint
           command: ./gradlew codenarcMain codenarcTest
 
       - run:
-          name: Compile and build
-          command: ./gradlew build -x test
-
-      - run:
           name: Test
           command: ./gradlew test
 
       - run:
-          name: Test reports
-          command: ./gradlew jacocoTestReport
+          name: End-to-end
+          command: ./gradlew e2e
 
-      - save_cache:
-          paths:
-            - ~/repo/pretty-jupiter/.gradle
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "gradle.lock" }}
+      - run:
+          name: Build
+          command: ./gradlew build
+
+      - store-cache
+
+      - run:
+          name: Generate reports
+          command: ./gradlew jacocoTestReport
 
       - run:
           name: Upload reports
           command: bash <(curl -s https://codecov.io/bash) -y ./.circleci/codecov.yml
 
   publish:
-    working_directory: ~/repo/pretty-jupiter
-
-    docker:
-      - image: circleci/openjdk:15-jdk-buster
-        environment:
-          JVM_OPTS: -Xmx4096m
-          TERM: dumb
+    executor: default-jvm
 
     steps:
-      - checkout:
-          path: ~/repo/pretty-jupiter
+      - setup
 
       - run:
-          name: Generate gradle.lock
-          command: cat gradle/wrapper/gradle-wrapper.properties gradle/dependency-locks/* > gradle.lock
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "gradle.lock" }}
-            - v1-dependencies-
+          name: Assemble
+          command: ./gradlew assemble
 
       - run:
-          name: Build artifact
-          command: ./gradlew jar
-
-      - run:
-          name: Publish plugin
+          name: Publish
           command: ./gradlew publishPlugins -Pgradle.publish.key=$GRADLE_PUBLISH_KEY -Pgradle.publish.secret=$GRADLE_PUBLISH_SECRET
 
 workflows:
-  version: 2
   main:
     jobs:
       - build
+
       - publish:
           requires:
             - build

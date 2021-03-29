@@ -1,3 +1,9 @@
+buildscript {
+  configurations.classpath {
+    resolutionStrategy.activateDependencyLocking()
+  }
+}
+
 plugins {
   id 'codenarc'
   id 'groovy'
@@ -63,7 +69,7 @@ tasks.register('e2e', Test) {
   classpath = sourceSets.e2e.runtimeClasspath
 }
 
-tasks.named('test') {
+tasks.named('check') {
   finalizedBy(tasks.e2e)
 }
 
