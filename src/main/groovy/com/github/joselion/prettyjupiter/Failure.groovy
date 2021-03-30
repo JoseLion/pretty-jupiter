@@ -15,11 +15,13 @@ class Failure {
 
   private final String trace
 
-  Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterPluginExtension extension) {
+  Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterExtension extension) {
+    final PrettyJupiterExtension.Failure failure = extension.failure
+
     this.cause = buildCause(exception.getCause())
     this.location = buildLocation(descriptor, Utils.getLevel(descriptor))
-    this.message = buildMessage(exception.toString(), extension.failure.maxMessageLines)
-    this.trace = buildTrace(exception, extension.failure.maxTraceLines)
+    this.message = buildMessage(exception.toString(), failure.maxMessageLines.get())
+    this.trace = buildTrace(exception, failure.maxTraceLines.get())
   }
 
   String getCause() {
