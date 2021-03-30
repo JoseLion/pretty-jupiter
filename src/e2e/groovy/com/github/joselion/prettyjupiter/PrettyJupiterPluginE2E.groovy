@@ -45,17 +45,17 @@ class PrettyJupiterPluginE2E extends Specification {
         |  id('java')
         |  id('com.github.joselion.pretty-jupiter')
         |}
-
+        |
         |sourceSets {
         |  e2e {
         |  }
         |}
-
+        |
         |tasks.register('e2e', Test) {
         |  testClassesDirs = sourceSets.e2e.output.classesDirs
         |  classpath = sourceSets.e2e.runtimeClasspath
         |}
-
+        |
         |tasks.named('test') {
         |  finalizedBy(tasks.e2e)
         |}
@@ -74,7 +74,7 @@ class PrettyJupiterPluginE2E extends Specification {
         result.output.contains('BUILD SUCCESSFUL')
   }
 
-  def 'can change the plugin configuration'() {
+  def 'can update the extension properties'() {
     def projectDir = new File('build/e2e')
       projectDir.mkdirs()
       new File(projectDir, 'settings.gradle') << ''
@@ -85,14 +85,14 @@ class PrettyJupiterPluginE2E extends Specification {
         |  id('java')
         |  id('com.github.joselion.pretty-jupiter')
         |}
-
+        |
         |prettyJupiter {
         |  duration.threshold = 500
         |}
-
-        task showThreshold() {
-          print('THRESHOLD: ' + prettyJupiter.duration.threshold)
-        }
+        |
+        |task showThreshold() {
+        |  print('THRESHOLD: ' + prettyJupiter.duration.threshold.get())
+        |}
       |"""
       .stripMargin()
 
@@ -106,5 +106,43 @@ class PrettyJupiterPluginE2E extends Specification {
 
       then:
         result.output.contains('THRESHOLD: 500')
+  }
+
+  def 'can use closures to configure the extension'() {
+    def projectDir = new File('build/e2e')
+      projectDir.mkdirs()
+      new File(projectDir, 'settings.gradle') << ''
+      def buildGradle = new File(projectDir, 'build.gradle')
+      buildGradle.bytes = []
+      buildGradle << """\
+        |plugins {
+        |  id('java')
+        |  id('com.github.joselion.pretty-jupiter')
+        |}
+        |
+        |prettyJupiter {
+        |  duration {
+        |    enabled = false
+        |    threshold = 500
+        |  }
+        |
+        |  failure {
+        |    maxMessageLines = 25
+        |    maxTraceLines = 150
+        |  }
+        |}
+      |"""
+      .stripMargin()
+
+      when:
+        def runner = GradleRunner.create()
+        runner.forwardOutput()
+        runner.withPluginClasspath()
+        runner.withArguments('test')
+        runner.withProjectDir(projectDir)
+        def result = runner.build()
+
+      then:
+        result.output.contains('BUILD SUCCESSFUL')
   }
 }

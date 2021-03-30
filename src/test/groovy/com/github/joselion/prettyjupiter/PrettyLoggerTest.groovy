@@ -10,23 +10,28 @@ import com.github.joselion.prettyjupiter.helpers.Icons
 
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.reporting.DirectoryReport
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 import org.gradle.api.tasks.testing.TestTaskReports
+import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
 
 class PrettyLoggerTest extends Specification {
+
+  private static final ObjectFactory objects = ProjectBuilder.builder().build().objects
 
   def '.logDescriptors'(String className, Integer times) {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
       final Test testTask = Stub(Test)
-      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
+      final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getClassName() >> className
@@ -52,7 +57,8 @@ class PrettyLoggerTest extends Specification {
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
       final Test testTask = Stub(Test)
-      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
+      final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getDisplayName() >> 'This is a test result!'
@@ -92,7 +98,8 @@ class PrettyLoggerTest extends Specification {
           }
         }
       }
-      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask)
+      final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) { getParent() >> null }
       final Exception causeD = new Exception('Cause of error C')
       final Exception causeC = new Exception('Cause of error B', causeD)
@@ -173,7 +180,7 @@ class PrettyLoggerTest extends Specification {
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
       final Test testTask = Stub(Test)
-      final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
+      final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
       final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
@@ -209,8 +216,8 @@ class PrettyLoggerTest extends Specification {
     final Logger logger = Mock()
     final Project project = Stub(Project) { getLogger() >> logger }
     final Test testTask = Stub(Test)
-    final PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()
-    extension.duration.enabled = false
+    final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
+    extension.duration.enabled.set(false)
     final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
     final TestDescriptor descriptor = Stub(TestDescriptor) {
       getParent() >> null

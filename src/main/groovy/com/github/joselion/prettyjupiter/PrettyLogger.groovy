@@ -29,11 +29,11 @@ class PrettyLogger {
 
   private final Test testTask
 
-  private final PrettyJupiterPluginExtension extension
+  private final PrettyJupiterExtension extension
 
   private final List<Failure> failures
 
-  PrettyLogger(Project project, Test testTask, PrettyJupiterPluginExtension extension = new PrettyJupiterPluginExtension()) {
+  PrettyLogger(Project project, Test testTask, PrettyJupiterExtension extension) {
     this.project = project
     this.testTask = testTask
     this.extension = extension
@@ -122,11 +122,14 @@ class PrettyLogger {
   }
 
   private String getDuration(TestResult result) {
-    if (extension.duration.enabled) {
-      final long timeDiff = result.getEndTime() - result.getStartTime()
-      final Colors color = timeDiff >= extension.duration.threshold
+    final PrettyJupiterExtension.Duration duration = extension.duration
+
+    if (duration.enabled.get()) {
+      final Long timeDiff = result.getEndTime() - result.getStartTime()
+      final Long threshold = duration.threshold.get()
+      final Colors color = timeDiff >= threshold
         ? Colors.RED
-        : timeDiff >= extension.duration.threshold / 2
+        : timeDiff >= threshold / 2
           ? Colors.YELLOW
           : Colors.WHITE
       final String millis = Utils.coloredText(color, "${timeDiff}ms")
