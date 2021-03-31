@@ -7,7 +7,9 @@
   <ruleset-ref path="rulesets/basic.xml" />
   <ruleset-ref path="rulesets/braces.xml" />
   <ruleset-ref path="rulesets/concurrency.xml" />
-  <ruleset-ref path="rulesets/design.xml" />
+  <ruleset-ref path="rulesets/design.xml">
+    <exclude name="BuilderMethodWithSideEffects" />
+  </ruleset-ref>
   <ruleset-ref path="rulesets/exceptions.xml" />
   <ruleset-ref path="rulesets/generic.xml" />
   <ruleset-ref path="rulesets/groovyism.xml" />
