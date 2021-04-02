@@ -15,8 +15,9 @@ class Failure {
 
   private final String trace
 
-  Failure(Throwable exception, TestDescriptor descriptor, PrettyJupiterExtension extension) {
+  Failure(Throwable throwable, TestDescriptor descriptor, PrettyJupiterExtension extension) {
     final PrettyJupiterExtension.Failure failure = extension.failure
+    final Throwable exception = throwable ?: new Error('Test failed without exception!')
 
     this.cause = buildCause(exception.getCause())
     this.location = buildLocation(descriptor, Utils.getLevel(descriptor))
@@ -62,7 +63,7 @@ class Failure {
     final String firstLine = exception.toString().replace('\n', ' ') + '\n'
     final String rest = exception.getStackTrace().collect { "at ${it}" }.join('\n')
     final String limitedMessage = Utils.limitedText(rest, maxLines)
-    final String traceText = limitedMessage.split('\n').collect{ "  ${it}" }.join('\n')
+    final String traceText = limitedMessage.split('\n').collect { "  ${it}" }.join('\n')
 
     return Utils.coloredText(Colors.GRAY, firstLine + traceText)
   }
@@ -76,11 +77,12 @@ class Failure {
     return null
   }
 
-  private String getNextCause(Throwable cause, int indent = 0) {
+  private String getNextCause(Throwable cause, Integer indent = 0) {
     if (cause) {
       final String ns = ' ' * indent
       final String symbol = cause.getCause() ? '┬' : '─'
       final String next = getNextCause(cause.getCause(), indent + 2)
+      
       return "\n${ns}└─${symbol}─ ${cause}" + next
     }
 
