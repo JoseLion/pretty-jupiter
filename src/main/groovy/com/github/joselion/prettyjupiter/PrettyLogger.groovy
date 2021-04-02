@@ -55,7 +55,7 @@ class PrettyLogger {
     final String desc = Utils.coloredText(status.color, descriptor.getDisplayName())
     final String duration = getDuration(result)
 
-    if (result.getResultType() == FAILURE && result.getException() != null) {
+    if (result.getResultType() == FAILURE) {
       this.failures.add(new Failure(result.getException(), descriptor, extension))
     }
 

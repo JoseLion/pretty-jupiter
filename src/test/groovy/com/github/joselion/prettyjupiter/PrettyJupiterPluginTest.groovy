@@ -24,7 +24,7 @@ class PrettyJupiterPluginTest extends Specification {
       basePlugin << ['java', 'java-library', 'groovy', 'java-gradle-plugin']
   }
 
-  def 'plugin applied when test task *does not* exist'() {
+  def 'plugin applied when test task does NOT exist'() {
     given:
       final Project project = ProjectBuilder.builder().build()
       project.plugins.apply('com.github.joselion.pretty-jupiter')

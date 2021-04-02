@@ -85,7 +85,26 @@ class PrettyLoggerTest extends Specification {
       SKIPPED     | "${Icons.SKIPPED} ${ESC}[33mThis is a test result!${ESC}[0m (${ESC}[97m10ms${ESC}[0m)"
   }
 
-  def '.logSummary'(ResultType resultType, Icons icon) {
+  def '.logSummary (not yet in summary)'() {
+    given:
+      final Logger logger = Mock()
+      final Project project = Stub(Project) { getLogger() >> logger }
+      final Test testTask = Stub(Test)
+      final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
+      final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
+      final TestDescriptor descriptor = desc(1)
+      final TestResult results = Stub(TestResult)
+
+    when:
+      prettyLogger.logSummary(descriptor, results)
+
+    then:
+      with(logger) {
+        0 * lifecycle(_)
+      }
+  }
+
+  def '.logSummary (in summary)'(ResultType resultType, Icons icon) {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
@@ -106,9 +125,13 @@ class PrettyLoggerTest extends Specification {
       final Exception causeB = new Exception('Cause of error A', causeC)
       final Exception causeA = new Exception('Cause of top error', causeB)
       final Exception exception = new Exception('\nMulti\nline\nexception!', causeA)
-      final TestResult testRes = Stub(TestResult) {
+      final TestResult testRes1 = Stub(TestResult) {
         getResultType() >> FAILURE
         getException() >> exception
+      }
+      final TestResult testRes2 = Stub(TestResult) {
+        getResultType() >> FAILURE
+        getException() >> causeD
       }
       final TestResult results = Stub(TestResult) {
         getResultType() >> resultType
@@ -121,7 +144,8 @@ class PrettyLoggerTest extends Specification {
       }
 
     when:
-      prettyLogger.logResults(desc(1), testRes)
+      prettyLogger.logResults(desc(1), testRes1)
+      prettyLogger.logResults(desc(1), testRes2)
       prettyLogger.logSummary(descriptor, results)
 
     then:
@@ -160,6 +184,23 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle("         at ${exception.getStackTrace()[8]}")
         1 * lifecycle("         at ${exception.getStackTrace()[9]}")
         1 * lifecycle("         --- and ${exception.getStackTrace().length - 10} more ---${ESC}[0m")
+        1 * lifecycle('\n')
+        1 * lifecycle("${ESC}[91m(2)${ESC}[0m  Test 1:")
+        1 * lifecycle("       ${ESC}[91mjava.lang.Exception: Cause of error C${ESC}[0m")
+        1 * lifecycle('')
+        1 * lifecycle('     Stack trace:')
+        1 * lifecycle("       ${ESC}[90mjava.lang.Exception: Cause of error C")
+        1 * lifecycle("         at ${causeD.getStackTrace()[0]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[1]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[2]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[3]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[4]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[5]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[6]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[7]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[8]}")
+        1 * lifecycle("         at ${causeD.getStackTrace()[9]}")
+        1 * lifecycle("         --- and ${causeD.getStackTrace().length - 10} more ---${ESC}[0m")
         2 * lifecycle('\n')
         1 * lifecycle('┌─' + '─' * visibleText.length() + '──┐')
         1 * lifecycle("| ${rawText}  |")
