@@ -7,6 +7,7 @@ import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 
 import com.github.joselion.prettyjupiter.helpers.Colors
 import com.github.joselion.prettyjupiter.helpers.Icons
+import com.github.joselion.prettyjupiter.helpers.Utils
 
 import org.gradle.api.Project
 import org.gradle.api.logging.Logger
@@ -150,12 +151,8 @@ class PrettyLoggerTest extends Specification {
 
     then:
       with(logger) {
-        def normalize = { String s ->
-          s.replace("${ESC}", '')
-            .replaceAll(/\[\d*m/, '')
-        }
         final String rawText = "${icon} 136 tests completed, ${ESC}[32m120 successes${ESC}[0m, ${ESC}[31m10 failures${ESC}[0m, ${ESC}[33m6 skipped${ESC}[0m (43.617 seconds)"
-        final String visibleText = normalize(rawText)
+        final String visibleText = Utils.uncolorText(rawText)
         final String rawReport = 'Report: path/to/report/file.html'
 
         1 * lifecycle('\n\n')
@@ -202,11 +199,11 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle("         at ${causeD.getStackTrace()[9]}")
         1 * lifecycle("         --- and ${causeD.getStackTrace().length - 10} more ---${ESC}[0m")
         2 * lifecycle('\n')
-        1 * lifecycle('┌─' + '─' * visibleText.length() + '──┐')
-        1 * lifecycle("| ${rawText}  |")
-        1 * lifecycle('| ' + ' ' * visibleText.length() + '  |')
-        1 * lifecycle('| ' + rawReport + ' ' * (visibleText.length() - rawReport.length()) + '  |')
-        1 * lifecycle('└─' + '─' * visibleText.length() + '──┘')
+        1 * lifecycle('╔═' + '═' * visibleText.length() + '══╗')
+        1 * lifecycle("║ ${rawText}  ║")
+        1 * lifecycle('║ ' + ' ' * visibleText.length() + '  ║')
+        1 * lifecycle('║ ' + rawReport + ' ' * (visibleText.length() - rawReport.length()) + '  ║')
+        1 * lifecycle('╚═' + '═' * visibleText.length() + '══╝')
       }
 
     where:
