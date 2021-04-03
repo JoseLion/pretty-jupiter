@@ -61,7 +61,7 @@ class UtilsTest extends Specification {
 
   def '.uncolorText'() {
     given:
-      final String greeting = "Hello World!"
+      final String greeting = 'Hello World!'
       final String colored = Utils.coloredText(Colors.RED, greeting)
 
     when:

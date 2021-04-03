@@ -1,6 +1,5 @@
 package com.github.joselion.prettyjupiter
 
-import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
