@@ -1,3 +1,6 @@
+[![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter?branch=master)
+[![codecov](https://codecov.io/gh/JoseLion/pretty-jupiter/branch/master/graph/badge.svg?token=ZSrnHog6tO)](https://codecov.io/gh/JoseLion/pretty-jupiter)
+
 # Pretty Jupiter Plugin
 
 ## Why?
@@ -9,7 +12,7 @@ This plugin intends to solve that by grouping test logs and presenting them in a
 Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block):
 ```groovy
 plugins {
-  id 'com.github.joselion.pretty-jupiter' version '1.0.0'
+  id 'com.github.joselion.pretty-jupiter' version 'X.X.X'
 }
 ```
 
@@ -22,7 +25,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:1.0.0'
+    classpath 'gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:X.X.X'
   }
 }
 
