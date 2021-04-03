@@ -1,6 +1,5 @@
 package com.github.joselion.prettyjupiter
 
-import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
@@ -99,25 +98,20 @@ class PrettyLogger {
       final String stats = "${status.icon} ${result.testCount} tests completed, ${successes}, ${failures}, ${skipped} (${time})"
       final String report = "Report: ${this.testTask.reports.html.entryPoint}"
       final String summary = [stats, '', report].join('\n')
-      def normalize = { String s ->
-        s.replace("${ESC}", '')
-          .replaceAll(/\[\d*m/, '')
-      }
 
       final Integer max = summary.lines()
-        .map(normalize)
+        .map(Utils.&uncolorText)
         .max { a, b -> a.length() - b.length() }
         .orElse('')
         .length() + 1
 
       project.logger.lifecycle('\n')
-      project.logger.lifecycle('┌─' + ('─' * max) + '─┐')
+      project.logger.lifecycle('╔═' + ('═' * max) + '═╗')
       summary.lines().toArray().each {
-        final String ws = ' ' * (max - normalize(it).length())
-        project.logger.lifecycle("| ${it}${ws} |")
+        final String ws = ' ' * (max - Utils.uncolorText(it).length())
+        project.logger.lifecycle("║ ${it}${ws} ║")
       }
-      project.logger.lifecycle('└─' + ('─' * max) + '─┘')
-      
+      project.logger.lifecycle('╚═' + ('═' * max) + '═╝')
     }
   }
 

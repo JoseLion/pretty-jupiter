@@ -59,6 +59,18 @@ class UtilsTest extends Specification {
       7     | 'Multiple lines text\nMultiple lines text\nMultiple lines text\nMultiple lines text\nMultiple lines text\n'
   }
 
+  def '.uncolorText'() {
+    given:
+      final String greeting = 'Hello World!'
+      final String colored = Utils.coloredText(Colors.RED, greeting)
+
+    when:
+      final String uncolored = Utils.uncolorText(colored)
+
+    then:
+      uncolored == greeting
+  }
+
   private TestDescriptor descriptorWithParents(Integer num) {
     if (num == null) {
       return null

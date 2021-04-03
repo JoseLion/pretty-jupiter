@@ -52,4 +52,9 @@ class Utils {
       ? getLevel(parent, acc + 1)
       : acc
   }
+
+  static String uncolorText(String text) {
+    return text.replace("$ESC", '')
+      .replaceAll(/\[\d*m/, '')
+  }
 }
