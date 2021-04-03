@@ -9,6 +9,11 @@ JUnit 5 brings to us the [@Nested](https://junit.org/junit5/docs/current/user-gu
 This plugin intends to solve that by grouping test logs and presenting them in a more readable, understandable and prettier way. Moving failure traces to the end so they could be tackled more easily and finishing with a pretty summary. Durations, their color threshold, and failure traces can be configured using the `prettyJupiter` extension.
 
 ## Usage
+**Important:** For better results, make sure your system (or the JVM) uses `UTF-8` encoding. This can be done in many ways, but a simple one could be to add the `JAVA_TOOL_OPTIONS` environment variable. This could be specially helpful for Windows users.
+```sh
+JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+```
+
 Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block):
 ```groovy
 plugins {
