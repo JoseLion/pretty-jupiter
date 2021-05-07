@@ -3,6 +3,7 @@ package com.github.joselion.prettyjupiter
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.api.tasks.testing.Test
 
 /**
@@ -20,7 +21,9 @@ class PrettyJupiterPlugin implements Plugin<Project> {
         def prettyLogger = new PrettyLogger(project, testTask, project.prettyJupiter)
 
         testTask.testLogging {
-          events = []
+          events = [TestLogEvent.STANDARD_ERROR]
+          showExceptions(false)
+          showStackTraces(false)
         }
 
         testTask.reports {

@@ -1,6 +1,7 @@
 package com.github.joselion.prettyjupiter
 
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.testfixtures.ProjectBuilder
 
 import spock.lang.Specification
@@ -17,7 +18,9 @@ class PrettyJupiterPluginTest extends Specification {
       project.plugins.apply(basePlugin)
 
     then:
-      project.test.testLogging.events.size() == 0
+      project.test.testLogging.events as Set == [TestLogEvent.STANDARD_ERROR] as Set
+      project.test.testLogging.showExceptions == false
+      project.test.testLogging.showStackTraces == false
       project.test.reports.html.enabled == true
 
     where:
