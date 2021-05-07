@@ -79,7 +79,7 @@ tasks.named('check') {
 
 test {
   testLogging {
-    showStandardStreams = true
+    showStandardStreams(true)
     events('passed', 'skipped', 'failed')
   }
 }
