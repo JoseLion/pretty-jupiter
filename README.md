@@ -1,3 +1,4 @@
+[![GradlePlugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/joselion/pretty-jupiter/com.github.joselion.pretty-jupiter.gradle.plugin/maven-metadata.xml.svg?label=gradle-plugin)](https://plugins.gradle.org/plugin/com.github.joselion.pretty-jupiter)
 [![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter?branch=master)
 [![codecov](https://codecov.io/gh/JoseLion/pretty-jupiter/branch/master/graph/badge.svg?token=ZSrnHog6tO)](https://codecov.io/gh/JoseLion/pretty-jupiter)
 
@@ -17,7 +18,7 @@ JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
 Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block):
 ```groovy
 plugins {
-  id 'com.github.joselion.pretty-jupiter' version 'X.X.X'
+  id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
 }
 ```
 
@@ -30,7 +31,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:X.X.X'
+    classpath 'gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
   }
 }
 
