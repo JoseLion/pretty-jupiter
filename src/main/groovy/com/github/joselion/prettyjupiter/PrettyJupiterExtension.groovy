@@ -1,10 +1,14 @@
 package com.github.joselion.prettyjupiter
 
+import groovy.transform.CompileStatic
+import org.gradle.api.Action
+
 import javax.inject.Inject
 
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 
+@CompileStatic
 class PrettyJupiterExtension {
 
   final Duration duration
@@ -17,16 +21,12 @@ class PrettyJupiterExtension {
     this.failure = objects.newInstance(Failure)
   }
 
-  def duration(Closure closure) {
-    closure.resolveStrategy = Closure.DELEGATE_FIRST
-    closure.delegate = duration
-    closure()
+  void duration(Action<Duration> durationAction) {
+    durationAction.execute(duration)
   }
 
-  def failure(Closure closure) {
-    closure.resolveStrategy = Closure.DELEGATE_FIRST
-    closure.delegate = failure
-    closure()
+  void failure(Action<Failure> failureAction) {
+    failureAction.execute(failure)
   }
 
   static class Duration {

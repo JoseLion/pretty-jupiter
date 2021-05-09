@@ -16,13 +16,31 @@ JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
 ```
 
 Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block):
+<details open>
+<summary>Groovy</summary>
+
 ```groovy
 plugins {
-  id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
+    id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
 }
 ```
 
+</details>
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+plugins {
+    id("com.github.joselion.pretty-jupiter") version "x.x.x"
+}
+```
+
+</details>
+
 Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application):
+<details open>
+<summary>Groovy</summary>
+
 ```groovy
 buildscript {
   repositories {
@@ -38,6 +56,25 @@ buildscript {
 apply plugin: 'com.github.joselion.pretty-jupiter'
 ```
 
+</details>
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+buildscript {
+    repositories {
+        url = uri("https://plugins.gradle.org/m2/")
+    }
+    dependencies {
+        classpath("gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
+    }
+}
+
+apply(plugin = "com.github.joselion.pretty-jupiter")
+```
+
+</details>
+
 ## Extension properties
 The plugin can be customized adding a `prettyJupiter` closure to your `build.gradle` file and changing the following properties:
 
@@ -52,45 +89,117 @@ The plugin can be customized adding a `prettyJupiter` closure to your `build.gra
 
 ### Complete example
 
+
+
+<details open>
+<summary>Groovy</summary>
+
 ```groovy
 prettyJupiter {
-  duration {
-    enabled = true
-    threshold = 75
-  }
+    duration {
+        enabled = true
+        threshold = 75
+    }
 
-  failure {
-    maxMessageLines = 15
-    maxTraceLines = 10
-  }
+    failure {
+        maxMessageLines = 15
+        maxTraceLines = 10
+    }
 }
 ```
+
+</details>
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+prettyJupiter {
+    duration {
+        enabled.set(true)
+        threshold.set(75)
+    }
+
+    failure {
+        maxMessageLines.set(15)
+        maxTraceLines.set(10)
+    }
+}
+```
+
+</details>
 
 ## Illustrations
 
 ### Before
 Adding the following to `build.gradle` file:
 
+
+
+<details open>
+<summary>Groovy</summary>
+
 ```groovy
 test {
-  useJUnitPlatform()
+    useJUnitPlatform()
 
-  testLogging {
-    exceptionFormat 'short'
-    events 'started', 'skipped', 'failed'
-  }
+    testLogging {
+        exceptionFormat 'short'
+        events 'started', 'skipped', 'failed'
+    }
 }
 ```
+
+</details>
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED
+
+tasks {
+    test {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = SHORT
+            events = setOf(STARTED, SKIPPED, FAILED)
+        }
+    }
+}
+```
+
+</details>
 
 ![Before](assets/before.png)
 
 ### With `pretty-jupiter` plugin applied
-We only need Junit 5 configuration in `build.gradle` file:
+We only need Junit 5 configuration in `build.gradle(.kts)` file:
+
+
+<details open>
+<summary>Groovy</summary>
+
 ```groovy
 test {
-  useJUnitPlatform()
+    useJUnitPlatform()
 }
 ```
+
+</details>
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+}
+```
+
+</details>
 
 ![After (tests duration)](assets/after-durations.png)
 ![After (tests result)](assets/after-result.png)
