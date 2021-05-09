@@ -21,7 +21,7 @@ Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#s
 
 ```groovy
 plugins {
-    id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
+  id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
 }
 ```
 
@@ -31,7 +31,7 @@ plugins {
 
 ```kotlin
 plugins {
-    id("com.github.joselion.pretty-jupiter") version "x.x.x"
+  id("com.github.joselion.pretty-jupiter") version "x.x.x"
 }
 ```
 
@@ -62,12 +62,12 @@ apply plugin: 'com.github.joselion.pretty-jupiter'
 
 ```kotlin
 buildscript {
-    repositories {
-        url = uri("https://plugins.gradle.org/m2/")
-    }
-    dependencies {
-        classpath("gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
-    }
+  repositories {
+    url = uri("https://plugins.gradle.org/m2/")
+  }
+  dependencies {
+    classpath("gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
+  }
 }
 
 apply(plugin = "com.github.joselion.pretty-jupiter")
@@ -96,15 +96,15 @@ The plugin can be customized adding a `prettyJupiter` closure to your `build.gra
 
 ```groovy
 prettyJupiter {
-    duration {
-        enabled = true
-        threshold = 75
-    }
+  duration {
+    enabled = true
+    threshold = 75
+  }
 
-    failure {
-        maxMessageLines = 15
-        maxTraceLines = 10
-    }
+  failure {
+    maxMessageLines = 15
+    maxTraceLines = 10
+  }
 }
 ```
 
@@ -114,15 +114,15 @@ prettyJupiter {
 
 ```kotlin
 prettyJupiter {
-    duration {
-        enabled.set(true)
-        threshold.set(75)
-    }
+  duration {
+    enabled.set(true)
+    threshold.set(75)
+  }
 
-    failure {
-        maxMessageLines.set(15)
-        maxTraceLines.set(10)
-    }
+  failure {
+    maxMessageLines.set(15)
+    maxTraceLines.set(10)
+  }
 }
 ```
 
@@ -140,12 +140,12 @@ Adding the following to `build.gradle` file:
 
 ```groovy
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 
-    testLogging {
-        exceptionFormat 'short'
-        events 'started', 'skipped', 'failed'
-    }
+  testLogging {
+    exceptionFormat 'short'
+    events 'started', 'skipped', 'failed'
+  }
 }
 ```
 
@@ -160,13 +160,13 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED
 
 tasks {
-    test {
-        useJUnitPlatform()
-        testLogging {
-            exceptionFormat = SHORT
-            events = setOf(STARTED, SKIPPED, FAILED)
-        }
+  test {
+    useJUnitPlatform()
+    testLogging {
+      exceptionFormat = SHORT
+      events = setOf(STARTED, SKIPPED, FAILED)
     }
+  }
 }
 ```
 
@@ -183,7 +183,7 @@ We only need Junit 5 configuration in `build.gradle(.kts)` file:
 
 ```groovy
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 }
 ```
 
@@ -193,9 +193,9 @@ test {
 
 ```kotlin
 tasks {
-    test {
-        useJUnitPlatform()
-    }
+  test {
+    useJUnitPlatform()
+  }
 }
 ```
 
