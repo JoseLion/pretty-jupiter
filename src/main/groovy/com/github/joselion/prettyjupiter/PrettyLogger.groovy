@@ -11,6 +11,8 @@ import com.github.joselion.prettyjupiter.helpers.Utils
 import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 
+import org.gradle.api.internal.tasks.testing.DecoratingTestDescriptor
+
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
@@ -40,7 +42,7 @@ class PrettyLogger {
   }
 
   void logDescriptors(TestDescriptor descriptor) {
-    if (descriptor.getClassName() != null) {
+    if (descriptor.getClassName() != null  || isParameterizedTest(descriptor)) {
       final String tabs = Utils.getTabs(descriptor)
       def desc = Utils.coloredText(Colors.WHITE, descriptor.getDisplayName())
 
@@ -48,7 +50,15 @@ class PrettyLogger {
     }
   }
 
+  @SuppressWarnings('Instanceof')
+  boolean isParameterizedTest(TestDescriptor descriptor) {
+    descriptor instanceof DecoratingTestDescriptor && !descriptor.displayName.contains('Gradle Test')
+  }
+
   void logResults(TestDescriptor descriptor, TestResult result) {
+    if (isKotlinParameterizedTest(descriptor)) {
+      logKotlinParameterizedTest(descriptor)
+    }
     final status = statusMap[result.getResultType()]
     final String tabs = Utils.getTabs(descriptor)
     final String desc = Utils.coloredText(status.color, descriptor.getDisplayName())
@@ -59,6 +69,19 @@ class PrettyLogger {
     }
 
     project.logger.lifecycle("${tabs}${status.icon} ${desc}${duration}")
+  }
+
+  boolean isKotlinParameterizedTest(TestDescriptor descriptor) {
+    String name = descriptor.getName()
+    !descriptor.parent.toString().contains('Test suite') && name.endsWith(')[1]') && name.contains(' ')
+  }
+
+  void logKotlinParameterizedTest(TestDescriptor descriptor) {
+    final String tabs = Utils.getTabs(descriptor)
+    String name = descriptor.getName()
+    def desc = Utils.coloredText(Colors.WHITE, name[0, name.lastIndexOf('(')])
+
+    project.logger.lifecycle("${tabs}${desc}")
   }
 
   void logSummary(TestDescriptor descriptor, TestResult result) {
