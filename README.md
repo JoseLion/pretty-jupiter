@@ -24,8 +24,8 @@ plugins {
   id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
 }
 ```
-
 </details>
+
 <details>
 <summary>Kotlin</summary>
 
@@ -34,7 +34,6 @@ plugins {
   id("com.github.joselion.pretty-jupiter") version "x.x.x"
 }
 ```
-
 </details>
 
 Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application):
@@ -55,8 +54,8 @@ buildscript {
 
 apply plugin: 'com.github.joselion.pretty-jupiter'
 ```
-
 </details>
+
 <details>
 <summary>Kotlin</summary>
 
@@ -72,7 +71,6 @@ buildscript {
 
 apply(plugin = "com.github.joselion.pretty-jupiter")
 ```
-
 </details>
 
 ## Extension properties
@@ -109,6 +107,7 @@ prettyJupiter {
 ```
 
 </details>
+
 <details>
 <summary>Kotlin</summary>
 
@@ -125,7 +124,6 @@ prettyJupiter {
   }
 }
 ```
-
 </details>
 
 ## Illustrations
@@ -148,8 +146,8 @@ test {
   }
 }
 ```
-
 </details>
+
 <details>
 <summary>Kotlin</summary>
 
@@ -169,7 +167,6 @@ tasks {
   }
 }
 ```
-
 </details>
 
 ![Before](assets/before.png)
@@ -186,8 +183,8 @@ test {
   useJUnitPlatform()
 }
 ```
-
 </details>
+
 <details>
 <summary>Kotlin</summary>
 
@@ -198,7 +195,6 @@ tasks {
   }
 }
 ```
-
 </details>
 
 ![After (tests duration)](assets/after-durations.png)
