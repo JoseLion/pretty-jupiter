@@ -206,6 +206,35 @@ Please create an [issue](https://github.com/JoseLion/pretty-jupiter/issues/new) 
 ## Contribution
 Contributions are very welcome! To do so, please fork this repository and open a Pull Request to the `master` branch.
 
+To debug this plugin with help of another gradle project add to external project:
+
+<details open>
+<summary>settings.gradle</summary>
+
+```groovy
+pluginManagement {
+  includeBuild '../pretty-jupiter/'
+}
+```
+</details>
+
+<details>
+<summary>settings.gradle.kts</summary>
+
+```kotlin
+pluginManagement {
+  includeBuild("../pretty-jupiter/")
+}
+
+```
+</details>
+
+Then run your project from command line:
+```shell
+./gradlew clean test -Dorg.gradle.debug=true --no-daemon
+```
+And connect with debugger on port 5005.
+
 ## License
 
 [Apache License 2.0](LICENSE)
