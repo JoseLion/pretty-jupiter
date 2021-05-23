@@ -120,7 +120,7 @@ class PrettyLogger {
 
     if (duration.enabled.get()) {
       final Long timeDiff = result.getEndTime() - result.getStartTime()
-      final Long threshold = duration.threshold.get()
+      final Long threshold = duration.getThreshold(testTask)
       final Colors color = timeDiff >= threshold
         ? Colors.RED
         : timeDiff >= threshold / 2
@@ -133,5 +133,4 @@ class PrettyLogger {
 
     return ''
   }
-  
 }

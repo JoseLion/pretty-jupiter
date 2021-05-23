@@ -124,6 +124,7 @@ class PrettyJupiterPluginE2E extends Specification {
         |  duration {
         |    enabled = false
         |    threshold = 500
+        |    customThreshold = [test : 100, integrationTest : 200]
         |  }
         |
         |  failure {
@@ -144,5 +145,41 @@ class PrettyJupiterPluginE2E extends Specification {
 
       then:
         result.output.contains('BUILD SUCCESSFUL')
+  }
+
+  def 'can update the extension customThreshold properties'() {
+    def projectDir = new File('build/e2e')
+    projectDir.mkdirs()
+    new File(projectDir, 'settings.gradle') << ''
+    def buildGradle = new File(projectDir, 'build.gradle')
+    buildGradle.bytes = []
+    buildGradle << """\
+        |plugins {
+        |  id('java')
+        |  id('com.github.joselion.pretty-jupiter')
+        |}
+        |
+        |prettyJupiter {
+        |  duration.customThreshold = [test : 100, integrationTest : 200]
+        |}
+        |
+        |task showThreshold() {
+        |  print('Test threshold: ' + prettyJupiter.duration.customThreshold.get().get('test'))
+        |  print('Integration test threshold: ' + prettyJupiter.duration.customThreshold.get().get('integrationTest'))
+        |}
+      |"""
+            .stripMargin()
+
+    when:
+    def runner = GradleRunner.create()
+    runner.forwardOutput()
+    runner.withPluginClasspath()
+    runner.withArguments('test')
+    runner.withProjectDir(projectDir)
+    def result = runner.build()
+
+    then:
+    result.output.contains('Test threshold: 100')
+    result.output.contains('Integration test threshold: 200')
   }
 }
