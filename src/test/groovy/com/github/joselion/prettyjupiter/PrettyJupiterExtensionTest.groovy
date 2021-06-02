@@ -66,38 +66,36 @@ class PrettyJupiterExtensionTest extends Specification {
 
   def 'returns custom threshold when exists'() {
     given:
-    final Project project = ProjectBuilder.builder().build()
-    final PrettyJupiterExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterExtension)
-    final Test testTask = Stub(Test) {
-            toString() >> "task ':test'"
-    }
-    def testCustomThreshold = 100
-    extension.duration.customThreshold.put('test', testCustomThreshold)
+      final Project project = ProjectBuilder.builder().build()
+      final PrettyJupiterExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterExtension)
+      final Test testTask = Stub(Test) {
+        toString() >> "task ':test'"
+      }
+      def testCustomThreshold = 100
+      extension.duration.customThreshold.put('test', testCustomThreshold)
 
     when:
-    Long duration = extension.getDuration().getThreshold(testTask)
-
+      Long duration = extension.getDuration().getThreshold(testTask)
 
     then:
-    duration == testCustomThreshold
+      duration == testCustomThreshold
   }
 
   def 'returns default threshold when custom threshold doesnt exist'() {
     given:
-    final Project project = ProjectBuilder.builder().build()
-    final PrettyJupiterExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterExtension)
-    final Test testTask = Stub(Test) {
-      toString() >> "task ':integrationTest'"
-    }
-    extension.duration.customThreshold.put('test', 100)
-    def defaultThreshold = 150
-    extension.duration.threshold = defaultThreshold
+      final Project project = ProjectBuilder.builder().build()
+      final PrettyJupiterExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterExtension)
+      final Test testTask = Stub(Test) {
+        toString() >> "task ':integrationTest'"
+      }
+      extension.duration.customThreshold.put('test', 100)
+      def defaultThreshold = 150
+      extension.duration.threshold = defaultThreshold
 
     when:
-    Long duration = extension.getDuration().getThreshold(testTask)
-
+      Long duration = extension.getDuration().getThreshold(testTask)
 
     then:
-    duration == defaultThreshold
+      duration == defaultThreshold
   }
 }

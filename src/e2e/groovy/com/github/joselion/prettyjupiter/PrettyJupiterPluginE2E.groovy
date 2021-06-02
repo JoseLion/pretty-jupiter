@@ -154,21 +154,21 @@ class PrettyJupiterPluginE2E extends Specification {
     def buildGradle = new File(projectDir, 'build.gradle')
     buildGradle.bytes = []
     buildGradle << """\
-        |plugins {
-        |  id('java')
-        |  id('com.github.joselion.pretty-jupiter')
-        |}
-        |
-        |prettyJupiter {
-        |  duration.customThreshold = [test : 100, integrationTest : 200]
-        |}
-        |
-        |task showThreshold() {
-        |  print('Test threshold: ' + prettyJupiter.duration.customThreshold.get().get('test'))
-        |  print('Integration test threshold: ' + prettyJupiter.duration.customThreshold.get().get('integrationTest'))
-        |}
-      |"""
-            .stripMargin()
+      |plugins {
+      |  id('java')
+      |  id('com.github.joselion.pretty-jupiter')
+      |}
+      |
+      |prettyJupiter {
+      |  duration.customThreshold = [test : 100, integrationTest : 200]
+      |}
+      |
+      |task showThreshold() {
+      |  print('Test threshold: ' + prettyJupiter.duration.customThreshold.get().get('test'))
+      |  print('Integration test threshold: ' + prettyJupiter.duration.customThreshold.get().get('integrationTest'))
+      |}
+    |"""
+    .stripMargin()
 
     when:
     def runner = GradleRunner.create()
