@@ -2,6 +2,8 @@ package com.github.joselion.prettyjupiter
 
 import groovy.transform.CompileStatic
 import org.gradle.api.Action
+import org.gradle.api.provider.MapProperty
+import org.gradle.api.tasks.testing.Test
 
 import javax.inject.Inject
 
@@ -35,13 +37,37 @@ class PrettyJupiterExtension {
 
     final Property<Integer> threshold
 
+    final MapProperty<String, Integer> customThreshold
+
     @Inject
     Duration(ObjectFactory objects) {
       this.enabled = objects.property(Boolean)
       this.threshold = objects.property(Integer)
+      this.customThreshold = objects.mapProperty(String, Integer)
 
       this.enabled.convention(true)
       this.threshold.convention(75)
+      this.customThreshold.convention([:])
+    }
+
+    Long getThreshold(Test testTask) {
+      def customThreshold = findCustomThreshold(testTask)
+
+      if (customThreshold != null) {
+        return customThreshold
+      }
+
+      return threshold.get()
+    }
+
+    private Long findCustomThreshold(Test testTask) {
+      def matcher = testTask.toString() =~ /task ':(\w+)'/
+
+      if (!matcher.matches()) {
+        return null
+      }
+
+      return customThreshold.get().get(((ArrayList) matcher[0]).get(1))
     }
   }
 
