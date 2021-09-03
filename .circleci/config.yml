@@ -5,8 +5,9 @@ executors:
     working_directory: ~/repo/pretty-jupiter
 
     docker:
-      - image: circleci/openjdk:15-jdk-buster
+      - image: cimg/openjdk:16.0.2
         environment:
+          JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8
           JVM_OPTS: -Xmx4096m
           TERM: dumb
 
