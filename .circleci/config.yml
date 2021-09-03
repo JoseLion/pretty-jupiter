@@ -69,7 +69,10 @@ jobs:
 
       - run:
           name: Upload reports
-          command: bash <(curl -s https://codecov.io/bash) -y ./.circleci/codecov.yml
+          command: |
+            curl -Os https://uploader.codecov.io/latest/linux/codecov
+            chmod +x codecov
+            ./codecov -f -t ${CODECOV_TOKEN}
 
   publish:
     executor: default-jvm
