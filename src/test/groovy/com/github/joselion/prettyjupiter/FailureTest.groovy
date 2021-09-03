@@ -67,16 +67,16 @@ class FailureTest extends Specification {
       final String trace = '''\
         |java.lang.Exception: Some error message
         |  at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-        |  at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:64)
+        |  at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:78)
         |  at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-        |  at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-        |  at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-        |  at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:80)
+        |  at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+        |  at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+        |  at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:72)
         |  at org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrapNoCoerce.callConstructor(ConstructorSite.java:105)
         |  at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:59)
-        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:237)
-        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:249)
-        |  --- and 60 more ---'''
+        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:263)
+        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:277)
+        |  --- and 100 more ---'''
       .stripMargin()
       final Failure failure = new Failure(new Exception('Some error message'), desc(1), objects.newInstance(PrettyJupiterExtension))
 

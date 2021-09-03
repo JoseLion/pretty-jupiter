@@ -42,9 +42,11 @@ repositories {
 dependencies {
   implementation('org.codehaus.groovy:groovy-all:3.0.8')
 
+  testImplementation('org.junit.jupiter:junit-jupiter-api:5.7.2')
   testImplementation('org.spockframework:spock-core:2.0-groovy-3.0')
 
   testRuntimeOnly('net.bytebuddy:byte-buddy:1.11.14')
+  testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
   testRuntimeOnly('org.objenesis:objenesis:3.2')
 }
 
@@ -83,13 +85,23 @@ tasks.named('check') {
 }
 
 test {
+  useJUnitPlatform()
   testLogging {
-    showStandardStreams(true)
+    showStandardStreams(false)
+    events('passed', 'skipped', 'failed')
+  }
+}
+
+e2e {
+  useJUnitPlatform()
+  testLogging {
+    showStandardStreams(false)
     events('passed', 'skipped', 'failed')
   }
 }
 
 jacocoTestReport {
+  dependsOn(test, e2e)
   reports {
     html.required = true
     xml.required = true
