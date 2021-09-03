@@ -155,6 +155,7 @@ class PrettyLoggerTest extends Specification {
         final String visibleText = Utils.uncolorText(rawText)
         final String rawReport = 'Report: path/to/report/file.html'
 
+        1 * lifecycle('\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
         1 * lifecycle("       ${ESC}[91mjava.lang.Exception: ")
         1 * lifecycle('       Multi')
