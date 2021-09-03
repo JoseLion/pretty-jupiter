@@ -67,6 +67,8 @@ class PrettyLogger {
         final String n = Utils.coloredText(Colors.BRIGHT_RED, "(${i + 1})")
         final String ns = ' ' * ("${i}".length() + 2)
 
+        project.logger.lifecycle('\n')
+
         project.logger.lifecycle("${n}  ${failure.getLocation()}:")
         failure.getMessage().eachLine {
           project.logger.lifecycle("${ns}    ${it}")
@@ -85,7 +87,6 @@ class PrettyLogger {
         failure.getTrace().eachLine {
           project.logger.lifecycle("${ns}    ${it}")
         }
-        project.logger.lifecycle('\n')
       }
 
       final status = statusMap[result.getResultType()]
@@ -103,6 +104,7 @@ class PrettyLogger {
         .orElse('')
         .length() + 1
 
+      project.logger.lifecycle('\n')
       project.logger.lifecycle('╔═' + ('═' * max) + '═╗')
       summary.lines().toArray().each {
         final String ws = ' ' * (max - Utils.uncolorText(it).length())
