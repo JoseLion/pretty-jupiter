@@ -63,8 +63,6 @@ class PrettyLogger {
 
   void logSummary(TestDescriptor descriptor, TestResult result) {
     if (!descriptor.parent) {
-      project.logger.lifecycle('\n\n')
-
       this.failures.eachWithIndex { failure, i ->
         final String n = Utils.coloredText(Colors.BRIGHT_RED, "(${i + 1})")
         final String ns = ' ' * ("${i}".length() + 2)
@@ -105,7 +103,6 @@ class PrettyLogger {
         .orElse('')
         .length() + 1
 
-      project.logger.lifecycle('\n')
       project.logger.lifecycle('╔═' + ('═' * max) + '═╗')
       summary.lines().toArray().each {
         final String ws = ' ' * (max - Utils.uncolorText(it).length())

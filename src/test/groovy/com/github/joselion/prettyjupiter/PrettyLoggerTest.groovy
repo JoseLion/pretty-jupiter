@@ -155,7 +155,6 @@ class PrettyLoggerTest extends Specification {
         final String visibleText = Utils.uncolorText(rawText)
         final String rawReport = 'Report: path/to/report/file.html'
 
-        1 * lifecycle('\n\n')
         1 * lifecycle("${ESC}[91m(1)${ESC}[0m  Test 1:")
         1 * lifecycle("       ${ESC}[91mjava.lang.Exception: ")
         1 * lifecycle('       Multi')
@@ -198,7 +197,7 @@ class PrettyLoggerTest extends Specification {
         1 * lifecycle("         at ${causeD.getStackTrace()[8]}")
         1 * lifecycle("         at ${causeD.getStackTrace()[9]}")
         1 * lifecycle("         --- and ${causeD.getStackTrace().length - 10} more ---${ESC}[0m")
-        2 * lifecycle('\n')
+        1 * lifecycle('\n')
         1 * lifecycle('╔═' + '═' * visibleText.length() + '══╗')
         1 * lifecycle("║ ${rawText}  ║")
         1 * lifecycle('║ ' + ' ' * visibleText.length() + '  ║')
