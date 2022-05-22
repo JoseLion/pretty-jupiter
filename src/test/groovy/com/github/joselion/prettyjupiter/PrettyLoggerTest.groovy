@@ -10,6 +10,8 @@ import com.github.joselion.prettyjupiter.helpers.Icons
 import com.github.joselion.prettyjupiter.helpers.Utils
 
 import org.gradle.api.Project
+import org.gradle.api.internal.tasks.testing.DecoratingTestDescriptor
+import org.gradle.api.internal.tasks.testing.DefaultTestDescriptor
 import org.gradle.api.logging.Logger
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.reporting.DirectoryReport
@@ -26,7 +28,7 @@ class PrettyLoggerTest extends Specification {
 
   private static final ObjectFactory objects = ProjectBuilder.builder().build().objects
 
-  def '.logDescriptors'(String className, Integer times) {
+  def '.logDescriptors'() {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
@@ -38,6 +40,11 @@ class PrettyLoggerTest extends Specification {
         getClassName() >> className
         getDisplayName() >> 'This is a test description!'
       }
+      final DecoratingTestDescriptor parameterized = Stub(DecoratingTestDescriptor) {
+        getParent() >> new DefaultTestDescriptor('id', className, 'This is a test description!')
+        getClassName() >> null
+        getDisplayName() >> 'This is a parameterized test description!'
+      }
 
     when:
       prettyLogger.logDescriptors(descriptor)
@@ -45,6 +52,14 @@ class PrettyLoggerTest extends Specification {
     then:
       with(logger) {
         times * lifecycle("${ESC}[97mThis is a test description!${ESC}[0m")
+      }
+
+    when:
+      prettyLogger.logDescriptors(parameterized)
+
+    then:
+      with(logger) {
+        1 * lifecycle("${ESC}[97mThis is a parameterized test description!${ESC}[0m")
       }
 
     where:
