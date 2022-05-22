@@ -11,6 +11,7 @@ import spock.lang.Specification
 class FailureTest extends Specification {
 
   private static final ObjectFactory objects = ProjectBuilder.builder().build().objects
+  private static final PrettyJupiterExtension defaultConfig = objects.newInstance(PrettyJupiterExtension)
   private static final Exception causeD = new Exception('Cause of error C')
   private static final Exception causeC = new Exception('Cause of error B', causeD)
   private static final Exception causeB = new Exception('Cause of error A', causeC)
@@ -19,7 +20,7 @@ class FailureTest extends Specification {
 
   def '.cause'(Throwable topError, String result) {
     given:
-      final Failure failure = new Failure(topError, desc(1), objects.newInstance(PrettyJupiterExtension))
+      final Failure failure = new Failure(topError, desc(1), defaultConfig)
 
     expect:
       failure.getCause() == result
@@ -41,7 +42,7 @@ class FailureTest extends Specification {
 
   def '.location'(TestDescriptor descriptor, String location) {
     given:
-      final Failure failure = new Failure(new Exception(), descriptor, objects.newInstance(PrettyJupiterExtension))
+      final Failure failure = new Failure(new Exception(), descriptor, defaultConfig)
 
     expect:
       failure.getLocation() == location
@@ -56,7 +57,7 @@ class FailureTest extends Specification {
   def '.message'() {
     given:
       final String error = 'This should be an Assertion error!'
-      final Failure failure = new Failure(new Exception(error), desc(1), objects.newInstance(PrettyJupiterExtension))
+      final Failure failure = new Failure(new Exception(error), desc(1), defaultConfig)
 
     expect:
       failure.getMessage() == "${ESC}[91mjava.lang.Exception: ${error}${ESC}[0m"
@@ -64,24 +65,21 @@ class FailureTest extends Specification {
 
   def '.trace'() {
     given:
-      final String trace = '''\
-        |java.lang.Exception: Some error message
-        |  at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:67)
-        |  at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-        |  at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
-        |  at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:72)
-        |  at org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrapNoCoerce.callConstructor(ConstructorSite.java:105)
-        |  at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:59)
-        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:263)
-        |  at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:277)
-        |  at com.github.joselion.prettyjupiter.FailureTest.$spock_feature_0_3(FailureTest.groovy:81)
-        |  at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-        |  --- and 96 more ---'''
-      .stripMargin()
-      final Failure failure = new Failure(new Exception('Some error message'), desc(1), objects.newInstance(PrettyJupiterExtension))
+      final Exception exception = new Exception('Some error message')
+      final Failure failure = new Failure(exception, desc(1), defaultConfig)
 
     expect:
-      failure.getTrace() == "${ESC}[90m${trace}${ESC}[0m"
+      final Integer maxTrace = defaultConfig.failure.maxTraceLines.get()
+      final Integer traceDiff = exception.getStackTrace().length - maxTrace
+      final List<String> lines = failure.getTrace().readLines()
+
+      lines.size() == maxTrace + 2
+      lines.first() == "${ESC}[90mjava.lang.Exception: Some error message"
+      lines.last() == "  --- and ${traceDiff} more ---${ESC}[0m"
+
+      lines.eachWithIndex { line, count ->
+        assert line.startsWith('  ') == (count > 0)
+      }
   }
 
   private TestDescriptor desc(Integer parents = 0) {
