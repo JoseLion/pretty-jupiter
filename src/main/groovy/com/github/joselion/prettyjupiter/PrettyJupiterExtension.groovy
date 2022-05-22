@@ -4,6 +4,8 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Nested
 
 import javax.inject.Inject
 
@@ -13,8 +15,10 @@ import org.gradle.api.provider.Property
 @CompileStatic
 class PrettyJupiterExtension {
 
+  @Nested
   final Duration duration
 
+  @Nested
   final Failure failure
 
   @Inject
@@ -33,10 +37,13 @@ class PrettyJupiterExtension {
 
   static class Duration {
 
+    @Input
     final Property<Boolean> enabled
 
+    @Input
     final Property<Integer> threshold
 
+    @Input
     final MapProperty<String, Integer> customThreshold
 
     @Inject
@@ -73,8 +80,10 @@ class PrettyJupiterExtension {
 
   static class Failure {
 
+    @Input
     final Property<Integer> maxMessageLines
 
+    @Input
     final Property<Integer> maxTraceLines
 
     @Inject

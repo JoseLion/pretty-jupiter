@@ -10,7 +10,7 @@ plugins {
   id 'jacoco'
   id 'java-gradle-plugin'
 
-  id 'com.gradle.plugin-publish' version '0.15.0'
+  id 'com.gradle.plugin-publish' version '1.0.0-rc-2'
 }
 
 version = '1.6.2'
@@ -28,11 +28,11 @@ dependencyLocking {
 
 codenarc {
   reportFormat('console')
-  toolVersion('2.2.0')
+  toolVersion('3.0.1')
 }
 
 jacoco {
-  toolVersion('0.8.7')
+  toolVersion('0.8.8')
 }
 
 repositories {
@@ -40,20 +40,11 @@ repositories {
 }
 
 dependencies {
-  implementation('org.codehaus.groovy:groovy-all:3.0.8')
+  implementation(localGroovy())
 
-  testImplementation('org.junit.jupiter:junit-jupiter-api:5.7.2')
-  testImplementation('org.spockframework:spock-core:2.0-groovy-3.0')
-
-  testRuntimeOnly('net.bytebuddy:byte-buddy:1.11.14')
-  testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
+  testImplementation(gradleTestKit())
+  testRuntimeOnly('net.bytebuddy:byte-buddy:1.12.10')
   testRuntimeOnly('org.objenesis:objenesis:3.2')
-}
-
-pluginBundle {
-  website = 'https://github.com/JoseLion/pretty-jupiter'
-  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter.git'
-  tags = ['junit', 'jupiter', 'logger', 'pretty', 'mocha']
 }
 
 gradlePlugin {
@@ -67,25 +58,35 @@ gradlePlugin {
   }
 }
 
-sourceSets {
-  e2e {
+pluginBundle {
+  website = 'https://github.com/JoseLion/pretty-jupiter'
+  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter.git'
+  tags = ['junit', 'jupiter', 'logger', 'pretty', 'mocha']
+}
+
+testing {
+  suites {
+    test {
+      useSpock('2.2-M1-groovy-3.0')
+    }
+
+    e2e(JvmTestSuite) {
+      useSpock('2.2-M1-groovy-3.0')
+
+      dependencies {
+        implementation(project)
+      }
+
+      sources {
+        groovy {
+          srcDirs = ['src/2e2/groovy']
+        }
+      }
+    }
   }
 }
 
-gradlePlugin.testSourceSets(sourceSets.e2e)
-configurations.e2eImplementation.extendsFrom(configurations.testImplementation)
-
-tasks.register('e2e', Test) {
-  testClassesDirs = sourceSets.e2e.output.classesDirs
-  classpath = sourceSets.e2e.runtimeClasspath
-}
-
-tasks.named('check') {
-  finalizedBy(tasks.e2e)
-}
-
 test {
-  useJUnitPlatform()
   testLogging {
     showStandardStreams(false)
     events('passed', 'skipped', 'failed')
@@ -93,15 +94,19 @@ test {
 }
 
 e2e {
-  useJUnitPlatform()
   testLogging {
     showStandardStreams(false)
     events('passed', 'skipped', 'failed')
   }
 }
 
+tasks.named('check') {
+  dependsOn(testing.suites.e2e)
+}
+
 jacocoTestReport {
   dependsOn(test, e2e)
+
   reports {
     html.required = true
     xml.required = true
