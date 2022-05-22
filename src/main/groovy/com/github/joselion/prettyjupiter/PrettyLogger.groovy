@@ -12,6 +12,7 @@ import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 
 import org.gradle.api.Project
+import org.gradle.api.internal.tasks.testing.DecoratingTestDescriptor
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
@@ -39,10 +40,15 @@ class PrettyLogger {
     this.failures = []
   }
 
+  @SuppressWarnings('Instanceof')
   void logDescriptors(TestDescriptor descriptor) {
-    if (descriptor.getClassName() != null) {
+    final String displayName = descriptor.getDisplayName()
+    final boolean isDecorationDescriptor = descriptor instanceof DecoratingTestDescriptor
+    final boolean isParameterizedTest = isDecorationDescriptor && !displayName.contains('Gradle Test')
+
+    if (descriptor.getClassName() != null || isParameterizedTest) {
       final String tabs = Utils.getTabs(descriptor)
-      def desc = Utils.coloredText(Colors.WHITE, descriptor.getDisplayName())
+      def desc = Utils.coloredText(Colors.WHITE, displayName)
 
       project.logger.lifecycle("${tabs}${desc}")
     }
