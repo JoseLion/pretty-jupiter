@@ -10,6 +10,10 @@ JUnit 5 brings to us the [@Nested](https://junit.org/junit5/docs/current/user-gu
 This plugin intends to solve that by grouping test logs and presenting them in a more readable, understandable and prettier way. Moving failure traces to the end so they could be tackled more easily and finishing with a pretty summary. Durations, their color threshold, and failure traces can be configured using the `prettyJupiter` extension.
 
 ## Usage
+> **⚠️ BREAKING CHANGES**
+>
+> Due to changes on GitHub, and by consecuence Gradle and Maven, it's no longer allowed to use `com.github` as a valid group ID prefix. That being said, from version v2.0.0 of the plugin the ID is now `io.github.joselion.pretty-jupiter`. If you want to use a version prior to v2.0.0 youi can still find it under `com.github.joselion.pretty-jupiter`, but keep in mind the the `io.github` prefixed ID does not have any v1.x.x version available.
+
 **Important:** For better results, make sure your system (or the JVM) uses `UTF-8` encoding. This can be done in many ways, but a simple one could be to add the `JAVA_TOOL_OPTIONS` environment variable. This could be specially helpful for Windows users.
 ```sh
 JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
