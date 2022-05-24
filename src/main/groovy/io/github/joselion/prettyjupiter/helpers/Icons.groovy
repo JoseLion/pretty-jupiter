@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter.helpers
+package io.github.joselion.prettyjupiter.helpers
 
 enum Icons {
   SUCCESS(Utils.coloredText(Colors.GREEN, '✔')),

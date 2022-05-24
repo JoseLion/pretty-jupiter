@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter.helpers
+package io.github.joselion.prettyjupiter.helpers
 
 enum Colors {
   BRIGHT_RED(91),

@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test

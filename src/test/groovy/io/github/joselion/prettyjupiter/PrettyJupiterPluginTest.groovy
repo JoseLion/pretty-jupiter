@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -14,7 +14,7 @@ class PrettyJupiterPluginTest extends Specification {
       final Project project = ProjectBuilder.builder().build()
 
     when:
-      project.plugins.apply('com.github.joselion.pretty-jupiter')
+      project.plugins.apply('io.github.joselion.pretty-jupiter')
       project.plugins.apply(basePlugin)
 
     then:
@@ -30,7 +30,7 @@ class PrettyJupiterPluginTest extends Specification {
   def 'plugin applied when test task does NOT exist'() {
     given:
       final Project project = ProjectBuilder.builder().build()
-      project.plugins.apply('com.github.joselion.pretty-jupiter')
+      project.plugins.apply('io.github.joselion.pretty-jupiter')
 
     when:
       project.test

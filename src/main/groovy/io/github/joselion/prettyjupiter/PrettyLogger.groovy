@@ -1,12 +1,12 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 
-import com.github.joselion.prettyjupiter.helpers.Colors
-import com.github.joselion.prettyjupiter.helpers.Icons
-import com.github.joselion.prettyjupiter.helpers.Utils
+import io.github.joselion.prettyjupiter.helpers.Colors
+import io.github.joselion.prettyjupiter.helpers.Icons
+import io.github.joselion.prettyjupiter.helpers.Utils
 
 import groovy.time.TimeCategory
 import groovy.time.TimeDuration

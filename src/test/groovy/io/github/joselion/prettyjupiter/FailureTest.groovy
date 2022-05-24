@@ -1,6 +1,6 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
-import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
+import static io.github.joselion.prettyjupiter.helpers.Utils.ESC
 
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.testing.TestDescriptor
