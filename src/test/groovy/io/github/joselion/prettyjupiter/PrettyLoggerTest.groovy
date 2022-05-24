@@ -1,13 +1,13 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
-import static com.github.joselion.prettyjupiter.helpers.Utils.ESC
+import static io.github.joselion.prettyjupiter.helpers.Utils.ESC
 import static org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
 import static org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 
-import com.github.joselion.prettyjupiter.helpers.Colors
-import com.github.joselion.prettyjupiter.helpers.Icons
-import com.github.joselion.prettyjupiter.helpers.Utils
+import io.github.joselion.prettyjupiter.helpers.Colors
+import io.github.joselion.prettyjupiter.helpers.Icons
+import io.github.joselion.prettyjupiter.helpers.Utils
 
 import org.gradle.api.Project
 import org.gradle.api.internal.tasks.testing.DecoratingTestDescriptor

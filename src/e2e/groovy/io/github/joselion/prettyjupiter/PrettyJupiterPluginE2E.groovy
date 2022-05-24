@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class PrettyJupiterPluginE2E extends Specification {
       buildGradle << """\
         |plugins {
         |  id('java')
-        |  id('com.github.joselion.pretty-jupiter')
+        |  id('io.github.joselion.pretty-jupiter')
         |}
       |"""
       .stripMargin()
@@ -43,7 +43,7 @@ class PrettyJupiterPluginE2E extends Specification {
       buildGradle << """\
         |plugins {
         |  id('java')
-        |  id('com.github.joselion.pretty-jupiter')
+        |  id('io.github.joselion.pretty-jupiter')
         |}
         |
         |sourceSets {
@@ -83,7 +83,7 @@ class PrettyJupiterPluginE2E extends Specification {
       buildGradle << """\
         |plugins {
         |  id('java')
-        |  id('com.github.joselion.pretty-jupiter')
+        |  id('io.github.joselion.pretty-jupiter')
         |}
         |
         |prettyJupiter {
@@ -117,7 +117,7 @@ class PrettyJupiterPluginE2E extends Specification {
       buildGradle << """\
         |plugins {
         |  id('java')
-        |  id('com.github.joselion.pretty-jupiter')
+        |  id('io.github.joselion.pretty-jupiter')
         |}
         |
         |prettyJupiter {
@@ -156,7 +156,7 @@ class PrettyJupiterPluginE2E extends Specification {
     buildGradle << """\
       |plugins {
       |  id('java')
-      |  id('com.github.joselion.pretty-jupiter')
+      |  id('io.github.joselion.pretty-jupiter')
       |}
       |
       |prettyJupiter {

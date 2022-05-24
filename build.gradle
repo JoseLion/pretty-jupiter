@@ -13,7 +13,7 @@ plugins {
   id 'com.gradle.plugin-publish' version '1.0.0-rc-2'
 }
 
-group = 'com.github.joselion'
+group = 'io.github.joselion'
 version = '1.7.0'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -50,8 +50,8 @@ dependencies {
 gradlePlugin {
   plugins {
     prettyJupiter {
-      id = 'com.github.joselion.pretty-jupiter'
-      implementationClass = 'com.github.joselion.prettyjupiter.PrettyJupiterPlugin'
+      id = 'io.github.joselion.pretty-jupiter'
+      implementationClass = 'io.github.joselion.prettyjupiter.PrettyJupiterPlugin'
       displayName = 'Pretty Jupiter Plugin'
       description = 'Gradle plugin to log JUnit Jupiter tests with a pretty Mocha.js style'
     }

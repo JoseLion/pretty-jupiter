@@ -1,4 +1,4 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
 import groovy.transform.CompileStatic
 import org.gradle.api.Action

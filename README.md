@@ -1,4 +1,4 @@
-[![GradlePlugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/joselion/pretty-jupiter/com.github.joselion.pretty-jupiter.gradle.plugin/maven-metadata.xml.svg?label=gradle-plugin)](https://plugins.gradle.org/plugin/com.github.joselion.pretty-jupiter)
+[![GradlePlugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/joselion/pretty-jupiter/io.github.joselion.pretty-jupiter.gradle.plugin/maven-metadata.xml.svg?label=gradle-plugin)](https://plugins.gradle.org/plugin/io.github.joselion.pretty-jupiter)
 [![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter?branch=master)
 [![codecov](https://codecov.io/gh/JoseLion/pretty-jupiter/branch/master/graph/badge.svg?token=ZSrnHog6tO)](https://codecov.io/gh/JoseLion/pretty-jupiter)
 
@@ -21,7 +21,7 @@ Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#s
 
 ```groovy
 plugins {
-  id 'com.github.joselion.pretty-jupiter' version 'x.x.x'
+  id 'io.github.joselion.pretty-jupiter' version 'x.x.x'
 }
 ```
 </details>
@@ -31,7 +31,7 @@ plugins {
 
 ```kotlin
 plugins {
-  id("com.github.joselion.pretty-jupiter") version "x.x.x"
+  id("io.github.joselion.pretty-jupiter") version "x.x.x"
 }
 ```
 </details>
@@ -48,11 +48,11 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
+    classpath 'gradle.plugin.io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
   }
 }
 
-apply plugin: 'com.github.joselion.pretty-jupiter'
+apply plugin: 'io.github.joselion.pretty-jupiter'
 ```
 </details>
 
@@ -65,11 +65,11 @@ buildscript {
     url = uri("https://plugins.gradle.org/m2/")
   }
   dependencies {
-    classpath("gradle.plugin.com.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
+    classpath("gradle.plugin.io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
   }
 }
 
-apply(plugin = "com.github.joselion.pretty-jupiter")
+apply(plugin = "io.github.joselion.pretty-jupiter")
 ```
 </details>
 

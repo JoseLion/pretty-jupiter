@@ -1,7 +1,7 @@
-package com.github.joselion.prettyjupiter
+package io.github.joselion.prettyjupiter
 
-import com.github.joselion.prettyjupiter.helpers.Colors
-import com.github.joselion.prettyjupiter.helpers.Utils
+import io.github.joselion.prettyjupiter.helpers.Colors
+import io.github.joselion.prettyjupiter.helpers.Utils
 
 import org.gradle.api.tasks.testing.TestDescriptor
 
