@@ -12,7 +12,7 @@ This plugin intends to solve that by grouping test logs and presenting them in a
 ## Usage
 > **⚠️ BREAKING CHANGES**
 >
-> Due to changes on GitHub, and by consecuence Gradle and Maven, it's no longer allowed to use `com.github` as a valid group ID prefix. That being said, from version v2.0.0 of the plugin the ID is now `io.github.joselion.pretty-jupiter`. If you want to use a version prior to v2.0.0 youi can still find it under `com.github.joselion.pretty-jupiter`, but keep in mind the the `io.github` prefixed ID does not have any v1.x.x version available.
+> Due to changes on GitHub, and by consequence Gradle and Maven, it's no longer allowed to use `com.github` as a valid group ID prefix. That being said, from version v2.0.0 of the plugin the ID is now `io.github.joselion.pretty-jupiter`. If you want to use a version prior to v2.0.0 you can still find it under `com.github.joselion.pretty-jupiter`, but keep in mind that the `io.github` prefixed ID does not have any v1.x.x version available.
 
 **Important:** For better results, make sure your system (or the JVM) uses `UTF-8` encoding. This can be done in many ways, but a simple one could be to add the `JAVA_TOOL_OPTIONS` environment variable. This could be specially helpful for Windows users.
 ```sh
