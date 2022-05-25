@@ -28,22 +28,40 @@ class PrettyLoggerTest extends Specification {
 
   private static final ObjectFactory objects = ProjectBuilder.builder().build().objects
 
-  def '.logDescriptors'() {
+  def '.logDescriptors'(String className, Integer times) {
     given:
       final Logger logger = Mock()
       final Project project = Stub(Project) { getLogger() >> logger }
       final Test testTask = Stub(Test)
       final PrettyJupiterExtension extension = objects.newInstance(PrettyJupiterExtension)
       final PrettyLogger prettyLogger = new PrettyLogger(project, testTask, extension)
+      final TestDescriptor initial = Stub(TestDescriptor) {
+        getParent() >> null
+        getClassName() >> null
+        getDisplayName() >> 'Gradle Test'
+      }
       final TestDescriptor descriptor = Stub(TestDescriptor) {
         getParent() >> null
         getClassName() >> className
         getDisplayName() >> 'This is a test description!'
       }
+      final DecoratingTestDescriptor initialParam = Stub(DecoratingTestDescriptor) {
+        getParent() >> null
+        getClassName() >> null
+        getDisplayName() >> 'Gradle Test'
+      }
       final DecoratingTestDescriptor parameterized = Stub(DecoratingTestDescriptor) {
-        getParent() >> new DefaultTestDescriptor('id', className, 'This is a test description!')
+        getParent() >> new DefaultTestDescriptor('id', className, 'Gradle Test')
         getClassName() >> null
         getDisplayName() >> 'This is a parameterized test description!'
+      }
+
+    when:
+      prettyLogger.logDescriptors(initial)
+
+    then:
+      with(logger) {
+        0 * lifecycle("${ESC}[97mGradle Test${ESC}[0m")
       }
 
     when:
@@ -52,6 +70,14 @@ class PrettyLoggerTest extends Specification {
     then:
       with(logger) {
         times * lifecycle("${ESC}[97mThis is a test description!${ESC}[0m")
+      }
+
+    when:
+      prettyLogger.logDescriptors(initialParam)
+
+    then:
+      with(logger) {
+        0 * lifecycle("${ESC}[97mGradle Test${ESC}[0m")
       }
 
     when:
