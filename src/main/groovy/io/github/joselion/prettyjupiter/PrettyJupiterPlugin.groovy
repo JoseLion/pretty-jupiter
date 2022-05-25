@@ -27,7 +27,7 @@ class PrettyJupiterPlugin implements Plugin<Project> {
         }
 
         testTask.reports {
-          html.enabled(true)
+          html.required = true
         }
 
         testTask.beforeSuite(prettyLogger.&logDescriptors)
