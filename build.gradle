@@ -14,7 +14,6 @@ plugins {
 }
 
 group = 'io.github.joselion'
-version = '2.0.1'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 

@@ -57,6 +57,35 @@ commands:
             - ~/jdk/jdk-<<parameters.major>>.tar.gz
           key: v1-<<parameters.major>>-{{ checksum "~/jdk/jdk-<<parameters.major>>.sha256" }}
 
+  install-nodejs:
+    description: Install NodeJS and Yarn dependencies
+
+    steps:
+      - run:
+          name: Install NodeJS
+          command: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --install' >> $BASH_ENV
+            source $BASH_ENV
+
+      - run:
+          name: Install yarn
+          command: npm install -g yarn
+
+      - restore_cache:
+          keys:
+            - yarn-v1-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: Install packages
+          command: yarn install --immutable
+
+      - save_cache:
+          paths:
+            - ~/repos/pretty-jupiter/.yarn/cache
+          key: yarn-v1-{{ checksum "yarn.lock" }}
+
   setup:
     description: "Setup the environment to run tasks on CI"
 
@@ -134,13 +163,11 @@ jobs:
 
       - setup
 
-      - run:
-          name: Assemble
-          command: ./gradlew assemble
+      - install-nodejs
 
       - run:
-          name: Publish
-          command: ./gradlew publishPlugins
+          name: Publish to Gradle Plugins
+          command: yarn release
 
 workflows:
   main:

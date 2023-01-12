@@ -1,0 +1,16 @@
+{
+  "name": "pretty-jupiter",
+  "version": "0.0.0",
+  "description": "Pretty Jupiter release workflow",
+  "repository": "git@github.com:JoseLion/pretty-jupiter.git",
+  "author": "JoseLion <joseluis5000l@gmail.com>",
+  "license": "MIT",
+  "packageManager": "yarn@3.3.1",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "gradle-semantic-release-plugin": "^1.7.6",
+    "semantic-release": "^20.0.2"
+  }
+}
