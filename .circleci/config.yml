@@ -17,11 +17,11 @@ commands:
       major:
         description: The JDK major version to use
         type: string
-        default: "17"
+        default: "19"
       version:
         description: The JDK full version to use
         type: string
-        default: "17.0.3"
+        default: "19.0.1"
 
     steps:
       - run:
