@@ -10,7 +10,7 @@ plugins {
   id 'jacoco'
   id 'java-gradle-plugin'
 
-  id 'com.gradle.plugin-publish' version '1.0.0-rc-2'
+  id 'com.gradle.plugin-publish' version '1.1.0'
 }
 
 group = 'io.github.joselion'
@@ -27,7 +27,7 @@ dependencyLocking {
 
 codenarc {
   reportFormat('console')
-  toolVersion('3.0.1')
+  toolVersion('3.1.0')
 }
 
 jacoco {
@@ -42,19 +42,8 @@ dependencies {
   implementation(localGroovy())
 
   testImplementation(gradleTestKit())
-  testRuntimeOnly('net.bytebuddy:byte-buddy:1.12.10')
-  testRuntimeOnly('org.objenesis:objenesis:3.2')
-}
-
-gradlePlugin {
-  plugins {
-    prettyJupiter {
-      id = 'io.github.joselion.pretty-jupiter'
-      implementationClass = 'io.github.joselion.prettyjupiter.PrettyJupiterPlugin'
-      displayName = 'Pretty Jupiter Plugin'
-      description = 'Gradle plugin to log JUnit Jupiter tests with a pretty Mocha.js style'
-    }
-  }
+  testRuntimeOnly('net.bytebuddy:byte-buddy:1.12.21')
+  testRuntimeOnly('org.objenesis:objenesis:3.3')
 }
 
 pluginBundle {
@@ -65,37 +54,23 @@ pluginBundle {
 
 testing {
   suites {
-    test {
-      useSpock('2.2-M1-groovy-3.0')
-    }
+    def applySpock = { suite ->
+      suite.useSpock('2.4-M1-groovy-3.0')
 
-    e2e(JvmTestSuite) {
-      useSpock('2.2-M1-groovy-3.0')
-
-      dependencies {
-        implementation(project)
-      }
-
-      sources {
-        groovy {
-          srcDirs = ['src/2e2/groovy']
+      suite.targets {
+        all {
+          testTask.configure {
+            testLogging {
+              showStandardStreams(false)
+              events('passed', 'skipped', 'failed')
+            }
+          }
         }
       }
     }
-  }
-}
 
-test {
-  testLogging {
-    showStandardStreams(false)
-    events('passed', 'skipped', 'failed')
-  }
-}
-
-e2e {
-  testLogging {
-    showStandardStreams(false)
-    events('passed', 'skipped', 'failed')
+    test(applySpock)
+    e2e(JvmTestSuite, applySpock)
   }
 }
 
@@ -110,4 +85,17 @@ jacocoTestReport {
     html.required = true
     xml.required = true
   }
+}
+
+gradlePlugin {
+  plugins {
+    prettyJupiter {
+      id = 'io.github.joselion.pretty-jupiter'
+      implementationClass = 'io.github.joselion.prettyjupiter.PrettyJupiterPlugin'
+      displayName = 'Pretty Jupiter Plugin'
+      description = 'Gradle plugin to log JUnit Jupiter tests with a pretty Mocha.js style'
+    }
+  }
+
+  testSourceSets(sourceSets.e2e)
 }
