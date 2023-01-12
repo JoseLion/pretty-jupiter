@@ -68,7 +68,7 @@ class PrettyJupiterExtension {
     }
 
     private Long findCustomThreshold(Test testTask) {
-      def matcher = testTask.toString() =~ /task ':(\w+)'/
+      def matcher = testTask.toString() =~ /^task '.*:(\w+)'$/
 
       if (!matcher.matches()) {
         return null

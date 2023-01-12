@@ -69,16 +69,21 @@ class PrettyJupiterExtensionTest extends Specification {
       final Project project = ProjectBuilder.builder().build()
       final PrettyJupiterExtension extension = project.extensions.create('prettyJupiter', PrettyJupiterExtension)
       final Test testTask = Stub(Test) {
-        toString() >> "task ':test'"
+        toString() >> taskLog
       }
-      def testCustomThreshold = 100
-      extension.duration.customThreshold.put('test', testCustomThreshold)
+      extension.duration.customThreshold.put(testSource, testCustomThreshold)
 
     when:
       Long duration = extension.getDuration().getThreshold(testTask)
 
     then:
       duration == testCustomThreshold
+
+    where:
+      taskLog                           | testSource        | testCustomThreshold
+      "task ':test'"                    | 'test'            | 100
+      "task ':app:e2eTest'"             | 'e2eTest'         | 200
+      "task ':lib:app:integrationTest'" | 'integrationTest' | 300
   }
 
   def 'returns default threshold when custom threshold doesnt exist'() {
