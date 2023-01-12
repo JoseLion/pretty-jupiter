@@ -1,0 +1,53 @@
+---
+
+remote_theme: mmistakes/minimal-mistakes
+
+plugins:
+  - jekyll-include-cache
+  - jekyll-github-metadata
+
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      author_profile: true
+      classes: wide
+      layout: single
+
+minimal_mistakes_skin: dark
+title: Pretty Jupiter
+subtitle: A Gradle plugin to pretty-log JUnit Jupiter tests when run from the Gradle test task. Nested tests are grouped together and the output styles is very similar to `mocha.js`
+name: Jose Luis Leon
+repository: JoseLion/pretty-jupiter
+atom_feed:
+  hide: true
+twitter:
+  username: joseliont
+author:
+  name: Jose Luis Leon
+  avatar: https://github.com/JoseLion.png
+  email: joseluis5000l@gmail.com
+  links:
+    - label: Repository
+      icon: fab fa-fw fa-github
+      url: https://github.com/JoseLion/pretty-jupiter
+    - label: GitHub
+      icon: fab fa-fw fa-github-alt
+      url: https://github.com/JoseLion
+    - label: Twitter
+      icon: fab fa-fw fa-twitter-square
+      url: https://twitter.com/joseliont
+footer:
+  links:
+    - label: Repository
+      icon: fab fa-fw fa-github
+      url: https://github.com/JoseLion/pretty-jupiter
+    - label: GitHub
+      icon: fab fa-fw fa-github-alt
+      url: https://github.com/JoseLion
+    - label: Twitter
+      icon: fab fa-fw fa-twitter-square
+      url: https://twitter.com/joseliont
+
+...

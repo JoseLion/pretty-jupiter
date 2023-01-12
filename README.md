@@ -1,16 +1,20 @@
-[![GradlePlugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/joselion/pretty-jupiter/io.github.joselion.pretty-jupiter.gradle.plugin/maven-metadata.xml.svg?label=gradle-plugin)](https://plugins.gradle.org/plugin/io.github.joselion.pretty-jupiter)
-[![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter/tree/master.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter?branch=master)
+[![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter)
+[![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/io.github.joselion.pretty-jupiter)](https://plugins.gradle.org/plugin/io.github.joselion.pretty-jupiter)
 [![codecov](https://codecov.io/gh/JoseLion/pretty-jupiter/branch/master/graph/badge.svg?token=ZSrnHog6tO)](https://codecov.io/gh/JoseLion/pretty-jupiter)
+[![License](https://img.shields.io/github/license/JoseLion/pretty-jupiter)](./LICENSE)
+[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/JoseLion/pretty-jupiter)](https://snyk.io/)
 
-# Pretty Jupiter Plugin
+# Pretty Jupiter
 
 ## Why?
+
 JUnit 5 brings to us the [@Nested](https://junit.org/junit5/docs/current/user-guide/#writing-tests-nested) annotation feature, which allows the test writer to group tests with similar conditions (initializations, relationships, etc.), and lets us add some BDD love to our test suites. This works great until we run the test suite with Gradle's `test` task. Even if we change the [testLogging](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html) closure on our build script to log more information and events about the tests, we'll end up with some not-very-friendly to read logs.
 
 This plugin intends to solve that by grouping test logs and presenting them in a more readable, understandable and prettier way. Moving failure traces to the end so they could be tackled more easily and finishing with a pretty summary. Durations, their color threshold, and failure traces can be configured using the `prettyJupiter` extension.
 
 ## Usage
-> **⚠️ BREAKING CHANGES**
+
+> **⚠️ BREAKING CHANGES ⚠️**
 >
 > Due to changes on GitHub, and by consequence Gradle and Maven, it's no longer allowed to use `com.github` as a valid group ID prefix. That being said, from version v2.0.0 of the plugin the ID is now `io.github.joselion.pretty-jupiter`. If you want to use a version prior to v2.0.0 you can still find it under `com.github.joselion.pretty-jupiter`, but keep in mind that the `io.github` prefixed ID does not have any v1.x.x version available.
 
@@ -52,7 +56,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'gradle.plugin.io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
+    classpath 'io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
   }
 }
 
@@ -78,6 +82,7 @@ apply(plugin = "io.github.joselion.pretty-jupiter")
 </details>
 
 ## Extension properties
+
 The plugin can be customized adding a `prettyJupiter` closure to your `build.gradle` file and changing the following properties:
 
 | Property                      | Default        | Description |
@@ -91,8 +96,6 @@ The plugin can be customized adding a `prettyJupiter` closure to your `build.gra
 | failure.maxTraceLines         | `10`           | The number of lines of the exception stack trace to display |
 
 ### Complete example
-
-
 
 <details open>
 <summary>Groovy</summary>
@@ -137,9 +140,8 @@ prettyJupiter {
 ## Illustrations
 
 ### Before
+
 Adding the following to `build.gradle` file:
-
-
 
 <details open>
 <summary>Groovy</summary>
@@ -180,8 +182,8 @@ tasks {
 ![Before](assets/before.png)
 
 ### With `pretty-jupiter` plugin applied
-We only need Junit 5 configuration in `build.gradle(.kts)` file:
 
+We only need Junit 5 configuration in `build.gradle(.kts)` file:
 
 <details open>
 <summary>Groovy</summary>
@@ -209,9 +211,11 @@ tasks {
 ![After (tests result)](assets/after-result.png)
 
 ## Want to add further customizations?
+
 Please create an [issue](https://github.com/JoseLion/pretty-jupiter/issues/new) describing your request, feature or bug. I'll try to look into it as soon as possible 🙂
 
 ## Contribution
+
 Contributions are very welcome! To do so, please fork this repository and open a Pull Request to the `master` branch.
 
 To debug this plugin with help of another gradle project add to external project:
