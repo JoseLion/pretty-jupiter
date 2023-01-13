@@ -24,61 +24,67 @@ JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
 ```
 
 Using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block):
-<details open>
-<summary>Groovy</summary>
 
-```groovy
-plugins {
-  id 'io.github.joselion.pretty-jupiter' version 'x.x.x'
-}
-```
+<details open="true">
+  <summary>Groovy</summary>
+
+
+  ````groovy
+  plugins {
+    id 'io.github.joselion.pretty-jupiter' version 'x.x.x'
+  }
+  ````
 </details>
 
 <details>
-<summary>Kotlin</summary>
+  <summary>Kotlin</summary>
 
-```kotlin
-plugins {
-  id("io.github.joselion.pretty-jupiter") version "x.x.x"
-}
-```
+
+  ```kotlin
+  plugins {
+    id("io.github.joselion.pretty-jupiter") version "x.x.x"
+  }
+  ```
 </details>
 
 Using [legacy plugin application](https://docs.gradle.org/current/userguide/plugins.html#sec:old_plugin_application):
-<details open>
-<summary>Groovy</summary>
 
-```groovy
-buildscript {
-  repositories {
-    maven {
-      url 'https://plugins.gradle.org/m2/'
+<details open="true">
+  <summary>Groovy</summary>
+
+
+  ```groovy
+  buildscript {
+    repositories {
+      maven {
+        url 'https://plugins.gradle.org/m2/'
+      }
+    }
+    dependencies {
+      classpath 'io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
     }
   }
-  dependencies {
-    classpath 'io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x'
-  }
-}
 
-apply plugin: 'io.github.joselion.pretty-jupiter'
-```
+  apply plugin: 'io.github.joselion.pretty-jupiter'
+  ```
 </details>
 
 <details>
-<summary>Kotlin</summary>
+  <summary>Kotlin</summary>
 
-```kotlin
-buildscript {
-  repositories {
-    url = uri("https://plugins.gradle.org/m2/")
-  }
-  dependencies {
-    classpath("gradle.plugin.io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
-  }
-}
 
-apply(plugin = "io.github.joselion.pretty-jupiter")
-```
+  ```kotlin
+  buildscript {
+    repositories {
+      url = uri("https://plugins.gradle.org/m2/")
+    }
+    dependencies {
+      classpath("gradle.plugin.io.github.joselion.pretty-jupiter:pretty-jupiter:x.x.x")
+    }
+  }
+
+  apply(plugin = "io.github.joselion.pretty-jupiter")
+  ```
 </details>
 
 ### Plain output
@@ -103,44 +109,45 @@ The plugin can be customized adding a `prettyJupiter` closure to your `build.gra
 
 ### Complete example
 
-<details open>
-<summary>Groovy</summary>
+<details open="true">
+  <summary>Groovy</summary>
 
-```groovy
-prettyJupiter {
-  duration {
-    enabled = true
-    threshold = 75
-    customThreshold = [test : 100, integrationTest : 150]  
+
+  ```groovy
+  prettyJupiter {
+    duration {
+      enabled = true
+      threshold = 75
+      customThreshold = [test : 100, integrationTest : 150]  
+    }
+
+    failure {
+      maxMessageLines = 15
+      maxTraceLines = 10
+    }
   }
-
-  failure {
-    maxMessageLines = 15
-    maxTraceLines = 10
-  }
-}
-```
-
+  ```
 </details>
 
 <details>
-<summary>Kotlin</summary>
+  <summary>Kotlin</summary>
 
-```kotlin
-prettyJupiter {
-  duration {
-    enabled.set(true)
-    threshold.set(75)
-    customThreshold.put("test", 100)
-    customThreshold.put("integrationTest", 10000)
-  }
 
-  failure {
-    maxMessageLines.set(15)
-    maxTraceLines.set(10)
+  ```kotlin
+  prettyJupiter {
+    duration {
+      enabled.set(true)
+      threshold.set(75)
+      customThreshold.put("test", 100)
+      customThreshold.put("integrationTest", 10000)
+    }
+
+    failure {
+      maxMessageLines.set(15)
+      maxTraceLines.set(10)
+    }
   }
-}
-```
+  ```
 </details>
 
 ## Illustrations
@@ -149,40 +156,42 @@ prettyJupiter {
 
 Adding the following to `build.gradle` file:
 
-<details open>
-<summary>Groovy</summary>
+<details open="true">
+  <summary>Groovy</summary>
 
-```groovy
-test {
-  useJUnitPlatform()
 
-  testLogging {
-    exceptionFormat 'short'
-    events 'started', 'skipped', 'failed'
+  ```groovy
+  test {
+    useJUnitPlatform()
+
+    testLogging {
+      exceptionFormat 'short'
+      events 'started', 'skipped', 'failed'
+    }
   }
-}
-```
+  ```
 </details>
 
 <details>
-<summary>Kotlin</summary>
+  <summary>Kotlin</summary>
 
-```kotlin
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
-import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
-import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED
 
-tasks {
-  test {
-    useJUnitPlatform()
-    testLogging {
-      exceptionFormat = SHORT
-      events = setOf(STARTED, SKIPPED, FAILED)
+  ```kotlin
+  import org.gradle.api.tasks.testing.logging.TestExceptionFormat.SHORT
+  import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
+  import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+  import org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED
+
+  tasks {
+    test {
+      useJUnitPlatform()
+      testLogging {
+        exceptionFormat = SHORT
+        events = setOf(STARTED, SKIPPED, FAILED)
+      }
     }
   }
-}
-```
+  ```
 </details>
 
 ![Before](assets/before.png)
@@ -191,26 +200,28 @@ tasks {
 
 We only need Junit 5 configuration in `build.gradle(.kts)` file:
 
-<details open>
-<summary>Groovy</summary>
+<details open="true">
+  <summary>Groovy</summary>
 
-```groovy
-test {
-  useJUnitPlatform()
-}
-```
-</details>
 
-<details>
-<summary>Kotlin</summary>
-
-```kotlin
-tasks {
+  ```groovy
   test {
     useJUnitPlatform()
   }
-}
-```
+  ```
+</details>
+
+<details>
+  <summary>Kotlin</summary>
+
+
+  ```kotlin
+  tasks {
+    test {
+      useJUnitPlatform()
+    }
+  }
+  ```
 </details>
 
 ![After (tests duration)](assets/after-durations.png)
@@ -226,31 +237,33 @@ Contributions are very welcome! To do so, please fork this repository and open a
 
 To debug this plugin with help of another gradle project add to external project:
 
-<details open>
-<summary>settings.gradle</summary>
+<details open="true">
+  <summary>settings.gradle</summary>
 
-```groovy
-pluginManagement {
-  includeBuild '../pretty-jupiter/'
-}
-```
+
+  ```groovy
+  pluginManagement {
+    includeBuild '../pretty-jupiter/'
+  }
+  ```
 </details>
 
 <details>
-<summary>settings.gradle.kts</summary>
+  <summary>settings.gradle.kts</summary>
 
-```kotlin
-pluginManagement {
-  includeBuild("../pretty-jupiter/")
-}
 
-```
+  ```kotlin
+  pluginManagement {
+    includeBuild("../pretty-jupiter/")
+  }
+  ```
 </details>
 
 Then run your project from command line:
 ```shell
 ./gradlew clean test -Dorg.gradle.debug=true --no-daemon
 ```
+
 And connect with debugger on port 5005.
 
 ## License

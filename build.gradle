@@ -46,12 +46,6 @@ dependencies {
   testRuntimeOnly('org.objenesis:objenesis:3.3')
 }
 
-pluginBundle {
-  website = 'https://github.com/JoseLion/pretty-jupiter'
-  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter.git'
-  tags = ['junit', 'jupiter', 'logger', 'pretty', 'mocha']
-}
-
 testing {
   suites {
     def applySpock = { suite ->
@@ -85,6 +79,12 @@ jacocoTestReport {
     html.required = true
     xml.required = true
   }
+}
+
+pluginBundle {
+  website = 'https://github.com/JoseLion/pretty-jupiter'
+  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter.git'
+  tags = ['junit', 'jupiter', 'logger', 'pretty', 'mocha']
 }
 
 gradlePlugin {
