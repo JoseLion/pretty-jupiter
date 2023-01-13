@@ -87,7 +87,7 @@ commands:
           key: yarn-v1-{{ checksum "yarn.lock" }}
 
   setup:
-    description: "Setup the environment to run tasks on CI"
+    description: Setup the environment to run tasks on CI
 
     steps:
       - checkout:
@@ -101,9 +101,7 @@ commands:
 
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
-            - v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-
-            - v2-dependencies-
+            - v3-dependencies-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
 
       - run:
           name: Dependencies
@@ -113,7 +111,7 @@ commands:
           paths:
             - ~/repo/pretty-jupiter/.gradle
             - ~/.gradle
-          key: v2-dependencies-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
+          key: v3-dependencies-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "buildscript-gradle.lockfile" }}-{{ checksum "gradle.lockfile" }}
 
 jobs:
   build:
