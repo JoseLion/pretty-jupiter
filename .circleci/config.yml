@@ -7,7 +7,7 @@ executors:
       - image: cimg/base:stable
         environment:
           JVM_OPTS: -Xmx4096m
-          TERM: dumb
+          TERM: xterm
     resource_class: large
 
 commands:
