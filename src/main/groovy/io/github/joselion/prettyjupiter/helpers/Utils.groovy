@@ -23,7 +23,9 @@ class Utils {
   static String coloredText(Colors color, String text) {
     final String colorCode = color.getCode()
 
-    return "${ESC}[${colorCode}m${text}${ESC}[0m"
+    return !Utils.isTermDumb()
+      ? "${ESC}[${colorCode}m${text}${ESC}[0m"
+      : text
   }
 
   static String limitedText(String text, Integer maxLines) {
@@ -56,5 +58,11 @@ class Utils {
   static String uncolorText(String text) {
     return text.replace("$ESC", '')
       .replaceAll(/\[\d*m/, '')
+  }
+
+  static boolean isTermDumb() {
+    final String term = System.getenv('TERM') ?: ''
+
+    return term.equalsIgnoreCase('dumb')
   }
 }

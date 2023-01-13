@@ -81,7 +81,13 @@ apply(plugin = "io.github.joselion.pretty-jupiter")
 ```
 </details>
 
-## Extension properties
+### Plain output
+
+You may need the output to be plain (colorless and with text-based icons) for example, for logging to a file or for a CI environment. This is possible by setting the environment variable `TERM=dumb` before running your test command.
+
+> Keep in mind that using `--console=plain` will not work at the moment as checking for that flag is not supported by Gradle (check [this gradle issue](https://github.com/gradle/gradle/issues/11133) for details).
+
+### Extension properties
 
 The plugin can be customized adding a `prettyJupiter` closure to your `build.gradle` file and changing the following properties:
 
