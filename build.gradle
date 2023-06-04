@@ -10,7 +10,7 @@ plugins {
   id 'jacoco'
   id 'java-gradle-plugin'
 
-  id 'com.gradle.plugin-publish' version '1.1.0'
+  id 'com.gradle.plugin-publish' version '1.2.0'
 }
 
 group = 'io.github.joselion'
@@ -27,11 +27,11 @@ dependencyLocking {
 
 codenarc {
   reportFormat('console')
-  toolVersion('3.1.0')
+  toolVersion('3.2.0')
 }
 
 jacoco {
-  toolVersion('0.8.8')
+  toolVersion('0.8.10')
 }
 
 repositories {
@@ -42,7 +42,7 @@ dependencies {
   implementation(localGroovy())
 
   testImplementation(gradleTestKit())
-  testRuntimeOnly('net.bytebuddy:byte-buddy:1.12.21')
+  testRuntimeOnly('net.bytebuddy:byte-buddy:1.14.5')
   testRuntimeOnly('org.objenesis:objenesis:3.3')
 }
 
@@ -55,7 +55,7 @@ testing {
         all {
           testTask.configure {
             testLogging {
-              showStandardStreams(false)
+              showStandardStreams(true)
               events('passed', 'skipped', 'failed')
             }
           }
@@ -81,19 +81,25 @@ jacocoTestReport {
   }
 }
 
-pluginBundle {
-  website = 'https://github.com/JoseLion/pretty-jupiter'
-  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter.git'
-  tags = ['junit', 'jupiter', 'logger', 'pretty', 'mocha']
-}
-
 gradlePlugin {
+  website = 'https://joselion.github.io/pretty-jupiter/'
+  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter'
+
   plugins {
     prettyJupiter {
       id = 'io.github.joselion.pretty-jupiter'
       implementationClass = 'io.github.joselion.prettyjupiter.PrettyJupiterPlugin'
       displayName = 'Pretty Jupiter Plugin'
       description = 'Gradle plugin to log JUnit Jupiter tests with a pretty Mocha.js style'
+      tags.set([
+        'junit',
+        'jupiter',
+        'junit5',
+        'logger',
+        'pretty',
+        'mocha',
+        'tdd',
+      ])
     }
   }
 
