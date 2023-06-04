@@ -6,7 +6,6 @@ executors:
     docker:
       - image: cimg/base:stable
         environment:
-          JVM_OPTS: -Xmx4096m
           TERM: xterm
     resource_class: large
 
@@ -17,11 +16,11 @@ commands:
       major:
         description: The JDK major version to use
         type: string
-        default: "19"
+        default: "20"
       version:
         description: The JDK full version to use
         type: string
-        default: "19.0.1"
+        default: "20.0.1"
 
     steps:
       - run:

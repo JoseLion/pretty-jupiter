@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 class PrettyJupiterPluginTest extends Specification {
 
-  def 'plugin applied when test task exist'(String basePlugin) {
+  def 'plugin applied when test task exists'(String basePlugin) {
     given:
       final Project project = ProjectBuilder.builder().build()
 
@@ -21,7 +21,7 @@ class PrettyJupiterPluginTest extends Specification {
       project.test.testLogging.events as Set == [TestLogEvent.STANDARD_ERROR] as Set
       project.test.testLogging.showExceptions == false
       project.test.testLogging.showStackTraces == false
-      project.test.reports.html.enabled == true
+      project.test.reports.html.required.get() == true
 
     where:
       basePlugin << ['java', 'java-library', 'groovy', 'java-gradle-plugin']
