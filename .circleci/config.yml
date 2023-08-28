@@ -20,7 +20,7 @@ commands:
       version:
         description: The JDK full version to use
         type: string
-        default: "20.0.1"
+        default: "20.0.2"
 
     steps:
       - run:
