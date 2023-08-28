@@ -10,12 +10,15 @@ plugins {
   id 'jacoco'
   id 'java-gradle-plugin'
 
-  id 'com.gradle.plugin-publish' version '1.2.0'
+  id 'com.gradle.plugin-publish' version '1.2.1'
 }
 
 group = 'io.github.joselion'
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 tasks.withType(GroovyCompile) {
   groovyOptions.encoding = 'UTF-8'
@@ -27,7 +30,7 @@ dependencyLocking {
 
 codenarc {
   reportFormat('console')
-  toolVersion('3.2.0')
+  toolVersion('3.3.0')
 }
 
 jacoco {
@@ -42,7 +45,7 @@ dependencies {
   implementation(localGroovy())
 
   testImplementation(gradleTestKit())
-  testRuntimeOnly('net.bytebuddy:byte-buddy:1.14.5')
+  testRuntimeOnly('net.bytebuddy:byte-buddy:1.14.7')
   testRuntimeOnly('org.objenesis:objenesis:3.3')
 }
 
@@ -97,8 +100,8 @@ gradlePlugin {
         'junit5',
         'logger',
         'pretty',
-        'mocha',
         'tdd',
+        'bdd'
       ])
     }
   }
