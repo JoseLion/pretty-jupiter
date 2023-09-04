@@ -21,14 +21,15 @@ jobs:
           java-version: 20
           check-latest: true
           cache: gradle
-      - run: ./gradlew compileGroovy compileTestGroovy compileE2eGroovy
-      - run: ./gradlew codenarcMain codenarcTest codenarcE2e
+      - run: ./gradlew compileJava compileTestJava compileTestkitJava
+      - run: ./gradlew checkstyleMain checkstyleTest checkstyleTestkit
+      - run: ./gradlew sonarlintMain sonarlintTest sonarlintTestkit
       - run: ./gradlew test
-      - run: ./gradlew e2e
+      - run: ./gradlew testkit
       - run: ./gradlew build
       - run: ./gradlew jacocoTestReport
-      - name: Upload report
-        run: |
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov -Z -t ${{ secrets.CODECOV_TOKEN }}
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
