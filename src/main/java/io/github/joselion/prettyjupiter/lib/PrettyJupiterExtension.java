@@ -1,0 +1,102 @@
+package io.github.joselion.prettyjupiter.lib;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+import javax.inject.Inject;
+
+import org.gradle.api.Action;
+import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.MapProperty;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Nested;
+import org.gradle.api.tasks.testing.Test;
+
+import lombok.Getter;
+
+@Getter
+public class PrettyJupiterExtension {
+
+  @Nested
+  private final Duration duration;
+
+  @Nested
+  private final Failure failure;
+
+  @Inject
+  public PrettyJupiterExtension(final ObjectFactory objects) {
+    this.duration = objects.newInstance(Duration.class);
+    this.failure = objects.newInstance(Failure.class);
+  }
+
+  public void duration(final Action<Duration> durationAction) {
+    durationAction.execute(duration);
+  }
+
+  public void failure(final Action<Failure> failureAction) {
+    failureAction.execute(failure);
+  }
+
+  @Getter
+  public static class Duration {
+
+    @Input
+    private final Property<Boolean> enabled;
+
+    @Input
+    private final Property<Integer> threshold;
+
+    @Input
+    private final MapProperty<String, Integer> customThreshold;
+
+    @Inject
+    public Duration(final ObjectFactory objects) {
+      this.enabled = objects.property(Boolean.class);
+      this.threshold = objects.property(Integer.class);
+      this.customThreshold = objects.mapProperty(String.class, Integer.class);
+
+      this.enabled.convention(true);
+      this.threshold.convention(75);
+      this.customThreshold.convention(Map.of());
+    }
+
+    public Integer getThreshold(final Test testTask) {
+      return Optional.of(testTask)
+        .flatMap(this::findCustomThreshold)
+        .orElseGet(threshold::get);
+    }
+
+    private Optional<Integer> findCustomThreshold(final Test testTask) {
+      final var matcher = Pattern.compile("^task '.*:(\\w+)'$").matcher(testTask.toString());
+
+      if (!matcher.matches()) {
+        return Optional.empty();
+      }
+
+      return Optional.of(customThreshold)
+        .map(MapProperty<String, Integer>::get)
+        .map(thresholdMap -> thresholdMap.get(matcher.group(1)));
+    }
+  }
+
+  @Getter
+  public static class Failure {
+
+    @Input
+    private final Property<Integer> maxMessageLines;
+
+    @Input
+    private final Property<Integer> maxTraceLines;
+
+    @Inject
+    public Failure(final ObjectFactory objects) {
+      this.maxMessageLines = objects.property(Integer.class);
+      this.maxTraceLines = objects.property(Integer.class);
+
+      this.maxMessageLines.convention(15);
+      this.maxTraceLines.convention(10);
+    }
+  }
+}

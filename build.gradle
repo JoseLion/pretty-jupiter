@@ -5,36 +5,58 @@ buildscript {
 }
 
 plugins {
-  id 'codenarc'
-  id 'groovy'
-  id 'jacoco'
-  id 'java-gradle-plugin'
+  id('checkstyle')
+  id('jacoco')
+  id('java-gradle-plugin')
 
-  id 'com.gradle.plugin-publish' version '1.2.1'
+  id('com.gradle.plugin-publish') version '1.2.1'
+  id('io.github.joselion.pretty-jupiter') version '2.2.1'
+  id('io.github.joselion.strict-null-check') version '2.3.0'
+  id('se.solrike.sonarlint') version '1.0.0-beta.15'
 }
 
 group = 'io.github.joselion'
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(20)
+    vendor = JvmVendorSpec.ORACLE
+  }
 }
 
-tasks.withType(GroovyCompile) {
-  groovyOptions.encoding = 'UTF-8'
+javadoc {
+  options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+tasks.withType(JavaCompile) {
+  options.compilerArgs << '-Xlint:unchecked'
+  options.deprecation = true
 }
 
 dependencyLocking {
   lockAllConfigurations()
 }
 
-codenarc {
-  reportFormat('console')
-  toolVersion('3.3.0')
+checkstyle {
+  setToolVersion('10.12.3')
 }
 
-jacoco {
-  toolVersion('0.8.10')
+sonarlint {
+  excludeRules = [
+    'java:S107', // Allow constructors with more than 7 parameters
+    'java:S3776', // Allow methods with more than 15 lines
+    'java:S4032', // Allow packages only containing `package-info.java`
+  ]
+  includeRules = [
+    'java:S4266', // "Stream.collect()" calls should not be redundant
+  ]
+}
+
+strictNullCheck {
+  versions {
+    eclipseAnnotations = '2.2.700'
+    findBugs = '3.0.2'
+  }
 }
 
 repositories {
@@ -42,41 +64,56 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor('org.projectlombok:lombok:1.18.28')
+  compileOnly('org.projectlombok:lombok:1.18.28')
+  sonarlintPlugins('org.sonarsource.java:sonar-java-plugin:7.20.0.31692')
+
   implementation(localGroovy())
 
-  testImplementation(gradleTestKit())
-  testRuntimeOnly('net.bytebuddy:byte-buddy:1.14.7')
-  testRuntimeOnly('org.objenesis:objenesis:3.3')
+	testAnnotationProcessor('org.projectlombok:lombok:1.18.28')
+  testCompileOnly('org.eclipse.jdt:org.eclipse.jdt.annotation:2.2.700')
+  testCompileOnly('org.projectlombok:lombok:1.18.28')
+  testImplementation('org.mockito:mockito-core:5.5.0')
 }
 
 testing {
   suites {
-    def applySpock = { suite ->
-      suite.useSpock('2.4-M1-groovy-3.0')
+    configureEach {
+      useJUnitJupiter('5.10.0')
 
-      suite.targets {
+      dependencies {
+        implementation('org.assertj:assertj-core:3.24.2')
+      }
+    }
+
+    testkit(JvmTestSuite) {
+      dependencies {
+        implementation(gradleTestKit())
+      }
+
+      targets {
         all {
           testTask.configure {
-            testLogging {
-              showStandardStreams(true)
-              events('passed', 'skipped', 'failed')
-            }
+            shouldRunAfter(test)
           }
         }
       }
     }
-
-    test(applySpock)
-    e2e(JvmTestSuite, applySpock)
   }
 }
 
-tasks.named('check') {
-  dependsOn(testing.suites.e2e)
+prettyJupiter {
+  duration {
+    customThreshold = [testkit: 1000]
+  }
+}
+
+jacoco {
+  toolVersion('0.8.10')
 }
 
 jacocoTestReport {
-  dependsOn(test, e2e)
+  dependsOn(test, testkit)
 
   reports {
     html.required = true
@@ -106,5 +143,9 @@ gradlePlugin {
     }
   }
 
-  testSourceSets(sourceSets.e2e)
+  testSourceSets.add(sourceSets.testkit)
+}
+
+tasks.named('check') {
+  dependsOn(testing.suites.testkit)
 }
