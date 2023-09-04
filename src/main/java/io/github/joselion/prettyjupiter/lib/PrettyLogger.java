@@ -16,6 +16,7 @@ import org.gradle.api.tasks.testing.TestDescriptor;
 import org.gradle.api.tasks.testing.TestResult;
 import org.gradle.api.tasks.testing.TestResult.ResultType;
 
+import groovy.time.TimeDuration;
 import io.github.joselion.prettyjupiter.lib.helpers.Color;
 import io.github.joselion.prettyjupiter.lib.helpers.Common;
 import io.github.joselion.prettyjupiter.lib.helpers.Icon;
@@ -99,13 +100,20 @@ public record PrettyLogger(
       final var failed = Text.colored(Color.RED, Long.toString(result.getFailedTestCount()).concat(" failed"));
       final var skipped = Text.colored(Color.YELLOW, Long.toString(result.getSkippedTestCount()).concat(" skipped"));
       final var time = Duration.ofMillis(result.getEndTime()).minusMillis(result.getStartTime());
-      final var stats = "%s %d tests completed, %s, %s, %s (%.3f seconds)".formatted(
+      final var timeDuration = new TimeDuration(
+        Math.toIntExact(time.toDaysPart()),
+        time.toHoursPart(),
+        time.toMinutesPart(),
+        time.toSecondsPart(),
+        time.toMillisPart()
+      );
+      final var stats = "%s %d tests completed, %s, %s, %s (%s)".formatted(
         status.icon(),
         result.getTestCount(),
         succeed,
         failed,
         skipped,
-        time.toMillis() / 1000.0
+        timeDuration
       );
       final var report = "Report: ".concat(this.testTask.getReports().getHtml().getEntryPoint().toString());
       final var summary = Stream.of(stats, "", report).collect(joining("\n"));
