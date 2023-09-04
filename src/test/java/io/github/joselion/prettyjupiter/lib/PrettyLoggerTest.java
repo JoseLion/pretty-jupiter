@@ -240,7 +240,7 @@ import testing.annotations.UnitTest;
             final var results = mock(TestResult.class);
             when(results.getResultType()).thenReturn(entry.getKey());
             when(results.getStartTime()).thenReturn(1583909261673L);
-            when(results.getEndTime()).thenReturn(1583909305290L);
+            when(results.getEndTime()).thenReturn(1583909325290L);
             when(results.getTestCount()).thenReturn(136L);
             when(results.getSuccessfulTestCount()).thenReturn(120L);
             when(results.getFailedTestCount()).thenReturn(10L);
@@ -252,7 +252,7 @@ import testing.annotations.UnitTest;
 
             final var plainSummary = """
               %s 136 tests completed, \u001B[32m120 succeed\u001B[0m, \u001B[31m10 failed\u001B[0m, \
-              \u001B[33m6 skipped\u001B[0m (43.617 seconds)\
+              \u001B[33m6 skipped\u001B[0m (1 minutes, 3.617 seconds)\
               """
               .formatted(entry.getValue());
             final var visibleText = Text.uncolored(plainSummary);
