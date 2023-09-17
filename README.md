@@ -1,8 +1,10 @@
-[![JoseLion](https://circleci.com/gh/JoseLion/pretty-jupiter.svg?style=shield)](https://app.circleci.com/pipelines/github/JoseLion/pretty-jupiter)
+[![CI](https://github.com/JoseLion/pretty-jupiter/actions/workflows/ci.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/ci.yml)
+[![Release](https://github.com/JoseLion/pretty-jupiter/actions/workflows/release.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/release.yml)
+[![Pages](https://github.com/JoseLion/pretty-jupiter/actions/workflows/pages.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/pages.yml)
 [![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/io.github.joselion.pretty-jupiter)](https://plugins.gradle.org/plugin/io.github.joselion.pretty-jupiter)
 [![codecov](https://codecov.io/gh/JoseLion/pretty-jupiter/branch/master/graph/badge.svg?token=ZSrnHog6tO)](https://codecov.io/gh/JoseLion/pretty-jupiter)
 [![License](https://img.shields.io/github/license/JoseLion/pretty-jupiter)](./LICENSE)
-[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/JoseLion/pretty-jupiter)](https://snyk.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/JoseLion/pretty-jupiter/badge.svg)](https://snyk.io/test/github/JoseLion/pretty-jupiter)
 
 # Pretty Jupiter
 
