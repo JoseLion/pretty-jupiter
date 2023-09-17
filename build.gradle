@@ -10,8 +10,8 @@ plugins {
   id('java-gradle-plugin')
 
   id('com.gradle.plugin-publish') version '1.2.1'
-  id('io.github.joselion.pretty-jupiter') version '2.2.1'
-  id('io.github.joselion.strict-null-check') version '2.3.0'
+  id('io.github.joselion.pretty-jupiter') version '3.0.1'
+  id('io.github.joselion.strict-null-check') version '3.0.1'
   id('se.solrike.sonarlint') version '1.0.0-beta.15'
 }
 
@@ -38,7 +38,7 @@ dependencyLocking {
 }
 
 checkstyle {
-  setToolVersion('10.12.3')
+  setToolVersion(libs.versions.checkstyle.get())
 }
 
 sonarlint {
@@ -53,10 +53,8 @@ sonarlint {
 }
 
 strictNullCheck {
-  versions {
-    eclipseAnnotations = '2.2.700'
-    findBugs = '3.0.2'
-  }
+  packageInfo.useEclipse()
+  source.addEclipse()
 }
 
 repositories {
@@ -64,25 +62,24 @@ repositories {
 }
 
 dependencies {
-	annotationProcessor('org.projectlombok:lombok:1.18.28')
-  compileOnly('org.projectlombok:lombok:1.18.28')
-  sonarlintPlugins('org.sonarsource.java:sonar-java-plugin:7.20.0.31692')
+  annotationProcessor(libs.lombok)
+  compileOnly(libs.lombok)
+  sonarlintPlugins(libs.sonarlint.java)
 
   implementation(localGroovy())
-
-	testAnnotationProcessor('org.projectlombok:lombok:1.18.28')
-  testCompileOnly('org.eclipse.jdt:org.eclipse.jdt.annotation:2.2.700')
-  testCompileOnly('org.projectlombok:lombok:1.18.28')
-  testImplementation('org.mockito:mockito-core:5.5.0')
 }
 
 testing {
   suites {
     configureEach {
-      useJUnitJupiter('5.10.0')
+      useJUnitJupiter(libs.versions.junit.get())
 
       dependencies {
-        implementation('org.assertj:assertj-core:3.24.2')
+        annotationProcessor(libs.lombok)
+        compileOnly(libs.lombok)
+
+        implementation(libs.mockito)
+        implementation(libs.assertj)
       }
     }
 
@@ -109,7 +106,7 @@ prettyJupiter {
 }
 
 jacoco {
-  toolVersion('0.8.10')
+  setToolVersion(libs.versions.jacoco.get())
 }
 
 jacocoTestReport {

@@ -1,1 +1,16 @@
 rootProject.name = 'pretty-jupiter'
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      version('checkstyle', '10.12.3')
+      version('jacoco', '0.8.10')
+      version('junit', '5.10.0')
+
+      library('assertj', 'org.assertj', 'assertj-core').version('3.24.2')
+      library('lombok', 'org.projectlombok', 'lombok').version('1.18.28')
+      library('mockito', 'org.mockito', 'mockito-core').version('5.5.0')
+      library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.20.0.31692')
+    }
+  }
+}
