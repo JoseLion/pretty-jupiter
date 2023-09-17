@@ -71,6 +71,11 @@ dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   sonarlintCorePlugins(libs.sonarlint.java)
+  constraints {
+    sonarlintCore(libs.tomcat.jasper) {
+      because('version 9.0.75 has a security vulnerability')
+    }
+  }
 
   implementation(localGroovy())
 }

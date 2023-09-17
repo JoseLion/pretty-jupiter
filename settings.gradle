@@ -12,6 +12,7 @@ dependencyResolutionManagement {
       library('lombok', 'org.projectlombok', 'lombok').version('1.18.28')
       library('mockito', 'org.mockito', 'mockito-core').version('5.5.0')
       library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.24.0.32100')
+      library('tomcat-jasper', 'org.apache.tomcat.embed', 'tomcat-embed-jasper').version('9.0.80')
     }
   }
 }
