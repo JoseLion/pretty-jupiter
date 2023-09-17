@@ -12,7 +12,7 @@ plugins {
   id('com.gradle.plugin-publish') version '1.2.1'
   id('io.github.joselion.pretty-jupiter') version '3.0.1'
   id('io.github.joselion.strict-null-check') version '3.0.1'
-  id('se.solrike.sonarlint') version '1.0.0-beta.15'
+  id('name.remal.sonarlint') version '3.3.9'
 }
 
 group = 'io.github.joselion'
@@ -41,15 +41,21 @@ checkstyle {
   setToolVersion(libs.versions.checkstyle.get())
 }
 
-sonarlint {
-  excludeRules = [
-    'java:S107', // Allow constructors with more than 7 parameters
-    'java:S3776', // Allow methods with more than 15 lines
-    'java:S4032', // Allow packages only containing `package-info.java`
-  ]
-  includeRules = [
-    'java:S4266', // "Stream.collect()" calls should not be redundant
-  ]
+sonarLint {
+  setToolVersion(libs.versions.sonarlint.core.get())
+  languages {
+    include('java')
+  }
+  rules {
+    enable(
+      'java:S4266', // "Stream.collect()" calls should not be redundant
+    )
+    disable(
+      'java:S107', // Allow constructors with more than 7 parameters
+      'java:S3776', // Allow methods with more than 15 lines
+      'java:S4032', // Allow packages only containing `package-info.java`
+    )
+  }
 }
 
 strictNullCheck {
@@ -64,7 +70,7 @@ repositories {
 dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
-  sonarlintPlugins(libs.sonarlint.java)
+  sonarlintCorePlugins(libs.sonarlint.java)
 
   implementation(localGroovy())
 }
