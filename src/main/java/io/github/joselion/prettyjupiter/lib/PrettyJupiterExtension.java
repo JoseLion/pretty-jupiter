@@ -31,12 +31,12 @@ public class PrettyJupiterExtension {
     this.failure = objects.newInstance(Failure.class);
   }
 
-  public void duration(final Action<Duration> durationAction) {
-    durationAction.execute(duration);
+  public void duration(final Action<Duration> action) {
+    action.execute(this.duration);
   }
 
-  public void failure(final Action<Failure> failureAction) {
-    failureAction.execute(failure);
+  public void failure(final Action<Failure> action) {
+    action.execute(this.failure);
   }
 
   @Getter
@@ -65,7 +65,7 @@ public class PrettyJupiterExtension {
     public Integer getThreshold(final Test testTask) {
       return Optional.of(testTask)
         .flatMap(this::findCustomThreshold)
-        .orElseGet(threshold::get);
+        .orElseGet(this.threshold::get);
     }
 
     private Optional<Integer> findCustomThreshold(final Test testTask) {
@@ -75,7 +75,7 @@ public class PrettyJupiterExtension {
         return Optional.empty();
       }
 
-      return Optional.of(customThreshold)
+      return Optional.of(this.customThreshold)
         .map(MapProperty<String, Integer>::get)
         .map(thresholdMap -> thresholdMap.get(matcher.group(1)));
     }
