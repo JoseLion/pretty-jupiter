@@ -5,12 +5,15 @@
   "repository": "git@github.com:JoseLion/pretty-jupiter.git",
   "author": "JoseLion <joseluis5000l@gmail.com>",
   "license": "MIT",
-  "packageManager": "yarn@3.6.3",
+  "engines": {
+    "node": "21.0.0"
+  },
+  "packageManager": "yarn@4.0.0",
   "scripts": {
     "release": "semantic-release"
   },
   "devDependencies": {
     "gradle-semantic-release-plugin": "^1.7.7",
-    "semantic-release": "^21.1.1"
+    "semantic-release": "^22.0.5"
   }
 }
