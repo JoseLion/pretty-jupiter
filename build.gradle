@@ -11,8 +11,8 @@ plugins {
 
   id('com.gradle.plugin-publish') version '1.2.1'
   id('io.github.joselion.pretty-jupiter') version '3.0.1'
-  id('io.github.joselion.strict-null-check') version '3.0.1'
-  id('name.remal.sonarlint') version '3.3.9'
+  id('io.github.joselion.strict-null-check') version '3.1.0'
+  id('name.remal.sonarlint') version '3.3.12'
 }
 
 group = 'io.github.joselion'
@@ -59,8 +59,8 @@ sonarLint {
 }
 
 strictNullCheck {
+  addEclipse()
   packageInfo.useEclipse()
-  source.addEclipse()
 }
 
 repositories {
