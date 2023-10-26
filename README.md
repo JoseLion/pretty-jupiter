@@ -1,4 +1,5 @@
 [![CI](https://github.com/JoseLion/pretty-jupiter/actions/workflows/ci.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/JoseLion/pretty-jupiter/actions/workflows/codeql.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/codeql.yml)
 [![Release](https://github.com/JoseLion/pretty-jupiter/actions/workflows/release.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/release.yml)
 [![Pages](https://github.com/JoseLion/pretty-jupiter/actions/workflows/pages.yml/badge.svg)](https://github.com/JoseLion/pretty-jupiter/actions/workflows/pages.yml)
 [![Gradle Plugin](https://img.shields.io/gradle-plugin-portal/v/io.github.joselion.pretty-jupiter)](https://plugins.gradle.org/plugin/io.github.joselion.pretty-jupiter)
