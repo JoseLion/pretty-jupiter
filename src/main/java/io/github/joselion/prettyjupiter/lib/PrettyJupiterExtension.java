@@ -58,7 +58,7 @@ public class PrettyJupiterExtension {
       this.customThreshold = objects.mapProperty(String.class, Integer.class);
 
       this.enabled.convention(true);
-      this.threshold.convention(75);
+      this.threshold.convention(200);
       this.customThreshold.convention(Map.of());
     }
 
@@ -96,7 +96,7 @@ public class PrettyJupiterExtension {
       this.maxTraceLines = objects.property(Integer.class);
 
       this.maxMessageLines.convention(15);
-      this.maxTraceLines.convention(10);
+      this.maxTraceLines.convention(15);
     }
   }
 }
