@@ -9,17 +9,18 @@ plugins {
   id('jacoco')
   id('java-gradle-plugin')
 
-  id('com.gradle.plugin-publish') version '1.2.1'
-  id('io.github.joselion.pretty-jupiter') version '3.0.1'
-  id('io.github.joselion.strict-null-check') version '3.1.0'
-  id('name.remal.sonarlint') version '3.3.12'
+  alias(libs.plugins.pluginPublish)
+  alias(libs.plugins.prettyJupiter)
+  alias(libs.plugins.strictNullCheck)
+  alias(libs.plugins.sonarlint)
 }
 
 group = 'io.github.joselion'
 
 java {
+  sourceCompatibility = JavaLanguageVersion.of(20)
   toolchain {
-    languageVersion = JavaLanguageVersion.of(20)
+    languageVersion = JavaLanguageVersion.of(21)
     vendor = JvmVendorSpec.ORACLE
   }
 }
@@ -71,11 +72,11 @@ dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   sonarlintCorePlugins(libs.sonarlint.java)
-  constraints {
-    sonarlintCore(libs.tomcat.jasper) {
-      because('version 9.0.75 has a security vulnerability')
-    }
-  }
+  // constraints {
+  //   sonarlintCore(libs.tomcat.jasper) {
+  //     because('version 9.0.75 has a security vulnerability')
+  //   }
+  // }
 
   implementation(localGroovy())
 }
