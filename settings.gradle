@@ -9,15 +9,14 @@ dependencyResolutionManagement {
       version('sonarlint-core', '9.4.0.76070')
 
       plugin('pluginPublish', 'com.gradle.plugin-publish').version('1.2.1')
-      plugin('prettyJupiter', 'io.github.joselion.pretty-jupiter').version('3.0.1')
+      plugin('prettyJupiter', 'io.github.joselion.pretty-jupiter').version('3.1.0')
       plugin('sonarlint', 'name.remal.sonarlint').version('3.3.14')
-      plugin('strictNullCheck', 'io.github.joselion.strict-null-check').version('3.1.0')
+      plugin('strictNullCheck', 'io.github.joselion.strict-null-check').version('3.2.0')
 
       library('assertj', 'org.assertj', 'assertj-core').version('3.24.2')
       library('lombok', 'org.projectlombok', 'lombok').version('1.18.30')
       library('mockito', 'org.mockito', 'mockito-core').version('5.7.0')
       library('sonarlint-java', 'org.sonarsource.java', 'sonar-java-plugin').version('7.27.1.33504')
-      // library('tomcat-jasper', 'org.apache.tomcat.embed', 'tomcat-embed-jasper').version('9.0.82')
     }
   }
 }
