@@ -104,11 +104,11 @@ The plugin can be customized adding a `prettyJupiter` closure to your `build.gra
 | ------------------------------|:--------------:| ----------- |
 | duration                      | -              | Closure to configure the test durations logged |
 | duration.enabled              | `true`         | If `true`, shows each test execution duration |
-| duration.threshold            | `75`           | Time threshold in milliseconds. If the test duration is `>=` than this value, it'll be colored <span style="color:red">RED</span>, if it's `>=` than half of this value, it'll be <span style="color:yellow">YELLOW</span>, otherwise it'll be white. |
+| duration.threshold            | `200`          | Time threshold in milliseconds. If the test duration is `>=` than this value, it'll be colored <span style="color:red">RED</span>, if it's `>=` than half of this value, it'll be <span style="color:yellow">YELLOW</span>, otherwise it'll be white. |
 | duration.customThreshold      | empty map      | Map that contains task name as a key and its custom threshold as a value. When customThreshold is present and contains running task, duration.threshold is overriden|
 | failure                       | -              | Closure to configure the test failures logged |
 | failure.maxMessageLines       | `15`           | The number of lines of the exception message to display. Note that some exception messages may include some stack trace on it |
-| failure.maxTraceLines         | `10`           | The number of lines of the exception stack trace to display |
+| failure.maxTraceLines         | `15`           | The number of lines of the exception stack trace to display |
 
 ### Complete example
 
