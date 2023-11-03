@@ -1,5 +1,6 @@
 package io.github.joselion.prettyjupiter.lib;
 
+import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -151,11 +152,11 @@ import testing.annotations.UnitTest;
     @Nested class when_the_result_has_different_durations {
       @TestFactory Stream<DynamicTest> logs_the_result_with_the_matching_duration_color() {
         return Stream.of(
-          entry(Color.RED, 100L),
-          entry(Color.RED, 75L),
-          entry(Color.YELLOW, 50L),
-          entry(Color.YELLOW, 38L),
-          entry(Color.WHITE, 25L),
+          entry(Color.RED, 250L),
+          entry(Color.RED, 200L),
+          entry(Color.YELLOW, 150L),
+          entry(Color.YELLOW, 100L),
+          entry(Color.WHITE, 50L),
           entry(Color.WHITE, 0L)
         )
         .map(entry ->
@@ -258,8 +259,8 @@ import testing.annotations.UnitTest;
             final var visibleText = Text.uncolored(plainSummary);
             final var plainReport = "Report: path/to/report/file.html";
             final var reportTrailSpace = " ".repeat(visibleText.length() - plainReport.length());
-            final var hidden1 = exception.getStackTrace().length - 10;
-            final var hidden2 = causeD.getStackTrace().length - 10;
+            final var hidden1 = exception.getStackTrace().length - 15;
+            final var hidden2 = causeD.getStackTrace().length - 15;
             final var failedTest = Icon.FAILURE + " \u001B[31mTest description 1\u001B[0m (\u001B[97m0ms\u001B[0m)";
             final var ordered = inOrder(logger);
 
@@ -279,16 +280,9 @@ import testing.annotations.UnitTest;
             ordered.verify(logger).lifecycle("");
             ordered.verify(logger).lifecycle("     Stack trace:");
             ordered.verify(logger).lifecycle("       \u001B[90mjava.lang.Exception:  Multi line exception!");
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[0]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[1]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[2]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[3]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[4]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[5]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[6]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[7]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[8]);
-            ordered.verify(logger).lifecycle("         at " + exception.getStackTrace()[9]);
+            stream(exception.getStackTrace()).limit(15).forEachOrdered(trace ->
+              ordered.verify(logger).lifecycle("         at " + trace)
+            );
             ordered.verify(logger).lifecycle("         --- and " + hidden1 + " more ---\u001B[0m");
             ordered.verify(logger).lifecycle("\n");
             ordered.verify(logger).lifecycle("\u001B[91m(2)\u001B[0m  Test description 1:");
@@ -296,16 +290,9 @@ import testing.annotations.UnitTest;
             ordered.verify(logger).lifecycle("");
             ordered.verify(logger).lifecycle("     Stack trace:");
             ordered.verify(logger).lifecycle("       \u001B[90mjava.lang.Exception: Cause of error C");
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[0]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[1]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[2]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[3]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[4]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[5]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[6]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[7]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[8]);
-            ordered.verify(logger).lifecycle("         at " + causeD.getStackTrace()[9]);
+            stream(causeD.getStackTrace()).limit(15).forEachOrdered(trace ->
+              ordered.verify(logger).lifecycle("         at " + trace)
+            );
             ordered.verify(logger).lifecycle("         --- and " + hidden2 + " more ---\u001B[0m");
             ordered.verify(logger).lifecycle("\n");
             ordered.verify(logger).lifecycle("╔═" + "═".repeat(visibleText.length()) + "══╗");

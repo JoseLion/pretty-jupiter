@@ -26,10 +26,10 @@ import testing.annotations.UnitTest;
       final var failure = extension.getFailure();
 
       assertThat(duration.getEnabled().get()).isTrue();
-      assertThat(duration.getThreshold().get()).isEqualTo(75);
+      assertThat(duration.getThreshold().get()).isEqualTo(200);
       assertThat(duration.getCustomThreshold().get()).isEmpty();
       assertThat(failure.getMaxMessageLines().get()).isEqualTo(15);
-      assertThat(failure.getMaxTraceLines().get()).isEqualTo(10);
+      assertThat(failure.getMaxTraceLines().get()).isEqualTo(15);
     }
   }
 
