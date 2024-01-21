@@ -13,7 +13,7 @@ dependencyResolutionManagement {
       version('sonarlint-core', '9.6.1.76766')
 
       plugin('pluginPublish', 'com.gradle.plugin-publish').version('1.2.1')
-      plugin('prettyJupiter', 'io.github.joselion.pretty-jupiter').version('3.1.0')
+      plugin('prettyJupiter', 'io.github.joselion.pretty-jupiter').version('3.2.0')
       plugin('sonarlint', 'name.remal.sonarlint').version('3.4.4')
       plugin('strictNullCheck', 'io.github.joselion.strict-null-check').version('3.2.0')
 
