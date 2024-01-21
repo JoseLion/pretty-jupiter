@@ -18,7 +18,7 @@ plugins {
 group = 'io.github.joselion'
 
 java {
-  sourceCompatibility = JavaLanguageVersion.of(20)
+  sourceCompatibility = JavaLanguageVersion.of(21)
   toolchain {
     languageVersion = JavaLanguageVersion.of(21)
     vendor = JvmVendorSpec.ORACLE
@@ -64,6 +64,13 @@ strictNullCheck {
   packageInfo.useEclipse()
 }
 
+// Workaround for: https://github.com/checkstyle/checkstyle/issues/14211
+configurations.checkstyle {
+  resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+    select("com.google.guava:guava:0")
+  }
+}
+
 repositories {
   mavenCentral()
 }
@@ -72,11 +79,6 @@ dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   sonarlintCorePlugins(libs.sonarlint.java)
-  // constraints {
-  //   sonarlintCore(libs.tomcat.jasper) {
-  //     because('version 9.0.75 has a security vulnerability')
-  //   }
-  // }
 
   implementation(localGroovy())
 }
