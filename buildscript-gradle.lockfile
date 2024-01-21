@@ -8,7 +8,7 @@ io.github.joselion.strict-null-check:io.github.joselion.strict-null-check.gradle
 io.github.joselion:maybe:3.3.1=classpath
 io.github.joselion:pretty-jupiter:3.1.0=classpath
 io.github.joselion:strict-null-check:3.2.0=classpath
-name.remal.gradle-plugins.sonarlint:sonarlint:3.3.14=classpath
-name.remal.sonarlint:name.remal.sonarlint.gradle.plugin:3.3.14=classpath
+name.remal.gradle-plugins.sonarlint:sonarlint:3.4.4=classpath
+name.remal.sonarlint:name.remal.sonarlint.gradle.plugin:3.4.4=classpath
 org.apache.maven:maven-model:3.6.3=classpath
 empty=
