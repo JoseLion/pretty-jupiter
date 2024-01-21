@@ -45,9 +45,8 @@ public record PrettyLogger(
 
     if (descriptor.getClassName() != null || isParameterizedTest) {
       final var tabs = Common.tabsFor(descriptor);
-      final var desc = Text.colored(Color.WHITE, displayName);
 
-      this.project.getLogger().lifecycle(tabs.concat(desc));
+      this.project.getLogger().lifecycle(tabs.concat(displayName));
     }
   }
 
@@ -140,9 +139,11 @@ public record PrettyLogger(
     if (duration.getEnabled().get().booleanValue()) {
       final var timeDiff = result.getEndTime() - result.getStartTime();
       final var threshold = duration.getThreshold(testTask);
-      final var halfColor = timeDiff >= threshold / 2 ? Color.YELLOW : Color.WHITE;
-      final var color = timeDiff >= threshold ? Color.RED : halfColor;
-      final var millis = Text.colored(color, Long.toString(timeDiff).concat("ms"));
+      final var timeMs = Long.toString(timeDiff).concat("ms");
+      final var color = timeDiff >= threshold ? Color.RED : Color.YELLOW;
+      final var millis = timeDiff >= threshold / 2
+        ? Text.colored(color, timeMs)
+        : timeMs;
 
       return " (".concat(millis).concat(")");
     }

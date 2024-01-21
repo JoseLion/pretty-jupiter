@@ -51,7 +51,7 @@ import testing.annotations.UnitTest;
           prettyLogger.logDescriptors(descriptor);
 
           verify(logger, never()).lifecycle(contains("Gradle Test"));
-          verify(logger, never()).lifecycle("\u001B[97mGradle Test\u001B[0m");
+          verify(logger, never()).lifecycle("Gradle Test");
         }
       }
 
@@ -65,7 +65,7 @@ import testing.annotations.UnitTest;
             prettyLogger.logDescriptors(descriptor);
 
             verify(logger, never()).lifecycle(contains("Gradle Test"));
-            verify(logger, never()).lifecycle("\u001B[97mGradle Test\u001B[0m");
+            verify(logger, never()).lifecycle("Gradle Test");
           }
         }
 
@@ -79,7 +79,7 @@ import testing.annotations.UnitTest;
 
             prettyLogger.logDescriptors(descriptor);
 
-            verify(logger, only()).lifecycle("\u001B[97mThis is a test description!\u001B[0m");
+            verify(logger, only()).lifecycle("This is a test description!");
           }
         }
       }
@@ -96,7 +96,7 @@ import testing.annotations.UnitTest;
           prettyLogger.logDescriptors(descriptor);
 
           verify(logger, never()).lifecycle(contains("Gradle Test"));
-          verify(logger, never()).lifecycle("\u001B[97mGradle Test\u001B[0m");
+          verify(logger, never()).lifecycle("Gradle Test");
         }
       }
 
@@ -110,7 +110,7 @@ import testing.annotations.UnitTest;
 
           prettyLogger.logDescriptors(descriptor);
 
-          verify(logger, only()).lifecycle("\u001B[97mThis is a parameterized test description!\u001B[0m");
+          verify(logger, only()).lifecycle("This is a parameterized test description!");
         }
       }
     }
@@ -120,9 +120,9 @@ import testing.annotations.UnitTest;
     @Nested class when_the_result_has_different_types {
       @TestFactory Stream<DynamicTest> logs_the_result_with_the_icon_and_colors_of_the_type() {
         return Map.of(
-          ResultType.SUCCESS, Icon.SUCCESS + " \u001B[90mThis is a test result!\u001B[0m (\u001B[97m10ms\u001B[0m)",
-          ResultType.FAILURE, Icon.FAILURE + " \u001B[31mThis is a test result!\u001B[0m (\u001B[97m10ms\u001B[0m)",
-          ResultType.SKIPPED, Icon.SKIPPED + " \u001B[33mThis is a test result!\u001B[0m (\u001B[97m10ms\u001B[0m)"
+          ResultType.SUCCESS, Icon.SUCCESS + " \u001B[90mThis is a test result!\u001B[0m (10ms)",
+          ResultType.FAILURE, Icon.FAILURE + " \u001B[31mThis is a test result!\u001B[0m (10ms)",
+          ResultType.SKIPPED, Icon.SKIPPED + " \u001B[33mThis is a test result!\u001B[0m (10ms)"
         )
         .entrySet()
         .stream()
@@ -149,15 +149,31 @@ import testing.annotations.UnitTest;
       }
     }
 
-    @Nested class when_the_result_has_different_durations {
+    @Nested class when_the_result_duration_is_less_the_threshold {
+      @Test void logs_the_result_without_color() {
+        final var logger = mock(Logger.class);
+        final var prettyLogger = prettyLoggerOf(logger);
+        final var descriptor = MockDescriptor.empty().withDisplayName("This is a test result!");
+        final var result = mock(TestResult.class);
+        when(result.getResultType()).thenReturn(ResultType.SUCCESS);
+        when(result.getStartTime()).thenReturn(0L);
+        when(result.getEndTime()).thenReturn(50L);
+
+        prettyLogger.logResults(descriptor, result);
+
+        final var expected = "%s \u001B[90mThis is a test result!\u001B[0m (50ms)".formatted(Icon.SUCCESS);
+
+        verify(logger, only()).lifecycle(expected);
+      }
+    }
+
+    @Nested class when_the_result_duration_is_greater_or_equal_to_the_threshold {
       @TestFactory Stream<DynamicTest> logs_the_result_with_the_matching_duration_color() {
         return Stream.of(
           entry(Color.RED, 250L),
           entry(Color.RED, 200L),
           entry(Color.YELLOW, 150L),
-          entry(Color.YELLOW, 100L),
-          entry(Color.WHITE, 50L),
-          entry(Color.WHITE, 0L)
+          entry(Color.YELLOW, 100L)
         )
         .map(entry ->
           dynamicTest("[duration: %d]".formatted(entry.getValue()), () -> {
@@ -261,7 +277,7 @@ import testing.annotations.UnitTest;
             final var reportTrailSpace = " ".repeat(visibleText.length() - plainReport.length());
             final var hidden1 = exception.getStackTrace().length - 15;
             final var hidden2 = causeD.getStackTrace().length - 15;
-            final var failedTest = Icon.FAILURE + " \u001B[31mTest description 1\u001B[0m (\u001B[97m0ms\u001B[0m)";
+            final var failedTest = Icon.FAILURE + " \u001B[31mTest description 1\u001B[0m (0ms)";
             final var ordered = inOrder(logger);
 
             ordered.verify(logger, times(2)).lifecycle(failedTest);
