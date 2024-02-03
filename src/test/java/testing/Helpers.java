@@ -6,10 +6,11 @@ import static org.mockito.Mockito.when;
 import org.eclipse.jdt.annotation.Nullable;
 import org.gradle.api.tasks.testing.TestDescriptor;
 
-import lombok.experimental.UtilityClass;
+public final class Helpers {
 
-@UtilityClass
-public class Helpers {
+  private Helpers() {
+    throw new UnsupportedOperationException("Helpers is a helper class");
+  }
 
   @Nullable
   public static TestDescriptor descriptorOf(final Integer level) {

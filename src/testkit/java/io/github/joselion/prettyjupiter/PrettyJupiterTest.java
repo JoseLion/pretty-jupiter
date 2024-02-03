@@ -29,12 +29,14 @@ import testing.annotations.TestkitTest;
 
   @Nested class when_the_plugin_is_applied {
     @Test void runs_test_task_successfully() {
-      writeBuildGradle("""
+      writeBuildGradle(
+        """
         plugins {
           id('java')
           id('io.github.joselion.pretty-jupiter')
         }
-        """);
+        """
+      );
 
       final var result = runTask("test");
 
@@ -44,7 +46,8 @@ import testing.annotations.TestkitTest;
 
   @Nested class when_the_project_has_more_than_one_test_source {
     @Test void applies_the_plugin_to_all_test_sources() {
-      writeBuildGradle("""
+      writeBuildGradle(
+        """
         plugins {
           id('java')
           id('io.github.joselion.pretty-jupiter')
@@ -63,7 +66,8 @@ import testing.annotations.TestkitTest;
         tasks.named('test') {
           finalizedBy(tasks.e2e)
         }
-      """);
+        """
+      );
 
       final var result = runTask("test");
 
@@ -74,7 +78,8 @@ import testing.annotations.TestkitTest;
   @Nested class when_the_plugin_is_configured {
     @Nested class and_an_extension_property_is_changed {
       @Test void updates_the_plugin_configuration() {
-        writeBuildGradle("""
+        writeBuildGradle(
+          """
           plugins {
             id('java')
             id('io.github.joselion.pretty-jupiter')
@@ -89,7 +94,8 @@ import testing.annotations.TestkitTest;
               println("*** duration.threshold: ${prettyJupiter.duration.threshold.get()}")
             }
           }
-        """);
+          """
+        );
 
         final var result = runTask("showThreshold");
 
@@ -101,7 +107,8 @@ import testing.annotations.TestkitTest;
 
     @Nested class and_closures_are_used_to_change_properties {
       @Test void updates_the_plugin_configuration() {
-        writeBuildGradle("""
+        writeBuildGradle(
+          """
           plugins {
             id('java')
             id('io.github.joselion.pretty-jupiter')
@@ -129,7 +136,8 @@ import testing.annotations.TestkitTest;
               }
             }
           }
-        """);
+          """
+        );
 
         final var result = runTask("showConfig");
 

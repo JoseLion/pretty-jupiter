@@ -8,10 +8,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.gradle.api.tasks.testing.TestDescriptor;
 
 import groovy.lang.Closure;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class Common {
+public final class Common {
+
+  private Common() {
+    throw new UnsupportedOperationException("Common is a helper class");
+  }
 
   public static <T> Closure<Void> closure(final Consumer<T> consumer) {
     return new Closure<Void>(null) {
