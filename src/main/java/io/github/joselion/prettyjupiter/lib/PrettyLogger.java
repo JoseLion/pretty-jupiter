@@ -51,16 +51,20 @@ public record PrettyLogger(
   }
 
   public void logResults(final TestDescriptor descriptor, final TestResult result) {
-    final var status = metaOf(result.getResultType());
+    final var status = this.metaOf(result.getResultType());
     final var tabs = Common.tabsFor(descriptor);
     final var desc = Text.colored(status.color(), descriptor.getDisplayName());
-    final var duration = getDuration(result);
+    final var duration = this.getDuration(result);
+    final var text = tabs.concat(status.icon().toString())
+      .concat(" ")
+      .concat(desc)
+      .concat(duration);
 
     if (result.getResultType().equals(FAILURE)) {
-      this.failures.add(Failure.of(result.getException(), descriptor, extension));
+      this.failures.add(Failure.of(result.getException(), descriptor, this.extension));
     }
 
-    project.getLogger().lifecycle(tabs.concat(status.icon().toString()).concat(" ").concat(desc).concat(duration));
+    this.project.getLogger().lifecycle(text);
   }
 
   public void logSummary(final TestDescriptor descriptor, final TestResult result) {
@@ -72,29 +76,29 @@ public record PrettyLogger(
           final var n = Text.colored(Color.BRIGHT_RED, "(".concat(Integer.toString(i + 1)).concat(")"));
           final var ns = " ".repeat(Integer.toString(i).length() + 2);
 
-          project.getLogger().lifecycle("\n");
+          this.project.getLogger().lifecycle("\n");
 
-          project.getLogger().lifecycle(n.concat("  ").concat(failure.location()).concat(":"));
+          this.project.getLogger().lifecycle(n.concat("  ").concat(failure.location()).concat(":"));
           failure.message().lines().forEach(line ->
-            project.getLogger().lifecycle(ns.concat("    ").concat(line))
+            this.project.getLogger().lifecycle(ns.concat("    ").concat(line))
           );
 
           if (failure.cause() != null) {
-            project.getLogger().lifecycle("");
-            project.getLogger().lifecycle(ns.concat("  Caused by:"));
+            this.project.getLogger().lifecycle("");
+            this.project.getLogger().lifecycle(ns.concat("  Caused by:"));
             failure.cause().lines().forEach(line ->
-              project.getLogger().lifecycle(ns.concat("    ").concat(line))
+              this.project.getLogger().lifecycle(ns.concat("    ").concat(line))
             );
           }
 
-          project.getLogger().lifecycle("");
-          project.getLogger().lifecycle(ns.concat("  Stack trace:"));
+          this.project.getLogger().lifecycle("");
+          this.project.getLogger().lifecycle(ns.concat("  Stack trace:"));
           failure.trace().lines().forEach(line ->
-            project.getLogger().lifecycle(ns.concat("    ").concat(line))
+            this.project.getLogger().lifecycle(ns.concat("    ").concat(line))
           );
         });
 
-      final var status = metaOf(result.getResultType());
+      final var status = this.metaOf(result.getResultType());
       final var succeed = Text.colored(Color.GREEN, Long.toString(result.getSuccessfulTestCount()).concat(" succeed"));
       final var failed = Text.colored(Color.RED, Long.toString(result.getFailedTestCount()).concat(" failed"));
       final var skipped = Text.colored(Color.YELLOW, Long.toString(result.getSkippedTestCount()).concat(" skipped"));
@@ -123,13 +127,13 @@ public record PrettyLogger(
         .map(x -> x + 1)
         .orElse(1);
 
-      project.getLogger().lifecycle("\n");
-      project.getLogger().lifecycle("╔═".concat("═".repeat(max)).concat("═╗"));
+      this.project.getLogger().lifecycle("\n");
+      this.project.getLogger().lifecycle("╔═".concat("═".repeat(max)).concat("═╗"));
       summary.lines().forEach(line -> {
         final var ws = " ".repeat(max - Text.uncolored(line).length());
-        project.getLogger().lifecycle("║ ".concat(line).concat(ws).concat(" ║"));
+        this.project.getLogger().lifecycle("║ ".concat(line).concat(ws).concat(" ║"));
       });
-      project.getLogger().lifecycle("╚═".concat("═".repeat(max)).concat("═╝"));
+      this.project.getLogger().lifecycle("╚═".concat("═".repeat(max)).concat("═╝"));
     }
   }
 
@@ -138,7 +142,7 @@ public record PrettyLogger(
 
     if (duration.getEnabled().get().booleanValue()) {
       final var timeDiff = result.getEndTime() - result.getStartTime();
-      final var threshold = duration.getThreshold(testTask);
+      final var threshold = duration.getThreshold(this.testTask);
       final var timeMs = Long.toString(timeDiff).concat("ms");
       final var color = timeDiff >= threshold ? Color.RED : Color.YELLOW;
       final var millis = timeDiff >= threshold / 2

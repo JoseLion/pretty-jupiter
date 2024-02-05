@@ -2,12 +2,13 @@ package io.github.joselion.prettyjupiter.lib.helpers;
 
 import static java.util.stream.Collectors.joining;
 
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
-public class Text {
+public final class Text {
 
   private static final String ESC = Character.toString(27);
+
+  private Text() {
+    throw new UnsupportedOperationException("Text is a helper class");
+  }
 
   public static String colored(final Color color, final String text) {
     return !Common.isTermDumb()
