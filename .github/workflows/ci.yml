@@ -21,7 +21,7 @@ jobs:
           distribution: oracle
           java-version: 21
           check-latest: true
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/gradle-build-action@v3
       - run: ./gradlew compileJava compileTestJava compileTestkitJava
       - run: ./gradlew checkstyleMain checkstyleTest checkstyleTestkit
       - run: ./gradlew sonarlintMain sonarlintTest sonarlintTestkit
