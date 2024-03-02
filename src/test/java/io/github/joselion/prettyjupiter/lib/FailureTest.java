@@ -3,7 +3,9 @@ package io.github.joselion.prettyjupiter.lib;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.gradle.testfixtures.ProjectBuilder;
@@ -72,22 +74,34 @@ import testing.annotations.UnitTest;
 
     @Nested class location {
       @TestFactory Stream<DynamicTest> returns_the_location_based_on_the_descriptor_level() {
-        return Map.of(
-          0, "",
-          1, "",
-          2, "Test description 1",
-          3, "Test description 1 => Test description 2",
-          4, "Test description 1 => Test description 2 => Test description 3"
-        )
-        .entrySet()
-        .stream()
-        .map(entry ->
-          dynamicTest("[level: %d]".formatted(entry.getKey()), () -> {
-            final var failure = Failure.of(new Exception(), Helpers.descriptorOf(entry.getKey()), EXT);
-
-            assertThat(failure.location()).isEqualTo(entry.getValue());
-          })
+        final var results = List.of(
+          "",
+          "",
+          "Test description 1",
+          """
+          Test description 1
+            Test description 2\
+          """,
+          """
+          Test description 1
+            Test description 2
+              Test description 3\
+          """,
+          """
+          Test description 1
+            Test description 2
+              Test description 3
+                Test description 4\
+          """
         );
+
+        return IntStream.range(0, results.size())
+        .mapToObj(i -> dynamicTest("[level: %d]".formatted(i), () -> {
+          final var failure = Failure.of(new Exception(), Helpers.descriptorOf(i), EXT);
+          final var result = results.get(i);
+
+          assertThat(failure.location()).isEqualTo(result);
+        }));
       }
     }
 

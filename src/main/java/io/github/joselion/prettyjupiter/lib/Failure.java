@@ -52,7 +52,7 @@ public record Failure(
     if (desc != null && i >= 0) {
       final var concatText = text.isEmpty()
         ? desc.getDisplayName()
-        : desc.getDisplayName().concat(" => ").concat(text);
+        : desc.getDisplayName().concat("\n").concat("  ".repeat(i + 1)).concat(text);
 
       return locationOf(desc.getParent(), i - 1, concatText);
     }
