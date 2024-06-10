@@ -26,7 +26,8 @@ jobs:
           distribution: oracle
           java-version: 21
           check-latest: true
-      - uses: gradle/gradle-build-action@v3
+      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/wrapper-validation@v3
       - uses: github/codeql-action/init@v2
         with:
           languages: java-kotlin
