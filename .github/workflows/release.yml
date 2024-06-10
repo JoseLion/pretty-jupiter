@@ -28,7 +28,8 @@ jobs:
           distribution: oracle
           java-version: 21
           check-latest: true
-      - uses: gradle/gradle-build-action@v3
+      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/wrapper-validation@v3
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
