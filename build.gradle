@@ -18,9 +18,9 @@ plugins {
 group = 'io.github.joselion'
 
 java {
-  sourceCompatibility = JavaLanguageVersion.of(21)
+  sourceCompatibility = JavaLanguageVersion.of(22)
   toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
+    languageVersion = JavaLanguageVersion.of(22)
     vendor = JvmVendorSpec.ORACLE
   }
 }
@@ -44,7 +44,6 @@ checkstyle {
 }
 
 sonarLint {
-  setToolVersion(libs.versions.sonarlint.core.get())
   languages {
     include('java')
   }
