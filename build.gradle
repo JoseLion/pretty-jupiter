@@ -135,7 +135,7 @@ jacocoTestReport {
 
 gradlePlugin {
   website = 'https://joselion.github.io/pretty-jupiter/'
-  vcsUrl = 'https://github.com/JoseLion/pretty-jupiter'
+  vcsUrl = 'https://github.com/joselion/pretty-jupiter'
 
   plugins {
     prettyJupiter {
