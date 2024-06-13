@@ -39,8 +39,8 @@ dependencyLocking {
 }
 
 checkstyle {
-  setToolVersion(libs.versions.checkstyle.get())
   setMaxWarnings(0)
+  setToolVersion(libs.versions.checkstyle.get())
 }
 
 sonarLint {
@@ -63,13 +63,6 @@ sonarLint {
 strictNullCheck {
   addEclipse()
   packageInfo.useEclipse()
-}
-
-// Workaround for: https://github.com/checkstyle/checkstyle/issues/14211
-configurations.checkstyle {
-  resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
-    select("com.google.guava:guava:0")
-  }
 }
 
 repositories {

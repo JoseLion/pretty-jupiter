@@ -6,7 +6,7 @@
   "author": "JoseLion <joseluis5000l@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "22.2.0"
+    "node": "22.3.0"
   },
   "packageManager": "yarn@4.2.2",
   "scripts": {
