@@ -151,20 +151,6 @@ gradlePlugin {
   testSourceSets.add(sourceSets.testkit)
 }
 
-task preparePublish() {
-  doLast {
-    def publishKey = findProperty('gradlePublishKey')
-    def publishSecret = findProperty('gradlePublishSecret')
-
-    System.properties.setProperty('gradle.publish.key', publishKey)
-    System.properties.setProperty('gradle.publish.secret', publishSecret)
-  }
-}
-
 tasks.named('check') {
   dependsOn(testing.suites.testkit)
-}
-
-tasks.named('publishPlugins') {
-  dependsOn(tasks.preparePublish)
 }
