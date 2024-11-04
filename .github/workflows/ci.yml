@@ -24,9 +24,9 @@ jobs:
           distribution: oracle
           java-version: 22
           check-latest: true
-      - uses: gradle/actions/setup-gradle@v3
-      - uses: gradle/actions/wrapper-validation@v3
-      - uses: gradle/actions/dependency-submission@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/wrapper-validation@v4
+      - uses: gradle/actions/dependency-submission@v4
       - run: ./gradlew compileJava compileTestJava compileTestkitJava
       - run: ./gradlew checkstyleMain checkstyleTest checkstyleTestkit
       - run: ./gradlew sonarlintMain sonarlintTest sonarlintTestkit

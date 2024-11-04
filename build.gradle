@@ -20,7 +20,7 @@ group = 'io.github.joselion'
 java {
   sourceCompatibility = JavaLanguageVersion.of(17)
   toolchain {
-    languageVersion = JavaLanguageVersion.of(22)
+    languageVersion = JavaLanguageVersion.of(23)
     vendor = JvmVendorSpec.ORACLE
   }
 }
