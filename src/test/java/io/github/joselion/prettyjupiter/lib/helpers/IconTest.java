@@ -11,15 +11,16 @@ import testing.annotations.UnitTest;
 
 @UnitTest class IconTest {
 
-  @Nested class toStrin {
+  @Nested class toString {
     @Nested class when_the_terminal_is_not_dumb {
       @EnumSource(Icon.class)
       @ParameterizedTest(name = "[icon: {arguments}]")
-      void returns_the_text_icon(final Icon icon) {
+      void returns_the_colored_text_icon(final Icon icon) {
         try (var mock = mockStatic(Common.class)) {
           mock.when(Common::isTermDumb).thenReturn(false);
+          final var colored = Text.colored(icon.getColor(), icon.getText());
 
-          assertThat(icon).hasToString(icon.getText());
+          assertThat(icon).hasToString(colored);
         }
       }
     }
@@ -27,11 +28,11 @@ import testing.annotations.UnitTest;
     @Nested class when_the_terminal_is_dumb {
       @EnumSource(Icon.class)
       @ParameterizedTest(name = "[icon: {arguments}]")
-      void returns_the_plain_icon(final Icon icon) {
+      void returns_the_uncolored_icon(final Icon icon) {
         try (var mock = mockStatic(Common.class)) {
           mock.when(Common::isTermDumb).thenReturn(true);
 
-          assertThat(icon).hasToString(icon.getPlain());
+          assertThat(icon).hasToString(icon.getText());
         }
       }
     }
