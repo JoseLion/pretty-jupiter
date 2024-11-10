@@ -54,7 +54,7 @@ public record PrettyLogger(
     final var status = this.metaOf(result.getResultType());
     final var tabs = Common.tabsFor(descriptor);
     final var desc = Text.colored(status.color(), descriptor.getDisplayName());
-    final var duration = this.getDuration(result);
+    final var duration = this.duration(result);
     final var text = tabs.concat(status.icon().toString())
       .concat(" ")
       .concat(desc)
@@ -137,12 +137,12 @@ public record PrettyLogger(
     }
   }
 
-  private String getDuration(final TestResult result) {
-    final var duration = this.extension.getDuration();
+  private String duration(final TestResult result) {
+    final var duration = this.extension.duration();
 
-    if (duration.getEnabled().get().booleanValue()) {
+    if (duration.enabled().get().booleanValue()) {
       final var timeDiff = result.getEndTime() - result.getStartTime();
-      final var threshold = duration.getThreshold(this.testTask);
+      final var threshold = duration.threshold(this.testTask);
       final var timeMs = Long.toString(timeDiff).concat("ms");
       final var color = timeDiff >= threshold ? Color.RED : Color.YELLOW;
       final var millis = timeDiff >= threshold / 2

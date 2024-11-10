@@ -22,23 +22,23 @@ import testing.annotations.UnitTest;
     @Test void assigns_default_values() {
       final var project = ProjectBuilder.builder().build();
       final var extension = project.getExtensions().create("prettyJupiter", PrettyJupiterExtension.class);
-      final var duration = extension.getDuration();
-      final var failure = extension.getFailure();
+      final var duration = extension.duration();
+      final var failure = extension.failure();
 
-      assertThat(duration.getEnabled().get()).isTrue();
-      assertThat(duration.getThreshold().get()).isEqualTo(200);
-      assertThat(duration.getCustomThreshold().get()).isEmpty();
-      assertThat(failure.getMaxMessageLines().get()).isEqualTo(15);
-      assertThat(failure.getMaxTraceLines().get()).isEqualTo(15);
+      assertThat(duration.enabled().get()).isTrue();
+      assertThat(duration.threshold().get()).isEqualTo(200);
+      assertThat(duration.customThreshold().get()).isEmpty();
+      assertThat(failure.maxMessageLines().get()).isEqualTo(15);
+      assertThat(failure.maxTraceLines().get()).isEqualTo(15);
     }
   }
 
-  @Nested class getThreshold {
+  @Nested class threshold {
     @Nested class when_a_custom_threshold_exists {
       @TestFactory Stream<DynamicTest> returns_the_threshold_for_the_specific_test_source() {
         final var project = ProjectBuilder.builder().build();
         final var extension = project.getExtensions().create("prettyJupiter", PrettyJupiterExtension.class);
-        final var customThreshold = extension.getDuration().getCustomThreshold();
+        final var customThreshold = extension.duration().customThreshold();
 
         customThreshold.put("test", 100);
         customThreshold.put("e2eTest", 200);
@@ -54,11 +54,11 @@ import testing.annotations.UnitTest;
         .map(entry ->
           dynamicTest("[task log: %s]".formatted(entry.getKey()), () -> {
             final var testTask = mock(org.gradle.api.tasks.testing.Test.class);
-            final var duration = extension.getDuration();
+            final var duration = extension.duration();
 
             when(testTask.toString()).thenReturn(entry.getKey());
 
-            assertThat(duration.getThreshold(testTask)).isEqualTo(entry.getValue());
+            assertThat(duration.threshold(testTask)).isEqualTo(entry.getValue());
           })
         );
       }
@@ -69,13 +69,13 @@ import testing.annotations.UnitTest;
         final var project = ProjectBuilder.builder().build();
         final var extension = project.getExtensions().create("prettyJupiter", PrettyJupiterExtension.class);
         final var testTask = mock(org.gradle.api.tasks.testing.Test.class);
-        final var duration = extension.getDuration();
+        final var duration = extension.duration();
 
         when(testTask.toString()).thenReturn("task ':integrationTest'");
-        duration.getCustomThreshold().put("test", 100);
-        duration.getThreshold().set(150);
+        duration.customThreshold().put("test", 100);
+        duration.threshold().set(150);
 
-        assertThat(duration.getThreshold(testTask)).isEqualTo(150);
+        assertThat(duration.threshold(testTask)).isEqualTo(150);
       }
     }
   }

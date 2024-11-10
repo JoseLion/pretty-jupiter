@@ -18,7 +18,7 @@ import testing.annotations.UnitTest;
       void returns_the_colored_text_icon(final Icon icon) {
         try (var mock = mockStatic(Common.class)) {
           mock.when(Common::isTermDumb).thenReturn(false);
-          final var colored = Text.colored(icon.getColor(), icon.getText());
+          final var colored = Text.colored(icon.color(), icon.text());
 
           assertThat(icon).hasToString(colored);
         }
@@ -32,7 +32,7 @@ import testing.annotations.UnitTest;
         try (var mock = mockStatic(Common.class)) {
           mock.when(Common::isTermDumb).thenReturn(true);
 
-          assertThat(icon).hasToString(icon.getText());
+          assertThat(icon).hasToString(icon.text());
         }
       }
     }

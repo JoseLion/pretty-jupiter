@@ -118,7 +118,7 @@ import testing.annotations.UnitTest;
       @Test void returns_the_error_stack_trace() {
         final var exception = new Exception("Some error message");
         final var failure = Failure.of(exception, Helpers.descriptorOf(2), EXT);
-        final var maxTrace = EXT.getFailure().getMaxTraceLines().get();
+        final var maxTrace = EXT.failure().maxTraceLines().get();
         final var traceDiff = exception.getStackTrace().length - maxTrace;
         final var lines = failure.trace().lines().toList();
 
