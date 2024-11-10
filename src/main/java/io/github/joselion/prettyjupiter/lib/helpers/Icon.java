@@ -1,23 +1,23 @@
 package io.github.joselion.prettyjupiter.lib.helpers;
 
+import static lombok.AccessLevel.PRIVATE;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public enum Icon {
-  SUCCESS(Text.colored(Color.GREEN, "✔"), "√"),
-  FAILURE(Text.colored(Color.RED, "✖"), "X"),
-  SKIPPED(Text.colored(Color.YELLOW, "⚠️ "), "!");
+  SUCCESS("✓", Color.GREEN),
+  FAILURE("𐄂", Color.RED),
+  SKIPPED("↷", Color.YELLOW);
 
   private final String text;
 
-  private final String plain;
+  private final Color color;
 
   @Override
   public String toString() {
-    return Common.isTermDumb()
-      ? this.plain
-      : this.text;
+    return Text.colored(this.color, this.text);
   }
 }
