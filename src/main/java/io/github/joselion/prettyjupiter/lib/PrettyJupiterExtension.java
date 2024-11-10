@@ -31,6 +31,14 @@ public class PrettyJupiterExtension {
     this.failure = objects.newInstance(Failure.class);
   }
 
+  public Duration getDuration() {
+    return this.duration;
+  }
+
+  public Failure getFailure() {
+    return this.failure;
+  }
+
   public void duration(final Action<Duration> action) {
     action.execute(this.duration);
   }
@@ -62,7 +70,19 @@ public class PrettyJupiterExtension {
       this.customThreshold.convention(Map.of());
     }
 
-    public Integer getThreshold(final Test testTask) {
+    public Property<Boolean> getEnabled() {
+      return this.enabled;
+    }
+
+    public Property<Integer> getThreshold() {
+      return this.threshold;
+    }
+
+    public MapProperty<String, Integer> getCustomThreshold() {
+      return this.customThreshold;
+    }
+
+    public Integer threshold(final Test testTask) {
       return Optional.of(testTask)
         .flatMap(this::findCustomThreshold)
         .orElseGet(this.threshold::get);
@@ -97,6 +117,14 @@ public class PrettyJupiterExtension {
 
       this.maxMessageLines.convention(15);
       this.maxTraceLines.convention(15);
+    }
+
+    public Property<Integer> getMaxMessageLines() {
+      return this.maxMessageLines;
+    }
+
+    public Property<Integer> getMaxTraceLines() {
+      return this.maxTraceLines;
     }
   }
 }

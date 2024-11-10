@@ -23,4 +23,29 @@ public class MockDescriptor implements TestDescriptor {
   public static MockDescriptor empty() {
     return new MockDescriptor("", "", null, false, null);
   }
+
+  @Override
+  public String getClassName() {
+    return this.className();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return this.displayName();
+  }
+
+  @Override
+  public String getName() {
+    return this.name();
+  }
+
+  @Override
+  public TestDescriptor getParent() {
+    return this.parent();
+  }
+
+  @Override
+  public boolean isComposite() {
+    return this.composite();
+  }
 }

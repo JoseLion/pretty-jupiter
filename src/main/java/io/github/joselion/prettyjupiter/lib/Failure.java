@@ -61,14 +61,14 @@ public record Failure(
   }
 
   private static String messageOf(final Throwable exception, final PrettyJupiterExtension extension) {
-    final var maxLines = extension.getFailure().getMaxMessageLines().get();
+    final var maxLines = extension.failure().maxMessageLines().get();
     final var limitedMessage = Text.limited(exception.toString(), maxLines);
 
     return Text.colored(Color.BRIGHT_RED, limitedMessage);
   }
 
   private static String traceOf(final Throwable exception, final PrettyJupiterExtension extension) {
-    final var maxLines = extension.getFailure().getMaxTraceLines().get();
+    final var maxLines = extension.failure().maxTraceLines().get();
     final var firstLine = exception.toString().replace("\n", " ").concat("\n");
     final var rest = stream(exception.getStackTrace())
         .map(StackTraceElement::toString)

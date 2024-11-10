@@ -21,7 +21,7 @@ import testing.annotations.UnitTest;
         try (var mock = mockStatic(Common.class)) {
           mock.when(Common::isTermDumb).thenReturn(false);
           final var text = Text.colored(color, "This is a colored text!");
-          final var result = "\u001B[%dmThis is a colored text!\u001B[0m".formatted(color.getCode());
+          final var result = "\u001B[%dmThis is a colored text!\u001B[0m".formatted(color.code());
 
           assertThat(text).isEqualTo(result);
         }

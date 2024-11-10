@@ -187,7 +187,7 @@ import testing.annotations.UnitTest;
 
             prettyLogger.logResults(descriptor, result);
 
-            final var color = entry.getKey().getCode();
+            final var color = entry.getKey().code();
             final var expected = "%s \u001B[90mThis is a test result!\u001B[0m (\u001B[%sm%sms\u001B[0m)".formatted(
               Icon.SUCCESS,
               color,
@@ -203,7 +203,7 @@ import testing.annotations.UnitTest;
     @Nested class when_the_duration_is_disabled {
       @Test void logs_the_result_without_the_duration() {
         final var logger = mock(Logger.class);
-        final var prettyLogger = prettyLoggerOf(logger, ext -> ext.getDuration().getEnabled().set(false));
+        final var prettyLogger = prettyLoggerOf(logger, ext -> ext.duration().enabled().set(false));
         final var descriptor = MockDescriptor.empty().withDisplayName("Some tests without duration");
         final var result = mock(TestResult.class);
         when(result.getResultType()).thenReturn(ResultType.SUCCESS);
